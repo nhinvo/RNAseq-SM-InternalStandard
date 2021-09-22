@@ -1,0 +1,57 @@
+# The main entry point of your workflow.
+# After configuring, running snakemake -n in a clone of this repository should successfully execute a dry-run of the workflow.
+from pathlib import Path
+
+# report: "report/workflow.rst"
+
+global_dir = Path("/nobackup1/kve/2021_Sar11ProProject/data")
+
+input_dir = global_dir / "input_data"
+output_dir = global_dir / "output_data"
+results_dir = global_dir / "results"
+
+raw_reads_dir = input_dir / "raw_reads"
+genome_refs_dir = input_dir / "culture_genome_refs"
+gff_refs_dir = input_dir / "culture_genome_annotations"
+adapter_file = input_dir / "adapters" / "all_illumina_adapters.fa"
+condition_table_file = input_dir / "exp_sample_conditions" / "Xinda_Sample_list_GC.tsv"
+
+done_file_dir = output_dir / "done_files"
+trimmed_reads_dir = output_dir / "trimmed_reads"
+concat_gff_file = output_dir / "concat_gff" / "concat_gff.gff"
+concat_gff_mod_file = output_dir / "concat_gff" / "concat_gff_mod.gff"
+concat_genome_file = output_dir / "concat_genome" / "concat_genome.fna"
+mapped_reads_dir = output_dir / "mapped_reads"
+feature_count_dir = output_dir / "HTseq"
+genome_index_parent_dir = output_dir / "genome_index"
+
+SAMPLES = glob_wildcards(raw_reads_dir / "{sample}_1_sequence.fastq.gz").sample
+
+
+rule all:
+    input:
+        done_file_dir / "post_htseq2_parsing.done",
+
+
+include: "rules/counting_features.smk"
+
+
+include: "rules/genome_concat.smk"
+
+
+include: "rules/gff_tools.smk"
+
+
+include: "rules/map_reads.smk"
+
+
+include: "rules/post_htseq2_parsing.smk"
+
+
+include: "rules/run_trim.smk"
+
+
+include: "rules/samtools.smk"
+
+
+include: "rules/unzip.smk"
