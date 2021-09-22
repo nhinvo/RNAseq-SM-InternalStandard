@@ -1,0 +1,130 @@
+data_dir: /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/results
+htseq2dir: /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq
+raw_gff_dir: /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/input_data/culture_genome_annotations
+condition_table_path: /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/input_data/exp_sample_conditions/Xinda_Sample_list_GC.tsv
+experiment_1
+MIT9301
+DF Components
+   sample_143001  sample_143002  ...  sample_143019  sample_143020
+0       0.219201       0.217292  ...       0.231969       0.232925
+1       0.088214       0.049949  ...       0.083951       0.004737
+
+[2 rows x 20 columns]
+PCA explained variance
+[139.0389715719123, 0.7296042720144518]
+HTCC7211
+experiment_2
+MIT9301
+HTCC7211
+DF Components
+   sample_143009  sample_143010  ...  sample_143030  sample_143031
+0       0.232212       0.229093  ...       0.157648       0.160062
+1      -0.229938      -0.225792  ...      -0.089238      -0.091422
+
+[2 rows x 19 columns]
+PCA explained variance
+[78.21299607110363, 5.133510421278684]
+experiment_3
+MIT9301
+DF Components
+   sample_143001  sample_143002  ...  sample_143007  sample_143008
+0       0.354058       0.351008  ...       0.341082       0.356932
+1       0.149321       0.081754  ...       0.143854      -0.653813
+
+[2 rows x 8 columns]
+PCA explained variance
+[51.95126432522787, 0.14814346708931486]
+HTCC7211
+experiment_4
+MIT9301
+DF Components
+   sample_143001  sample_143002  ...  sample_143013  sample_143014
+0       0.308458       0.305756  ...       0.320500       0.326725
+1       0.376294       0.321021  ...       0.027825      -0.586648
+
+[2 rows x 10 columns]
+PCA explained variance
+[69.72208347771824, 0.5260146043117349]
+HTCC7211
+experiment_5
+MIT9301
+DF Components
+   sample_143005  sample_143006  ...  sample_143019  sample_143020
+0       0.314956       0.312523  ...       0.327801       0.328403
+1       0.256921       0.330781  ...      -0.438897      -0.459061
+
+[2 rows x 10 columns]
+PCA explained variance
+[70.81919585397145, 0.2030456123370858]
+HTCC7211
+experiment_7
+MIT9301
+DF Components
+   sample_143009  sample_143010  ...  sample_143019  sample_143020
+0      -0.285894      -0.284748  ...      -0.297545      -0.298742
+1      -0.117253      -0.115697  ...       0.180889       0.087582
+
+[2 rows x 12 columns]
+PCA explained variance
+[89.0184197943905, 0.8566256171938526]
+HTCC7211
+DF Components
+   sample_143009  sample_143010  ...  sample_143019  sample_143020
+0       0.253377       0.249178  ...       0.326878       0.332967
+1      -0.338051      -0.328778  ...       0.281486       0.267008
+
+[2 rows x 12 columns]
+PCA explained variance
+[65.38130649342297, 6.198276267328276]
+experiment_8
+MIT9301
+HTCC7211
+DF Components
+   sample_143009  sample_143010  ...  sample_143027  sample_143028
+0       0.330622       0.326704  ...       0.307513       0.287548
+1      -0.314062      -0.268903  ...       0.333543       0.424473
+
+[2 rows x 10 columns]
+PCA explained variance
+[40.582721905897856, 0.7444056228990285]
+experiment_9
+MIT9301
+DF Components
+   sample_143015  sample_143016  ...  sample_143030  sample_143031
+0       0.384255       0.378713  ...       0.143149       0.133276
+1      -0.059413      -0.076080  ...       0.453294       0.344148
+
+[2 rows x 9 columns]
+PCA explained variance
+[35.62270994159786, 2.1981290301482983]
+HTCC7211
+DF Components
+   sample_143015  sample_143016  ...  sample_143030  sample_143031
+0       0.383267       0.371651  ...       0.169862       0.173028
+1      -0.129244      -0.108455  ...       0.541468       0.550825
+
+[2 rows x 9 columns]
+PCA explained variance
+[45.62954592128123, 3.060570974138738]
+experiment_10
+MIT9301
+HTCC7211
+DF Components
+   sample_143025  sample_143026  ...  sample_143030  sample_143031
+0       0.422361       0.418748  ...       0.309827       0.315457
+1       0.217137       0.205641  ...      -0.464787      -0.476234
+
+[2 rows x 7 columns]
+PCA explained variance
+[18.68753152790744, 1.3676019338318104]
+experiment_11
+MIT9301
+DF Components
+   sample_143001  sample_143002  ...  sample_143023  sample_143024
+0       0.348406       0.345733  ...       0.355516       0.363192
+1       0.393091       0.295274  ...       0.184064      -0.508389
+
+[2 rows x 8 columns]
+PCA explained variance
+[55.66933053582452, 0.10578053923545666]
+HTCC7211

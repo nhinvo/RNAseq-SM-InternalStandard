@@ -1,0 +1,16 @@
+channels:
+- conda-forge
+- bioconda
+- defaults
+dependencies:
+- matplotlib
+- numpy
+- pandas
+- python
+- rpy2
+- scikit-learn
+- scipy
+- seaborn
+- bioconductor-deseq2
+- pip:
+  - gffpandas

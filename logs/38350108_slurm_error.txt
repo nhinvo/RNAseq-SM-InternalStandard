@@ -1,0 +1,439 @@
+Lints for snakefile /home/kve/scripts/DGE-co-culture-workflow/workflow/Snakefile:
+    * Absolute path "/nobackup1/kve/2021_Sar11ProProject/data_smk_SOP" in line 7:
+      Do not define absolute paths inside of the workflow, since this renders
+      your workflow irreproducible on other machines. Use path relative to the
+      working directory instead, or make the path configurable via a config
+      file.
+      Also see:
+      https://snakemake.readthedocs.io/en/latest/snakefiles/configuration.html#configuration
+
+Lints for rule counting_features (line 2, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/counting_features.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+
+Lints for rule genome_concat (line 2, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/genome_concat.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+    * Specify a conda environment or container for each rule.:
+      This way, the used software for each specific step is documented, and the
+      workflow can be executed on any machine without prerequisites.
+      Also see:
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#integrated-package-management
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#running-jobs-in-containers
+
+Lints for rule annotation_concat (line 2, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/gff_tools.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+    * Specify a conda environment or container for each rule.:
+      This way, the used software for each specific step is documented, and the
+      workflow can be executed on any machine without prerequisites.
+      Also see:
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#integrated-package-management
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#running-jobs-in-containers
+
+Lints for rule add_exon_column_to_gff (line 25, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/gff_tools.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+
+Lints for rule map_reads (line 2, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/map_reads.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+
+Lints for rule make_sample_index_dir (line 37, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/map_reads.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+    * Specify a conda environment or container for each rule.:
+      This way, the used software for each specific step is documented, and the
+      workflow can be executed on any machine without prerequisites.
+      Also see:
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#integrated-package-management
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#running-jobs-in-containers
+
+Lints for rule build_hisat2_index (line 52, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/map_reads.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+
+Lints for rule make_results_dir (line 1, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/post_htseq2_parsing.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+    * Specify a conda environment or container for each rule.:
+      This way, the used software for each specific step is documented, and the
+      workflow can be executed on any machine without prerequisites.
+      Also see:
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#integrated-package-management
+      https://snakemake.readthedocs.io/en/latest/snakefiles/deployment.html#running-jobs-in-containers
+
+Lints for rule post_htseq2_parsing (line 17, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/post_htseq2_parsing.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+
+Lints for rule run_trim (line 2, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/run_trim.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+
+Lints for rule convert_sam2bam (line 2, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/samtools.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+
+Lints for rule sort_bam (line 29, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/samtools.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+
+Lints for rule index_bam (line 56, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/samtools.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+
+Lints for rule unzip (line 1, /home/kve/scripts/DGE-co-culture-workflow/workflow/rules/unzip.smk):
+    * No log directive defined:
+      Without a log directive, all output will be printed to the terminal. In
+      distributed environments, this means that errors are harder to discover.
+      In local environments, output of concurrent jobs will be mixed and become
+      unreadable.
+      Also see:
+      https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#log-files
+
+[INFO] All done 🎉
+Building DAG of jobs...
+Building DAG of jobs...
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 10
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=250000
+Job stats:
+job                    count    min threads    max threads
+-------------------  -------  -------------  -------------
+all                        1              1              1
+post_htseq2_parsing        1              1              1
+total                      2              1              1
+
+Select jobs to execute...
+
+[Mon Aug 30 16:39:59 2021]
+rule post_htseq2_parsing:
+    input: /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143011.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143009.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143024.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143025.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143030.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143021.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143032.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143005.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143014.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143013.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143002.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143022.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143007.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143010.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143006.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143015.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143016.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143017.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143012.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143001.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143004.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143023.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143027.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143003.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143019.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143028.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143018.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143008.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143026.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143020.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143031.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/HTseq/210218Chi_D21-143029.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/input_data/culture_genome_annotations, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/input_data/exp_sample_conditions/Xinda_Sample_list_GC.tsv, /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/results
+    output: /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/done_files/post_htseq2_parsing.done
+    jobid: 1
+    resources: tmpdir=/tmp
+
+Activating conda environment: /home/kve/scripts/DGE-co-culture-workflow/.snakemake/conda/fe93d8e3bc2b15784ce515482091cb67
+Activating conda environment: /home/kve/scripts/DGE-co-culture-workflow/.snakemake/conda/fe93d8e3bc2b15784ce515482091cb67
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/scripts/tmpc62fiiw1.post_htseq2_parsing.py:313: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  experiment_condition_df[experiment] = experiments_include_df[experiment]
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+R[write to console]: -- replacing outliers and refitting for 2 genes
+-- DESeq argument 'minReplicatesForReplace' = 7 
+-- original counts are preserved in counts(dds)
+
+R[write to console]: estimating dispersions
+
+R[write to console]: fitting model and testing
+
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/scripts/tmpc62fiiw1.post_htseq2_parsing.py:313: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  experiment_condition_df[experiment] = experiments_include_df[experiment]
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: -- note: fitType='parametric', but the dispersion trend was not well captured by the
+   function: y = a/x + b, and a local regression fit was automatically substituted.
+   specify fitType='local' or 'mean' to avoid this message next time.
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+R[write to console]: -- note: fitType='parametric', but the dispersion trend was not well captured by the
+   function: y = a/x + b, and a local regression fit was automatically substituted.
+   specify fitType='local' or 'mean' to avoid this message next time.
+
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/conda/fe93d8e3bc2b15784ce515482091cb67/lib/python3.9/site-packages/seaborn/matrix.py:654: UserWarning: Clustering large matrix with scipy. Installing `fastcluster` may give better performance.
+  warnings.warn(msg)
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/scripts/tmpc62fiiw1.post_htseq2_parsing.py:313: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  experiment_condition_df[experiment] = experiments_include_df[experiment]
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/scripts/tmpc62fiiw1.post_htseq2_parsing.py:313: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  experiment_condition_df[experiment] = experiments_include_df[experiment]
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/scripts/tmpc62fiiw1.post_htseq2_parsing.py:313: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  experiment_condition_df[experiment] = experiments_include_df[experiment]
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/conda/fe93d8e3bc2b15784ce515482091cb67/lib/python3.9/site-packages/seaborn/matrix.py:805: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  self._figure = plt.figure(figsize=figsize)
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/scripts/tmpc62fiiw1.post_htseq2_parsing.py:313: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  experiment_condition_df[experiment] = experiments_include_df[experiment]
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/conda/fe93d8e3bc2b15784ce515482091cb67/lib/python3.9/site-packages/seaborn/matrix.py:654: UserWarning: Clustering large matrix with scipy. Installing `fastcluster` may give better performance.
+  warnings.warn(msg)
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/scripts/tmpc62fiiw1.post_htseq2_parsing.py:313: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  experiment_condition_df[experiment] = experiments_include_df[experiment]
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/scripts/tmpc62fiiw1.post_htseq2_parsing.py:313: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  experiment_condition_df[experiment] = experiments_include_df[experiment]
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/conda/fe93d8e3bc2b15784ce515482091cb67/lib/python3.9/site-packages/seaborn/matrix.py:654: UserWarning: Clustering large matrix with scipy. Installing `fastcluster` may give better performance.
+  warnings.warn(msg)
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/scripts/tmpc62fiiw1.post_htseq2_parsing.py:313: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  experiment_condition_df[experiment] = experiments_include_df[experiment]
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+/home/kve/scripts/DGE-co-culture-workflow/.snakemake/scripts/tmpc62fiiw1.post_htseq2_parsing.py:313: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  experiment_condition_df[experiment] = experiments_include_df[experiment]
+R[write to console]: estimating size factors
+
+R[write to console]: estimating dispersions
+
+R[write to console]: gene-wise dispersion estimates
+
+R[write to console]: mean-dispersion relationship
+
+R[write to console]: final dispersion estimates
+
+R[write to console]: fitting model and testing
+
+R[write to console]: There were 13 warnings (use warnings() to see them)
+R[write to console]: 
+
+Touching output file /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/done_files/post_htseq2_parsing.done.
+[Mon Aug 30 16:43:18 2021]
+Finished job 1.
+1 of 2 steps (50%) done
+Select jobs to execute...
+
+[Mon Aug 30 16:43:18 2021]
+localrule all:
+    input: /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/output_data/done_files/post_htseq2_parsing.done
+    jobid: 0
+    resources: tmpdir=/tmp
+
+[Mon Aug 30 16:43:18 2021]
+Finished job 0.
+2 of 2 steps (100%) done
+Complete log: /home/kve/scripts/DGE-co-culture-workflow/.snakemake/log/2021-08-30T163952.766847.snakemake.log
+Building DAG of jobs...
+Creating report...
+Missing metadata for file /nobackup1/kve/2021_Sar11ProProject/data_smk_SOP/results. Maybe metadata was deleted or it was created using an older version of Snakemake. This is a non critical warning.
+Downloading resources and rendering HTML.
+Loading script code for rule post_htseq2_parsing
+Loading script code for rule add_exon_column_to_gff
+Report created: report.html.
