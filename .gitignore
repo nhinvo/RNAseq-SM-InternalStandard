@@ -18,4 +18,5 @@ analysis/*
 !README.md
 !shell_scripts
 !shell_scripts/*
+!*.sbatch
 shell_scripts/.*
