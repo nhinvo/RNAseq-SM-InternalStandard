@@ -8,7 +8,6 @@ import seaborn as sns; sns.set()
 from sklearn.decomposition import PCA
 import gffpandas.gffpandas as gffpd
 import math
-from Bio import SeqIO
 
 # rpy2 imports
 import rpy2.robjects as robjects
