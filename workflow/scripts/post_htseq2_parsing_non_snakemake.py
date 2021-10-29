@@ -3,13 +3,13 @@ from pathlib import Path
 
 feature_types_to_keep=[
 'CDS',
-'RNase_P_RNA',
-'pseudogene',
 'rRNA',
-'region',
-'riboswitch',
 'tRNA',
-'tmRNA',
+# 'RNase_P_RNA',
+# 'pseudogene',
+# 'region',
+# 'riboswitch',
+# 'tmRNA',
 ]
 
 global_dir = Path("/nobackup1/kve/2021_Sar11ProProject/data")

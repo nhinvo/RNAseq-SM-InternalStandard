@@ -3,13 +3,13 @@ from pathlib import Path
 
 feature_types_to_keep=[
 'CDS',
-'RNase_P_RNA',
-'pseudogene',
 'rRNA',
-'region',
-'riboswitch',
 'tRNA',
-'tmRNA',
+# 'RNase_P_RNA',
+# 'pseudogene',
+# 'region',
+# 'riboswitch',
+# 'tmRNA',
 ]
 
 results_dir = Path(snakemake.input.r_dir)

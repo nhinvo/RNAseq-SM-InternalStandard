@@ -4,7 +4,7 @@ from pathlib import Path
 
 # report: "report/workflow.rst"
 
-global_dir = Path("/nobackup1/kve/2021_Sar11ProProject/data")
+global_dir = Path("/nobackup1/kve/2021_Sar11Pro_RNAseq_Project/data")
 
 input_dir = global_dir / "input_data"
 output_dir = global_dir / "output_data"
@@ -24,6 +24,7 @@ concat_genome_file = output_dir / "concat_genome" / "concat_genome.fna"
 mapped_reads_dir = output_dir / "mapped_reads"
 feature_count_dir = output_dir / "HTseq"
 genome_index_parent_dir = output_dir / "genome_index"
+library_count_dir = output_dir / "raw_library_counts"
 
 SAMPLES = glob_wildcards(raw_reads_dir / "{sample}_1_sequence.fastq.gz").sample
 

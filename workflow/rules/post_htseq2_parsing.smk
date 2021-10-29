@@ -12,6 +12,7 @@ rule post_htseq2_parsing:
         condition_table_path=condition_table_file,
         r_dir = results_dir,
         raw_reads=raw_reads_dir,
+        raw_reads_counts=library_count_dir / "library_len.tsv"
     output:
         done_flag = touch(done_file_dir / "post_htseq2_parsing.done"),
     conda:

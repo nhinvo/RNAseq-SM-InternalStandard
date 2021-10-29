@@ -4,7 +4,7 @@ rule map_reads:
         r1 = trimmed_reads_dir / "{sample}_1_trimmed.fastq",
         r2 = trimmed_reads_dir / "{sample}_2_trimmed.fastq",
         index_dir = genome_index_parent_dir / "{sample}" / "concat_genome", 
-        index = "build_hisat2_index.{sample}.done"
+        index = done_file_dir / "build_hisat2_index.{sample}.done"
     output:
         temp(mapped_reads_dir / "{sample}_mapped.sam"),  # temp() temporarily keeps SAMs until converted
     resources:
