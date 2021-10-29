@@ -2,7 +2,7 @@ rule make_results_dir:
     output:
         directory(results_dir)
     shell:
-        "sleep 1"
+        "mkdir -p {output}; sleep 1"
 
 # run post-HTseq script
 rule post_htseq2_parsing:
