@@ -1,9 +1,9 @@
 
 rule convert_sam2bam:
     input:
-        mapped_reads_dir / "{sample}_mapped.sam",
+        Path(config["output"]["mapped_reads"]) / "{sample}_mapped.sam",
     output:
-        temp(mapped_reads_dir / "{sample}_mapped.bam"),
+        temp(Path(config["output"]["mapped_reads"]) / "{sample}_mapped.bam"),
     resources:
         mem_mb=100000,
     conda:
@@ -13,9 +13,9 @@ rule convert_sam2bam:
 
 rule sort_bam:
     input:
-        mapped_reads_dir / "{sample}_mapped.bam",
+        Path(config["output"]["mapped_reads"]) / "{sample}_mapped.bam",
     output:
-        mapped_reads_dir / "{sample}_mapped_sorted.bam",  # TODO: once we can confirm workflow we should change this to temp
+        Path(config["output"]["mapped_reads"]) / "{sample}_mapped_sorted.bam",
     resources:
         mem_mb=100000,
     conda:
@@ -25,9 +25,9 @@ rule sort_bam:
 
 rule index_bam:
     input:
-        mapped_reads_dir / "{sample}_mapped_sorted.bam",
+        Path(config["output"]["mapped_reads"]) / "{sample}_mapped_sorted.bam",
     output:
-        temp(mapped_reads_dir / "{sample}_mapped_sorted.bam.bai"),
+        temp(Path(config["output"]["mapped_reads"]) / "{sample}_mapped_sorted.bam.bai"),
     resources:
         mem_mb=100000,
     conda:

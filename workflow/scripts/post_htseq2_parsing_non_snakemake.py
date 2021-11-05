@@ -1,5 +1,6 @@
 from post_htseq2_parsing import *
 from pathlib import Path
+import yaml
 
 feature_types_to_keep=[
 'CDS',
@@ -12,26 +13,18 @@ feature_types_to_keep=[
 # 'tmRNA',
 ]
 
-global_dir = Path("/nobackup1/kve/2021_Sar11ProProject/data")
+with open('../../config/config.yaml', 'r') as file:
+    config = yaml.safe_load(file)
 
-input_dir = global_dir / "input_data"
-output_dir = global_dir / "output_data"
-results_dir = global_dir / "results"
+results_dir = Path(config["results"])
+htseq2dir = Path(config["output"]["feature_count"])
+raw_gff_dir = Path(config["input"]["gff_refs"])
+condition_table_path = Path('../../config/samples.tsv')
+raw_reads_dir = Path(config["input"]["raw_reads"])
 
-raw_reads_dir = input_dir / "raw_reads"
-genome_refs_dir = input_dir / "culture_genome_refs"
-gff_refs_dir = input_dir / "culture_genome_annotations"
-adapter_file = input_dir / "adapters" / "all_illumina_adapters.fa"
-condition_table_file = input_dir / "exp_sample_conditions" / "Xinda_Sample_list_GC.tsv"
+print("results_dir: {}".format(results_dir))
+print("htseq2dir: {}".format(htseq2dir))
+print("raw_gff_dir: {}".format(raw_gff_dir))
+print("condition_table_path: {}".format(condition_table_path))
 
-done_file_dir = output_dir / "done_files"
-trimmed_reads_dir = output_dir / "trimmed_reads"
-concat_gff_file = output_dir / "concat_gff" / "concat_gff.gff"
-concat_gff_mod_file = output_dir / "concat_gff" / "concat_gff_mod.gff"
-concat_genome_file = output_dir / "concat_genome" / "concat_genome.fna"
-mapped_reads_dir = output_dir / "mapped_reads"
-feature_count_dir = output_dir / "HTseq"
-genome_index_parent_dir = output_dir / "genome_index"
-
-
-main(results_dir, feature_count_dir, gff_refs_dir, condition_table_file, raw_reads_dir, feature_types_to_keep)
+main(results_dir, htseq2dir, raw_gff_dir, condition_table_path, raw_reads_dir, feature_types_to_keep)

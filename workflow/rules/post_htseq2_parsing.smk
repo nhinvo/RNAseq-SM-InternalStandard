@@ -1,20 +1,20 @@
 rule make_results_dir:
     output:
-        directory(results_dir)
+        directory(config["results"])
     shell:
         "mkdir -p {output}; sleep 1"
 
 # run post-HTseq script
 rule post_htseq2_parsing:
     input:
-        sample_counts=expand(feature_count_dir / "{sample}.tsv", sample=SAMPLES),
-        raw_gff_dir=gff_refs_dir,
-        condition_table_path=condition_table_file,
-        r_dir = results_dir,
-        raw_reads=raw_reads_dir,
-        raw_reads_counts=library_count_dir / "library_len.tsv"
+        sample_counts=expand(Path(config["output"]["feature_count"]) / "{sample}.tsv", sample=SAMPLES),
+        raw_gff_dir=Path(config["input"]["gff_refs"]),
+        condition_table_path=Path(config["samples"]),
+        r_dir = Path(config["results"]),
+        raw_reads=Path(config["input"]["raw_reads"]),
+        raw_reads_counts=Path(config["output"]["library_count"])
     output:
-        done_flag = touch(done_file_dir / "post_htseq2_parsing.done"),
+        done_flag = touch(Path(config["output"]["done_files"]) / "post_htseq2_parsing.done"),
     conda:
         "../envs/post_htseq2_parsing.yaml"
     script:

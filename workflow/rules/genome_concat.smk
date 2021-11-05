@@ -1,9 +1,9 @@
 # concat all genomes within genome directory (necessary for mapping step)
 rule genome_concat:
     input:
-        genome_refs_dir,
+        config["input"]["genome_refs"],
     output:
-        concat_genome_file,
+        config["output"]["concat_genome"]["concat_genome_file"],
     resources:
         mem_mb=100000,
     shell:

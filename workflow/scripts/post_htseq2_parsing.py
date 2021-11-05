@@ -39,7 +39,7 @@ def get_htseq2_and_metadata_df(htseq2dir, organism_type_ID_df, feature_types_to_
     for i, path in enumerate(sorted(list(htseq2dir.iterdir()))):
         if path.suffix == '.tsv':
             # get sample ID from path
-            sample_name = path.stem.split('-')[1]
+            sample_name = path.stem
 
             # read in HTseq TSV
             temp_df = pd.read_csv(path, sep='\t', names=['long_ID', sample_name])
@@ -285,18 +285,27 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
     plot_pct_genes_mapped_per_organism_sample(organism_sample_gene_mapping_pct_df, metadata_figures_dir)
 
     # experiments and DEseq2
-    conditions_df =  pd.read_csv(condition_table_path, sep='\t', index_col='sample_ID')
+    conditions_df =  pd.read_csv(condition_table_path, sep='\t', index_col='sample_name')
 
+    # extracts columns that include the word "experiment"
     experiments_include_df = conditions_df[conditions_df.columns[np.array(conditions_df.columns.str.contains('experiment'))]]
+    
+    # creates new dataframe from experiments_include_df that replaces control/treatment with True in order to subset future datasets
     experiment_include_df_bool = experiments_include_df.replace(['control', 'treatment'], True)
     experiment_include_df_bool = experiment_include_df_bool.fillna(False)
 
+    print("experiment_include_df_bool:")
+    print(experiment_include_df_bool)
+
     conditions_df_sans_experiments = conditions_df[conditions_df.columns[~np.array(conditions_df.columns.str.contains('experiment'))]]
+
+    print("conditions_df_sans_experiments:")
+    print(conditions_df_sans_experiments)
 
     for experiment in experiment_include_df_bool.columns:
         
         print(experiment)
-
+        
         experiment_dir = makeOutDir(experiments_dir, experiment)
         experiment_count_dir = makeOutDir(experiment_dir, 'count_table')
         experiment_condition_dir = makeOutDir(experiment_dir, 'condition_table')
@@ -305,10 +314,12 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
         dge_out_dir = makeOutDir(experiment_dir, 'DGE_tables')
 
         include_sample_bool_list = experiment_include_df_bool[experiment]
+
         experiment_condition_df = conditions_df_sans_experiments[include_sample_bool_list]
         experiment_condition_df[experiment] = experiments_include_df[experiment]
-
-        experiment_counts_df = counts_df[include_sample_bool_list.index.values[include_sample_bool_list]]
+        
+        experiment_samples = include_sample_bool_list.index.values[include_sample_bool_list] 
+        experiment_counts_df = counts_df[[f"sample_{s}" for s in experiment_samples]]
         
         experiment_condition_df.to_csv(experiment_condition_dir / '{}_condition_table.tsv'.format(experiment), sep='\t')
 
@@ -339,9 +350,9 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
                 
                 # 2. create DESeqDataSet object
                 # exp design
-                robjects.r("""dds <- DESeqDataSetFromMatrix(countData = r_experiment_organism_count_df, 
+                robjects.r(f"""dds <- DESeqDataSetFromMatrix(countData = r_experiment_organism_count_df, 
                                                             colData = r_experiment_condition_df, 
-                                                            design = ~ {})""".format(experiment))
+                                                            design = ~ {experiment})""")
                 
                 # 3. run DEseq command
                 dds_processed = robjects.r("DESeq(dds)")

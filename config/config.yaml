@@ -1,4 +1,24 @@
-# This file should contain everything to configure the workflow on a global scale.
-# In case of sample based data, it should be complemented by a samples.tsv file that contains
-# one row per sample. It can be parsed easily via pandas.
+
 samples: "config/samples.tsv"
+
+input: 
+  raw_reads: /nobackup1/kve/2021_dark_adapted_transcriptome/input_data/raw_reads
+  genome_refs: /nobackup1/kve/2021_dark_adapted_transcriptome/input_data/culture_genome_refs
+  gff_refs: /nobackup1/kve/2021_dark_adapted_transcriptome/input_data/culture_genome_annotations
+  adapter_file: /nobackup1/kve/2021_dark_adapted_transcriptome/input_data/adapters/all_illumina_adapters.fa
+output: 
+  done_files: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/done_files
+  trimmed_reads: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/trimmed_reads
+  concat_gff:
+    concat_gff_file: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/concat_gff/concat_gff.gff
+    concat_gff_mod_file: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/concat_gff/concat_gff_mod.gff
+  concat_genome: 
+    concat_genome_file: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/concat_genome/concat_genome.fna
+  mapped_reads: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/mapped_reads
+  feature_count: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/HTseq
+  genome_index_parent: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/genome_index
+  library_count: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/raw_library_counts/library_len.tsv
+results: /nobackup1/kve/2021_dark_adapted_transcriptome/results
+
+  
+

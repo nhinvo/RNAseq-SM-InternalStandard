@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 
-#SBATCH --job-name=sar11_Pro_DE
+#SBATCH --job-name=DGE-co-cul
 #
 # Number of tasks/cores for job
 #SBATCH -n 10

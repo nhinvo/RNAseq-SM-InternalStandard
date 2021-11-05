@@ -1,9 +1,9 @@
 # concat all GFF within GFF directory (necessary for counting step)
 rule annotation_concat:
     input:
-        gff_refs_dir,
+        config["input"]["gff_refs"],
     output:
-        concat_gff_file,
+        config["output"]["concat_gff"]["concat_gff_file"],
     resources:
         mem_mb=100000,
     shell:
@@ -11,9 +11,9 @@ rule annotation_concat:
 
 rule add_exon_column_to_gff:
     input:
-        concat_gff_file
+        config["output"]["concat_gff"]["concat_gff_file"]
     output:
-        concat_gff_mod_file
+        config["output"]["concat_gff"]["concat_gff_mod_file"]
     conda:
         "../envs/post_htseq2_parsing.yaml"
     resources:

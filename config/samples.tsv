@@ -1,3 +1,43 @@
-sample	condition
-A	untreated
-B	treated
+sample_name	sample_ID	culture	Strain	Date	Real Time	Rounded Time	treatment	experiment_0	experiment_4	experiment_8	experiment_13	experiment_16	experiment_20	experiment_24	experiment_all
+1	175	NATL2A and MIT1002	Parental	12/1/17	135	0	Parental ZT 0	control							Parental ZT 0
+2	176	NATL2A and MIT1002	Parental	12/1/17	135	0	Parental ZT 0	control							Parental ZT 0
+3	177	NATL2A and MIT1002	Parental	12/1/17	135	0	Parental ZT 0	control							Parental ZT 0
+4	181	NATL2A and MIT1002	Parental	12/1/17	530	4	Parental ZT 4		control						Parental ZT 4
+5	182	NATL2A and MIT1002	Parental	12/1/17	530	4	Parental ZT 4		control						Parental ZT 4
+6	183	NATL2A and MIT1002	Parental	12/1/17	530	4	Parental ZT 4		control						Parental ZT 4
+7	187	NATL2A and MIT1002	Parental	12/1/17	930	8	Parental ZT 8			control					Parental ZT 8
+8	188	NATL2A and MIT1002	Parental	12/1/17	930	8	Parental ZT 8			control					Parental ZT 8
+9	189	NATL2A and MIT1002	Parental	12/1/17	930	8	Parental ZT 8			control					Parental ZT 8
+10	193	NATL2A and MIT1002	Parental	12/1/17	1430	13	Parental ZT 13				control				Parental ZT 13
+11	194	NATL2A and MIT1002	Parental	12/1/17	1430	13	Parental ZT 13				control				Parental ZT 13
+12	195	NATL2A and MIT1002	Parental	12/1/17	1430	13	Parental ZT 13				control				Parental ZT 13
+13	199	NATL2A and MIT1002	Parental	12/1/17	1735	16	Parental ZT 16					control			Parental ZT 16
+14	200	NATL2A and MIT1002	Parental	12/1/17	1735	16	Parental ZT 16					control			Parental ZT 16
+15	201	NATL2A and MIT1002	Parental	12/1/17	1735	16	Parental ZT 16					control			Parental ZT 16
+16	205	NATL2A and MIT1002	Parental	12/1/17	2135	20	Parental ZT 20						control		Parental ZT 20
+17	206	NATL2A and MIT1002	Parental	12/1/17	2135	20	Parental ZT 20						control		Parental ZT 20
+18	207	NATL2A and MIT1002	Parental	12/1/17	2135	20	Parental ZT 20						control		Parental ZT 20
+19	211	NATL2A and MIT1002	Parental	12/2/17	135	24	Parental ZT 24							control	Parental ZT 24
+20	212	NATL2A and MIT1002	Parental	12/2/17	135	24	Parental ZT 24							control	Parental ZT 24
+21	213	NATL2A and MIT1002	Parental	12/2/17	135	24	Parental ZT 24							control	Parental ZT 24
+22	331	NATL2A and MIT1002	Dark Adapted	2/17/18	130	0	Dark Adapted ZT 0	treatment							Dark Adapted ZT 0
+23	332	NATL2A and MIT1002	Dark Adapted	2/17/18	130	0	Dark Adapted ZT 0	treatment							Dark Adapted ZT 0
+24	333	NATL2A and MIT1002	Dark Adapted	2/17/18	130	0	Dark Adapted ZT 0	treatment							Dark Adapted ZT 0
+25	337	NATL2A and MIT1002	Dark Adapted	2/17/18	530	4	Dark Adapted ZT 4		treatment						Dark Adapted ZT 4
+26	338	NATL2A and MIT1002	Dark Adapted	2/17/18	530	4	Dark Adapted ZT 4		treatment						Dark Adapted ZT 4
+27	339	NATL2A and MIT1002	Dark Adapted	2/17/18	530	4	Dark Adapted ZT 4		treatment						Dark Adapted ZT 4
+28	343	NATL2A and MIT1002	Dark Adapted	2/17/18	930	8	Dark Adapted ZT 8			treatment					Dark Adapted ZT 8
+29	344	NATL2A and MIT1002	Dark Adapted	2/17/18	930	8	Dark Adapted ZT 8			treatment					Dark Adapted ZT 8
+30	345	NATL2A and MIT1002	Dark Adapted	2/17/18	930	8	Dark Adapted ZT 8			treatment					Dark Adapted ZT 8
+31	349	NATL2A and MIT1002	Dark Adapted	2/17/18	1425	13	Dark Adapted ZT 13				treatment				Dark Adapted ZT 13
+32	350	NATL2A and MIT1002	Dark Adapted	2/17/18	1425	13	Dark Adapted ZT 13				treatment				Dark Adapted ZT 13
+33	351	NATL2A and MIT1002	Dark Adapted	2/17/18	1425	13	Dark Adapted ZT 13				treatment				Dark Adapted ZT 13
+34	355	NATL2A and MIT1002	Dark Adapted	2/17/18	1734	16	Dark Adapted ZT 16					treatment			Dark Adapted ZT 16
+35	356	NATL2A and MIT1002	Dark Adapted	2/17/18	1734	16	Dark Adapted ZT 16					treatment			Dark Adapted ZT 16
+36	357	NATL2A and MIT1002	Dark Adapted	2/17/18	1734	16	Dark Adapted ZT 16					treatment			Dark Adapted ZT 16
+37	361	NATL2A and MIT1002	Dark Adapted	2/17/18	2130	20	Dark Adapted ZT 20						treatment		Dark Adapted ZT 20
+38	362	NATL2A and MIT1002	Dark Adapted	2/17/18	2130	20	Dark Adapted ZT 20						treatment		Dark Adapted ZT 20
+39	363	NATL2A and MIT1002	Dark Adapted	2/17/18	2130	20	Dark Adapted ZT 20						treatment		Dark Adapted ZT 20
+40	367	NATL2A and MIT1002	Dark Adapted	2/18/18	130	24	Dark Adapted ZT 24							treatment	Dark Adapted ZT 24
+41	368	NATL2A and MIT1002	Dark Adapted	2/18/18	130	24	Dark Adapted ZT 24							treatment	Dark Adapted ZT 24
+42	369	NATL2A and MIT1002	Dark Adapted	2/18/18	130	24	Dark Adapted ZT 24							treatment	Dark Adapted ZT 24
