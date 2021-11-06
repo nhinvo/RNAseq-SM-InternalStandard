@@ -291,18 +291,9 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
     experiments_include_df = conditions_df[conditions_df.columns[np.array(conditions_df.columns.str.contains('experiment'))]]
     
     # creates new dataframe from experiments_include_df that replaces control/treatment with True in order to subset future datasets
-    experiment_include_df_bool = experiments_include_df.replace(['control', 'treatment'], True)
-    experiment_include_df_bool = experiment_include_df_bool.fillna(False)
-
-    print("experiment_include_df_bool:")
-    print(experiment_include_df_bool)
-
     conditions_df_sans_experiments = conditions_df[conditions_df.columns[~np.array(conditions_df.columns.str.contains('experiment'))]]
 
-    print("conditions_df_sans_experiments:")
-    print(conditions_df_sans_experiments)
-
-    for experiment in experiment_include_df_bool.columns:
+    for experiment in experiments_include_df.columns:
         
         print(experiment)
         
@@ -313,15 +304,19 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
         figure_out_dir = makeOutDir(experiment_dir, 'post_DE_seq_figures')
         dge_out_dir = makeOutDir(experiment_dir, 'DGE_tables')
 
-        include_sample_bool_list = experiment_include_df_bool[experiment]
+        included_samples_series = experiments_include_df[experiments_include_df[experiment].notna()][experiment]
 
-        experiment_condition_df = conditions_df_sans_experiments[include_sample_bool_list]
-        experiment_condition_df[experiment] = experiments_include_df[experiment]
-        
-        experiment_samples = include_sample_bool_list.index.values[include_sample_bool_list] 
-        experiment_counts_df = counts_df[[f"sample_{s}" for s in experiment_samples]]
+        conditions = included_samples_series.to_list()
+        return_results_df = len(conditions) == 2 and 'control' in conditions and 'treatment' in conditions
+
+        experiment_condition_df = conditions_df_sans_experiments.loc[included_samples_series.index]
+        experiment_condition_df[experiment] = included_samples_series
         
         experiment_condition_df.to_csv(experiment_condition_dir / '{}_condition_table.tsv'.format(experiment), sep='\t')
+
+        experiment_samples = included_samples_series.index.values 
+
+        experiment_counts_df = counts_df[[f"sample_{s}" for s in experiment_samples]]
 
         experiment_counts_df = experiment_counts_df.reset_index(level='type', drop=True)
 
@@ -360,7 +355,8 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
 
                 # get normalized counts df
                 r_normalized_counts_df = robjects.r("counts(dds_processed, normalized=TRUE)")
-
+                
+                # if return_results_df:
                 # 4a. set up experiment controls and treatments
                 contrast_string_list = robjects.StrVector([experiment, 'control', 'treatment'])
 
@@ -387,21 +383,17 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
                 with localconverter(robjects.default_converter + pandas2ri.converter):
                     normalized_counts_array = robjects.conversion.rpy2py(r_normalized_counts_df)
 
+                # if return_results_df:
                 # 7. transfer results df to pandas
                 with localconverter(robjects.default_converter + pandas2ri.converter):
                     results_table = robjects.conversion.rpy2py(r_results_df)
-
-                # todo: fix final issues with this.
-
-                # 8. cleaning up dataframes
-                # results_table['seq_id'] = results_table.index
-                # results_table = results_table.set_index('seq_id')
+                    
 
                 results_table = results_table.rename({'seq_id':'long_ID'})
 
-                normalized_counts_df = pd.DataFrame(normalized_counts_array, index=results_table.index, columns=include_sample_bool_list.index.values[include_sample_bool_list])
-                rlog_df = pd.DataFrame(rlog_array, index=results_table.index, columns=include_sample_bool_list.index.values[include_sample_bool_list])
-                vst_df = pd.DataFrame(vst_array, index=results_table.index, columns=include_sample_bool_list.index.values[include_sample_bool_list])
+                normalized_counts_df = pd.DataFrame(normalized_counts_array, index=results_table.index, columns=included_samples_series.index.values)
+                rlog_df = pd.DataFrame(rlog_array, index=results_table.index, columns=included_samples_series.index.values)
+                vst_df = pd.DataFrame(vst_array, index=results_table.index, columns=included_samples_series.index.values)
                 
                 # saving out dataframes:
                 rlog_count_data_path = experiment_deseq2out_dir / '{}_{}_rlog.tsv'.format(experiment, organism)
