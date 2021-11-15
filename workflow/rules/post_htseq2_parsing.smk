@@ -12,7 +12,8 @@ rule post_htseq2_parsing:
         condition_table_path=Path(config["samples"]),
         r_dir = Path(config["results"]),
         raw_reads=Path(config["input"]["raw_reads"]),
-        raw_reads_counts=Path(config["output"]["library_count"])
+        raw_reads_counts=Path(config["output"]["library_count"]),
+        bam_coverages=expand(Path(config["output"]["coverage_positions"]) / "{sample}_coverage_depth.tsv", sample=SAMPLES),
     output:
         done_flag = touch(Path(config["output"]["done_files"]) / "post_htseq2_parsing.done"),
     conda:

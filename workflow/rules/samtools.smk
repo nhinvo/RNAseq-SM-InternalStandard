@@ -34,3 +34,16 @@ rule index_bam:
         "../envs/samtools.yaml"
     shell:
         "samtools index -b {input}"
+
+
+rule bam_coverage:
+    input:
+        Path(config["output"]["mapped_reads"]) / "{sample}_mapped_sorted.bam",
+    output:
+        Path(config["output"]["coverage_positions"]) / "{sample}_coverage_depth.tsv",
+    resources:
+        mem_mb=100000,
+    conda:
+        "../envs/samtools.yaml"
+    shell:
+        "samtools depth -a -H {input} > {output}"

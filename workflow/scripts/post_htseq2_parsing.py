@@ -209,6 +209,7 @@ def plot_PCA(count_table, condition_table, fig_out_path):
     ax.legend(handles=patches)
 
     plt.savefig(fig_out_path)
+    plt.close()
 
 def plot_pct_genes_mapped_per_organism_sample(pct_genes_mapped_per_organism_sample_df, out_dir):
     for organism in pct_genes_mapped_per_organism_sample_df.index.unique():
@@ -218,6 +219,7 @@ def plot_pct_genes_mapped_per_organism_sample(pct_genes_mapped_per_organism_samp
         pct_genes_mapped_per_organism_sample_df.loc[organism].plot.bar()
 
         plt.savefig(fig_out_path)
+        plt.close()
 
 def plot_lfc_mean_normalized_counts(results_df, fig_out_path, fdr=0.1):
     
@@ -234,6 +236,7 @@ def plot_lfc_mean_normalized_counts(results_df, fig_out_path, fdr=0.1):
     ax.set_ylabel('log2FoldChange')
     
     plt.savefig(fig_out_path)
+    plt.close()
 
 def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, feature_types_to_keep=None):
 
@@ -264,6 +267,7 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
     metadata_df, counts_df = get_htseq2_and_metadata_df(htseq2dir, organism_type_ID_df, feature_types_to_keep)
     
     counts_df.to_csv(results_dir / "counts.tsv", sep="\t")
+    attributes_df.to_csv(results_dir / "attributes.tsv", sep="\t")
 
     save_out_metadata(metadata_df, metadata_tables_dir)
     
@@ -306,8 +310,11 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
 
         included_samples_series = experiments_include_df[experiments_include_df[experiment].notna()][experiment]
 
-        conditions = included_samples_series.to_list()
+        conditions = list(included_samples_series.unique())
+        
         return_results_df = len(conditions) == 2 and 'control' in conditions and 'treatment' in conditions
+
+        print(f"conditions {return_results_df} for {conditions}")
 
         experiment_condition_df = conditions_df_sans_experiments.loc[included_samples_series.index]
         experiment_condition_df[experiment] = included_samples_series
@@ -322,13 +329,14 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
 
         for organism in experiment_counts_df.index.unique(0):
             print(organism)
+            print()
             experiment_organism_count_df = experiment_counts_df.loc[organism, :]
 
             # organism must be present in all samples. Good test to tell if it is from experience...
             # print('{} - organism lowest sample read mapping in experiment: {}'.format(organism, min(experiment_organism_count_df.mean())))
             if min(experiment_organism_count_df.mean()) > 1:
                 
-                experiment_raw_count_outpath = experiment_count_dir / '{}_raw_counts_{}.tsv'.format(experiment, organism)
+                experiment_raw_count_outpath = experiment_count_dir / f"{experiment}_raw_counts_{organism}.tsv"
                 experiment_organism_count_df.to_csv(experiment_raw_count_outpath, sep='\t')
 
                 # DEseq process
@@ -356,14 +364,14 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
                 # get normalized counts df
                 r_normalized_counts_df = robjects.r("counts(dds_processed, normalized=TRUE)")
                 
-                # if return_results_df:
-                # 4a. set up experiment controls and treatments
-                contrast_string_list = robjects.StrVector([experiment, 'control', 'treatment'])
+                if return_results_df:
+                    # 4a. set up experiment controls and treatments
+                    contrast_string_list = robjects.StrVector([experiment, 'control', 'treatment'])
 
-                # 4b. get results df
-                r_results = deseq2.results(dds_processed, contrast = contrast_string_list)
-                robjects.globalenv['r_results'] = r_results
-                r_results_df = robjects.r("as.data.frame(r_results)")
+                    # 4b. get results df
+                    r_results = deseq2.results(dds_processed, contrast = contrast_string_list)
+                    robjects.globalenv['r_results'] = r_results
+                    r_results_df = robjects.r("as.data.frame(r_results)")
 
                 # 5. get rlog and vsd dfs
                 rlog_output = deseq2.rlog(dds_processed, blind=False)
@@ -383,29 +391,30 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
                 with localconverter(robjects.default_converter + pandas2ri.converter):
                     normalized_counts_array = robjects.conversion.rpy2py(r_normalized_counts_df)
 
-                # if return_results_df:
-                # 7. transfer results df to pandas
-                with localconverter(robjects.default_converter + pandas2ri.converter):
-                    results_table = robjects.conversion.rpy2py(r_results_df)
-                    
+                if return_results_df:
+                    # 7. transfer results df to pandas
+                    with localconverter(robjects.default_converter + pandas2ri.converter):
+                        results_table = robjects.conversion.rpy2py(r_results_df)
+                        
+                    results_table = results_table.rename({'seq_id':'long_ID'})
+                    results_table['long_ID'] = experiment_organism_count_df.index.values
+                    results_table = results_table.set_index('long_ID')
 
-                results_table = results_table.rename({'seq_id':'long_ID'})
+                    results_table_path = experiment_deseq2out_dir / '{}_{}_results.tsv'.format(experiment, organism)
+                    results_table.to_csv(results_table_path, sep='\t')
 
-                normalized_counts_df = pd.DataFrame(normalized_counts_array, index=results_table.index, columns=included_samples_series.index.values)
-                rlog_df = pd.DataFrame(rlog_array, index=results_table.index, columns=included_samples_series.index.values)
-                vst_df = pd.DataFrame(vst_array, index=results_table.index, columns=included_samples_series.index.values)
+                normalized_counts_df = pd.DataFrame(normalized_counts_array, index=experiment_organism_count_df.index, columns=included_samples_series.index.values)
+                rlog_df = pd.DataFrame(rlog_array, index=experiment_organism_count_df.index, columns=included_samples_series.index.values)
+                vst_df = pd.DataFrame(vst_array, index=experiment_organism_count_df.index, columns=included_samples_series.index.values)
                 
                 # saving out dataframes:
                 rlog_count_data_path = experiment_deseq2out_dir / '{}_{}_rlog.tsv'.format(experiment, organism)
                 vst_data_path = experiment_deseq2out_dir / '{}_{}_vst.tsv'.format(experiment, organism)
                 normalized_counts_data_path = experiment_deseq2out_dir / '{}_{}_normalized_counts.tsv'.format(experiment, organism)
-                results_table_path = experiment_deseq2out_dir / '{}_{}_results.tsv'.format(experiment, organism)
-
+                
                 normalized_counts_df.to_csv(normalized_counts_data_path, sep='\t')
                 rlog_df.to_csv(rlog_count_data_path, sep='\t')
                 vst_df.to_csv(vst_data_path, sep='\t')
-
-                results_table.to_csv(results_table_path, sep='\t')
 
                 # post-DEseq2 analysis
                 zero_dge_out_path = dge_out_dir / '{}_{}_DGE_all.tsv'.format(experiment, organism)
@@ -415,16 +424,20 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
                 clustermap_log_out_path = figure_out_dir / '{}_{}_clustermap_rlog.png'.format(experiment, organism)
                 lfc_mean_normalized_counts_path = figure_out_dir / '{}_{}_lfc_v_mean_normalized_counts.png'.format(experiment, organism)
 
-                get_dge_table(results_table, attributes_df, fdr=None, sort=True, dge_out_path=zero_dge_out_path)
-                get_dge_table(results_table, attributes_df, fdr=0.1, sort=True, dge_out_path=dge_out_path)
-
                 plot_PCA(rlog_df, experiment_condition_df, pca_out_path)
-                plot_lfc_mean_normalized_counts(results_table, lfc_mean_normalized_counts_path, fdr=0.1)
 
-                # get highest differentially expressed genes
-                high_dge_table = get_dge_table(results_table, attributes_df, fdr=0.01, sort=True, dge_out_path=high_dge_out_path)
-                try:
-                    plot_heatmap(rlog_df, indices=high_dge_table.index.tolist(), fig_out_path=clustermap_log_out_path)
-                except:
-                    print(rlog_df.min())
+                if return_results_df:
+
+                    get_dge_table(results_table, attributes_df, fdr=None, sort=True, dge_out_path=zero_dge_out_path)
+                    get_dge_table(results_table, attributes_df, fdr=0.1, sort=True, dge_out_path=dge_out_path)
+
+                    plot_lfc_mean_normalized_counts(results_table, lfc_mean_normalized_counts_path, fdr=0.1)
+
+                    # get highest differentially expressed genes
+                    high_dge_table = get_dge_table(results_table, attributes_df, fdr=0.01, sort=True, dge_out_path=high_dge_out_path)
+                    try:
+                        plot_heatmap(rlog_df, indices=high_dge_table.index.tolist(), fig_out_path=clustermap_log_out_path)
+                    except:
+                        print(f"rlog min: (something went wrong) {rlog_df.min()}")
+                        raise
 

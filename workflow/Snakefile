@@ -17,6 +17,10 @@ SAMPLES = glob_wildcards(
 rule all:
     input:
         Path(config["output"]["done_files"]) / "post_htseq2_parsing.done",
+        expand(
+            Path(config["output"]["fastqc"]) / "{sample}_trimmed_fastqc.html",
+            sample=SAMPLES,
+        ),
 
 
 include: "rules/counting_features.smk"
@@ -28,7 +32,16 @@ include: "rules/genome_concat.smk"
 include: "rules/gff_tools.smk"
 
 
-include: "rules/map_reads.smk"
+assert not (config["use_bwa"] and config["use_hisat2"])
+
+if config["use_hisat2"]:
+
+    include: "rules/map_reads_hisat2.smk"
+
+
+if config["use_bwa"]:
+
+    include: "rules/map_reads_bwa.smk"
 
 
 include: "rules/post_htseq2_parsing.smk"
@@ -41,3 +54,6 @@ include: "rules/samtools.smk"
 
 
 include: "rules/unzip.smk"
+
+
+include: "rules/fastqc.smk"

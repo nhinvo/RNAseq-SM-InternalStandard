@@ -1,24 +1,30 @@
 
 samples: "config/samples.tsv"
 
+use_bwa: true
+use_hisat2: false
+
 input: 
-  raw_reads: /nobackup1/kve/2021_dark_adapted_transcriptome/input_data/raw_reads
-  genome_refs: /nobackup1/kve/2021_dark_adapted_transcriptome/input_data/culture_genome_refs
-  gff_refs: /nobackup1/kve/2021_dark_adapted_transcriptome/input_data/culture_genome_annotations
-  adapter_file: /nobackup1/kve/2021_dark_adapted_transcriptome/input_data/adapters/all_illumina_adapters.fa
+  raw_reads: /pool001/kve/2021_dark_adapted_transcriptome/input_data/raw_reads
+  genome_refs: /pool001/kve/2021_dark_adapted_transcriptome/input_data/culture_genome_refs
+  gff_refs: /pool001/kve/2021_dark_adapted_transcriptome/input_data/culture_genome_annotations
+  adapter_file: /pool001/kve/2021_dark_adapted_transcriptome/input_data/adapters/all_illumina_adapters.fa
 output: 
-  done_files: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/done_files
-  trimmed_reads: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/trimmed_reads
+  done_files: /pool001/kve/2021_dark_adapted_transcriptome/output_data/done_files
+  trimmed_reads: /pool001/kve/2021_dark_adapted_transcriptome/output_data/trimmed_reads
   concat_gff:
-    concat_gff_file: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/concat_gff/concat_gff.gff
-    concat_gff_mod_file: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/concat_gff/concat_gff_mod.gff
+    concat_gff_file: /pool001/kve/2021_dark_adapted_transcriptome/output_data/concat_gff/concat_gff.gff
+    concat_gff_mod_file: /pool001/kve/2021_dark_adapted_transcriptome/output_data/concat_gff/concat_gff_mod.gff
   concat_genome: 
-    concat_genome_file: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/concat_genome/concat_genome.fna
-  mapped_reads: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/mapped_reads
-  feature_count: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/HTseq
-  genome_index_parent: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/genome_index
-  library_count: /nobackup1/kve/2021_dark_adapted_transcriptome/output_data/raw_library_counts/library_len.tsv
-results: /nobackup1/kve/2021_dark_adapted_transcriptome/results
+    concat_genome_file: /pool001/kve/2021_dark_adapted_transcriptome/output_data/concat_genome/concat_genome.fna
+    concat_genome_done: /pool001/kve/2021_dark_adapted_transcriptome/output_data/concat_genome/indexed.done
+  mapped_reads: /pool001/kve/2021_dark_adapted_transcriptome/output_data/mapped_reads
+  feature_count: /pool001/kve/2021_dark_adapted_transcriptome/output_data/HTseq
+  genome_index_parent: /pool001/kve/2021_dark_adapted_transcriptome/output_data/genome_index
+  library_count: /pool001/kve/2021_dark_adapted_transcriptome/output_data/raw_library_counts/library_len.tsv
+  coverage_positions: /pool001/kve/2021_dark_adapted_transcriptome/output_data/coverage_positions
+  fastqc: /pool001/kve/2021_dark_adapted_transcriptome/output_data/fastqc
+results: /pool001/kve/2021_dark_adapted_transcriptome/results
 
   
 
