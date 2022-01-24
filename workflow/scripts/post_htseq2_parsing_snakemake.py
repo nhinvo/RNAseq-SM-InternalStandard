@@ -1,10 +1,11 @@
-from post_htseq2_parsing import *
+from post_htseq2_parsing import main
 from pathlib import Path
 
 feature_types_to_keep=[
 'CDS',
 'rRNA',
 'tRNA',
+'sRNA'
 # 'RNase_P_RNA',
 # 'pseudogene',
 # 'region',

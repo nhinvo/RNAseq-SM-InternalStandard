@@ -10,8 +10,10 @@ rule counting_features:
         mem_mb=100000,
     conda:
         "../envs/htseq-count.yaml"
+    params:
+        mapping_quality_thresh = config["htseq"]["mapping_qual_threshold"]
     shell:
-        "htseq-count --idattr=ID -a 10 -s reverse --nonunique all "
+        "htseq-count --idattr=ID -a {params.mapping_quality_thresh} -s reverse --nonunique all "
         "{input.map_file} {input.gff} > {output}"
 
 rule counting_reads:

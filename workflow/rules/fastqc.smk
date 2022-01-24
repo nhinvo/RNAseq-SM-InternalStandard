@@ -1,10 +1,10 @@
 
 rule run_fastqc:
     input:
-        Path(config["output"]["trimmed_reads"]) / "{sample}_trimmed.fastq"
+        Path(config["output"]["trimmed_reads"]) / "{anything}_trimmed.fastq"
     output:
-        html = Path(config["output"]["trimmed_reads"]) / "{sample}_trimmed_fastqc.html",
-        zipp = Path(config["output"]["trimmed_reads"]) / "{sample}_trimmed_fastqc.zip",
+        html = Path(config["output"]["trimmed_reads"]) / "{anything}_trimmed_fastqc.html",
+        zipp = Path(config["output"]["trimmed_reads"]) / "{anything}_trimmed_fastqc.zip",
     resources:
         mem_mb=10000,
     conda:
@@ -14,11 +14,11 @@ rule run_fastqc:
 
 rule move_fastqc_data:
     input:
-        html = Path(config["output"]["trimmed_reads"]) / "{sample}_trimmed_fastqc.html",
-        zipp = Path(config["output"]["trimmed_reads"]) / "{sample}_trimmed_fastqc.zip",
+        html = Path(config["output"]["trimmed_reads"]) / "{anything}_trimmed_fastqc.html",
+        zipp = Path(config["output"]["trimmed_reads"]) / "{anything}_trimmed_fastqc.zip",
     output:
-        html = Path(config["output"]["fastqc"]) / "{sample}_trimmed_fastqc.html",
-        zipp = Path(config["output"]["fastqc"]) / "{sample}_trimmed_fastqc.zip",
+        html = Path(config["output"]["fastqc"]) / "{anything}_trimmed_fastqc.html",
+        zipp = Path(config["output"]["fastqc"]) / "{anything}_trimmed_fastqc.zip",
     resources:
         mem_mb=10000,
     conda:

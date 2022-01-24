@@ -1,6 +1,7 @@
 # The main entry point of your workflow.
 # After configuring, running snakemake -n in a clone of this repository should successfully execute a dry-run of the workflow.
 from pathlib import Path
+import shutil
 
 # report: "report/workflow.rst"
 
@@ -10,7 +11,8 @@ configfile: "config/config.yaml"
 
 SAMPLES = glob_wildcards(
     Path(config["input"]["raw_reads"])
-    / "2019_dark_adapted_transcriptome_sequencing_{sample}.fastq.bz2"
+    # / "2019_dark_adapted_transcriptome_sequencing_{sample}.fastq.bz2"
+    / "2021_Sar11Pro_RNAseq_Project_{sample}_1_sequence.fastq.gz"
 ).sample
 
 
@@ -18,8 +20,9 @@ rule all:
     input:
         Path(config["output"]["done_files"]) / "post_htseq2_parsing.done",
         expand(
-            Path(config["output"]["fastqc"]) / "{sample}_trimmed_fastqc.html",
+            Path(config["output"]["fastqc"]) / "{sample}_{read}_trimmed_fastqc.html",
             sample=SAMPLES,
+            read=[1, 2],
         ),
 
 
@@ -57,3 +60,7 @@ include: "rules/unzip.smk"
 
 
 include: "rules/fastqc.smk"
+
+
+onsuccess:
+    shutil.rmtree(".snakemake")

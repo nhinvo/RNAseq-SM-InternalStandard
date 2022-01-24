@@ -18,6 +18,9 @@ base = importr('base')
 utils = importr('utils')
 deseq2 = importr('DESeq2')
 
+import logging as log
+
+log.basicConfig(format='%(levelname)s:%(message)s', level=log.INFO)
 
 def makeOutDir(outputDir, folderName):
     """
@@ -158,7 +161,11 @@ def plot_strain_featured_sample(counts_df, outdir, normalized = True):
     fig.savefig(outpath, bbox_inches='tight', transparent=False, facecolor='w', edgecolor='w')
 
 def plot_heatmap(count_table, indices=None, fig_out_path=None):
+    log.info(f"plotting heatmap")
+    log.debug(f"count_table:\n{count_table}")
+    log.debug(f"indicies:\n{indices}")
     if indices is not None:
+        log.debug(f"subsetted df:\n{count_table.loc[indices]}")
         figure = sns.clustermap(count_table.loc[indices])
     else:
         figure = sns.clustermap(count_table)
@@ -169,21 +176,19 @@ def get_PCA(count_table):
     pca = PCA(n_components=2)
     pca.fit(count_table)
 
-    print('pca components')
-    print(pca.components_)
-    print('pca explained variance')
-    print(pca.explained_variance_)
+    log.info(f'pca components: {pca.components_}')
+    log.info(f'pca explained variance {pca.explained_variance_}')
 
     return pca
 
 def plot_PCA(count_table, condition_table, fig_out_path):
     pca = PCA(n_components=2)
     projected = pca.fit_transform(count_table)
-    print('DF Components')
-    print(pd.DataFrame(pca.components_, columns = count_table.columns))
-    print('PCA explained variance')
+    log.info('DF Components')
+    log.info(pd.DataFrame(pca.components_, columns = count_table.columns))
+    log.info('PCA explained variance')
     explained_variance = list(pca.explained_variance_)
-    print(explained_variance)
+    log.info(explained_variance)
     transform = pca.fit_transform(count_table.T)
     
     samples = count_table.columns
@@ -299,7 +304,7 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
 
     for experiment in experiments_include_df.columns:
         
-        print(experiment)
+        log.info(experiment)
         
         experiment_dir = makeOutDir(experiments_dir, experiment)
         experiment_count_dir = makeOutDir(experiment_dir, 'count_table')
@@ -314,7 +319,7 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
         
         return_results_df = len(conditions) == 2 and 'control' in conditions and 'treatment' in conditions
 
-        print(f"conditions {return_results_df} for {conditions}")
+        log.info(f"conditions {return_results_df} for {conditions}")
 
         experiment_condition_df = conditions_df_sans_experiments.loc[included_samples_series.index]
         experiment_condition_df[experiment] = included_samples_series
@@ -323,17 +328,17 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
 
         experiment_samples = included_samples_series.index.values 
 
-        experiment_counts_df = counts_df[[f"sample_{s}" for s in experiment_samples]]
+        experiment_counts_df = counts_df[[f"sample_{s:02d}" for s in experiment_samples]]
 
         experiment_counts_df = experiment_counts_df.reset_index(level='type', drop=True)
 
         for organism in experiment_counts_df.index.unique(0):
-            print(organism)
-            print()
+            log.info(f'{organism}\n')
+
             experiment_organism_count_df = experiment_counts_df.loc[organism, :]
 
             # organism must be present in all samples. Good test to tell if it is from experience...
-            # print('{} - organism lowest sample read mapping in experiment: {}'.format(organism, min(experiment_organism_count_df.mean())))
+            # log.info('{} - organism lowest sample read mapping in experiment: {}'.format(organism, min(experiment_organism_count_df.mean())))
             if min(experiment_organism_count_df.mean()) > 1:
                 
                 experiment_raw_count_outpath = experiment_count_dir / f"{experiment}_raw_counts_{organism}.tsv"
@@ -428,16 +433,19 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
 
                 if return_results_df:
 
-                    get_dge_table(results_table, attributes_df, fdr=None, sort=True, dge_out_path=zero_dge_out_path)
-                    get_dge_table(results_table, attributes_df, fdr=0.1, sort=True, dge_out_path=dge_out_path)
+                    all_dge_table = get_dge_table(results_table, attributes_df, fdr=None, sort=True, dge_out_path=zero_dge_out_path)
+                    mid_dge_table = get_dge_table(results_table, attributes_df, fdr=0.1, sort=True, dge_out_path=dge_out_path)
 
                     plot_lfc_mean_normalized_counts(results_table, lfc_mean_normalized_counts_path, fdr=0.1)
 
                     # get highest differentially expressed genes
                     high_dge_table = get_dge_table(results_table, attributes_df, fdr=0.01, sort=True, dge_out_path=high_dge_out_path)
                     try:
-                        plot_heatmap(rlog_df, indices=high_dge_table.index.tolist(), fig_out_path=clustermap_log_out_path)
+                        filtered_indicies = high_dge_table.index.tolist()
+                        if len(filtered_indicies) == 0:
+                            filtered_indicies = None
+                        plot_heatmap(rlog_df, indices=filtered_indicies, fig_out_path=clustermap_log_out_path)
                     except:
-                        print(f"rlog min: (something went wrong) {rlog_df.min()}")
+                        log.error(f"rlog min: (something went wrong)\n{rlog_df.min()}")
                         raise
 
