@@ -7,7 +7,7 @@ rule counting_features:
     output:
         Path(config["output"]["feature_count"]) / "{sample}.tsv",
     resources:
-        mem_mb=100000,
+        mem_mb=10000,
     conda:
         "../envs/htseq-count.yaml"
     params:

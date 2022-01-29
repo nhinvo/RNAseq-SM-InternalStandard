@@ -1,4 +1,4 @@
-exp_name	sample_number	sample_name	adapter_reference	adapter_string	culture	time_point	media	centrifuge_type	treatment	experiment_1	experiment_2	experiment_3	experiment_4	experiment_5	experiment_7	experiment_8	experiment_9	experiment_10	experiment_11
+exp_name	sample_number	sample_name	adapter_reference	adapter_string	culture	time_point	media	centrifuge_type	treatment	comparison_1	comparison_2	comparison_3	comparison_4	comparison_5	comparison_7	comparison_8	comparison_9	comparison_10	comparison_11
 D21	143001	01	25	(GTCAGTCA+TAATGCCG)	9301 ax 	T1	ProMS	normal	9301 ax  T1 ProMS	control		control	control						treatment
 D21	143002	02	26	(CCTTCCAT+ATTGCGTG)	9301 ax 	T1	ProMS	normal	9301 ax  T1 ProMS	control		control	control						treatment
 D21	143003	03	27	(AGGAACAC+GACATTCC)	9301 ax 	T1	ProMS	normal	9301 ax  T1 ProMS	control		control	control						treatment

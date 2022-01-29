@@ -5,7 +5,7 @@ use_bwa: true
 use_hisat2: false
 
 htseq:
-  mapping_qual_threshold: 0 # default is 10
+  mapping_qual_threshold: 10 # default is 10
 
 input: 
   raw_reads: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/raw_reads

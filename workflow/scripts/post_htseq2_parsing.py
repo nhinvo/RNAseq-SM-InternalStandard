@@ -1,4 +1,5 @@
 from pathlib import Path
+import shutil
 from matplotlib.colors import same_color
 import pandas as pd
 import numpy as np
@@ -83,7 +84,7 @@ def get_htseq2_and_metadata_df(htseq2dir, organism_type_ID_df, feature_types_to_
 
     return metadata_df, counts_df
 
-def get_dge_table(results_table, attributes_df, fdr=0.1, sort=True, dge_out_path=None, rearrange_columns=True):
+def get_dge_table(results_table, attributes_df=None, fdr=0.1, sort=True, dge_out_path=None, rearrange_columns=True):
         if fdr:
             dge_table_subset = results_table[results_table['padj'] < fdr]
         else:
@@ -124,9 +125,7 @@ def get_dge_table(results_table, attributes_df, fdr=0.1, sort=True, dge_out_path
             dge_table_subset.to_csv(dge_out_path, sep='\t')
 
         return dge_table_subset
-
-def save_out_metadata(metadata_df, outdir):
-    metadata_df.to_csv(outdir / 'metadata.tsv', sep='\t')
+    
 
 def plot_feature_pct_sample(metadata_df, outdir, normalized=True):
     if normalized:
@@ -183,7 +182,6 @@ def get_PCA(count_table):
 
 def plot_PCA(count_table, condition_table, fig_out_path):
     pca = PCA(n_components=2)
-    projected = pca.fit_transform(count_table)
     log.info('DF Components')
     log.info(pd.DataFrame(pca.components_, columns = count_table.columns))
     log.info('PCA explained variance')
@@ -245,9 +243,12 @@ def plot_lfc_mean_normalized_counts(results_df, fig_out_path, fdr=0.1):
 
 def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, feature_types_to_keep=None):
 
-    experiments_dir = makeOutDir(results_dir, 'experiments')
+    comparisons_dir = makeOutDir(results_dir, 'comparisons')
     metadata_figures_dir = makeOutDir(results_dir, 'metadata_figures')
     metadata_tables_dir = makeOutDir(results_dir, 'metadata_tables')
+
+    app_dfs_dir = makeOutDir(results_dir, 'app_dfs')
+    shutil.copy(condition_table_path, app_dfs_dir / condition_table_path.name)
     
     # attributes and annotations
 
@@ -272,9 +273,11 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
     metadata_df, counts_df = get_htseq2_and_metadata_df(htseq2dir, organism_type_ID_df, feature_types_to_keep)
     
     counts_df.to_csv(results_dir / "counts.tsv", sep="\t")
+    counts_df.to_csv(app_dfs_dir / "counts.tsv", sep="\t")
     attributes_df.to_csv(results_dir / "attributes.tsv", sep="\t")
 
-    save_out_metadata(metadata_df, metadata_tables_dir)
+    metadata_df.to_csv(metadata_tables_dir / 'metadata.tsv', sep='\t')
+    metadata_df.to_csv(app_dfs_dir / 'metadata.tsv', sep='\t')
     
     plot_feature_pct_sample(metadata_df, metadata_figures_dir, normalized=True)
     plot_feature_pct_sample(metadata_df, metadata_figures_dir, normalized=False)
@@ -293,27 +296,31 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
 
     plot_pct_genes_mapped_per_organism_sample(organism_sample_gene_mapping_pct_df, metadata_figures_dir)
 
-    # experiments and DEseq2
+    # comparisons and DEseq2
     conditions_df =  pd.read_csv(condition_table_path, sep='\t', index_col='sample_name')
 
-    # extracts columns that include the word "experiment"
-    experiments_include_df = conditions_df[conditions_df.columns[np.array(conditions_df.columns.str.contains('experiment'))]]
+    # extracts columns that include the word "comparison"
+    comparisons_include_df = conditions_df[conditions_df.columns[np.array(conditions_df.columns.str.contains('comparison'))]]
     
-    # creates new dataframe from experiments_include_df that replaces control/treatment with True in order to subset future datasets
-    conditions_df_sans_experiments = conditions_df[conditions_df.columns[~np.array(conditions_df.columns.str.contains('experiment'))]]
+    # creates new dataframe from comparisons_include_df that replaces control/treatment with True in order to subset future datasets
+    conditions_df_sans_comparisons = conditions_df[conditions_df.columns[~np.array(conditions_df.columns.str.contains('comparison'))]]
 
-    for experiment in experiments_include_df.columns:
-        
-        log.info(experiment)
-        
-        experiment_dir = makeOutDir(experiments_dir, experiment)
-        experiment_count_dir = makeOutDir(experiment_dir, 'count_table')
-        experiment_condition_dir = makeOutDir(experiment_dir, 'condition_table')
-        experiment_deseq2out_dir = makeOutDir(experiment_dir, 'DEseq2out')
-        figure_out_dir = makeOutDir(experiment_dir, 'post_DE_seq_figures')
-        dge_out_dir = makeOutDir(experiment_dir, 'DGE_tables')
+    results_dfs = []
+    rlog_dfs = []
+    
 
-        included_samples_series = experiments_include_df[experiments_include_df[experiment].notna()][experiment]
+    for comparison in comparisons_include_df.columns:
+        
+        log.info(comparison)
+        
+        comparison_dir = makeOutDir(comparisons_dir, comparison)
+        comparison_count_dir = makeOutDir(comparison_dir, 'count_table')
+        comparison_condition_dir = makeOutDir(comparison_dir, 'condition_table')
+        comparison_deseq2out_dir = makeOutDir(comparison_dir, 'DEseq2out')
+        figure_out_dir = makeOutDir(comparison_dir, 'post_DE_seq_figures')
+        dge_out_dir = makeOutDir(comparison_dir, 'DGE_tables')
+
+        included_samples_series = comparisons_include_df[comparisons_include_df[comparison].notna()][comparison]
 
         conditions = list(included_samples_series.unique())
         
@@ -321,46 +328,46 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
 
         log.info(f"conditions {return_results_df} for {conditions}")
 
-        experiment_condition_df = conditions_df_sans_experiments.loc[included_samples_series.index]
-        experiment_condition_df[experiment] = included_samples_series
+        comparison_condition_df = conditions_df_sans_comparisons.loc[included_samples_series.index]
+        comparison_condition_df[comparison] = included_samples_series
         
-        experiment_condition_df.to_csv(experiment_condition_dir / '{}_condition_table.tsv'.format(experiment), sep='\t')
+        comparison_condition_df.to_csv(comparison_condition_dir / '{}_condition_table.tsv'.format(comparison), sep='\t')
 
-        experiment_samples = included_samples_series.index.values 
+        comparison_samples = included_samples_series.index.values 
 
-        experiment_counts_df = counts_df[[f"sample_{s:02d}" for s in experiment_samples]]
+        comparison_counts_df = counts_df[[f"sample_{s:02d}" for s in comparison_samples]]
 
-        experiment_counts_df = experiment_counts_df.reset_index(level='type', drop=True)
+        comparison_counts_df = comparison_counts_df.reset_index(level='type', drop=True)
 
-        for organism in experiment_counts_df.index.unique(0):
+        for organism in comparison_counts_df.index.unique(0):
             log.info(f'{organism}\n')
 
-            experiment_organism_count_df = experiment_counts_df.loc[organism, :]
+            comparison_organism_count_df = comparison_counts_df.loc[organism, :]
 
             # organism must be present in all samples. Good test to tell if it is from experience...
-            # log.info('{} - organism lowest sample read mapping in experiment: {}'.format(organism, min(experiment_organism_count_df.mean())))
-            if min(experiment_organism_count_df.mean()) > 1:
+            # log.info('{} - organism lowest sample read mapping in comparison: {}'.format(organism, min(comparison_organism_count_df.mean())))
+            if min(comparison_organism_count_df.mean()) > 1:
                 
-                experiment_raw_count_outpath = experiment_count_dir / f"{experiment}_raw_counts_{organism}.tsv"
-                experiment_organism_count_df.to_csv(experiment_raw_count_outpath, sep='\t')
+                comparison_raw_count_outpath = comparison_count_dir / f"{comparison}_raw_counts_{organism}.tsv"
+                comparison_organism_count_df.to_csv(comparison_raw_count_outpath, sep='\t')
 
                 # DEseq process
                 # 1a. transfer count df into r df
                 with localconverter(robjects.default_converter + pandas2ri.converter):
-                    r_experiment_organism_count_df = robjects.conversion.py2rpy(experiment_organism_count_df)
+                    r_comparison_organism_count_df = robjects.conversion.py2rpy(comparison_organism_count_df)
 
-                robjects.globalenv['r_experiment_organism_count_df'] = r_experiment_organism_count_df
+                robjects.globalenv['r_comparison_organism_count_df'] = r_comparison_organism_count_df
                 
                 # 1b. transfer condition df into r df
                 with localconverter(robjects.default_converter + pandas2ri.converter):
-                    r_experiment_condition_df = robjects.conversion.py2rpy(experiment_condition_df)
-                robjects.globalenv['r_experiment_condition_df'] = r_experiment_condition_df
+                    r_comparison_condition_df = robjects.conversion.py2rpy(comparison_condition_df)
+                robjects.globalenv['r_comparison_condition_df'] = r_comparison_condition_df
                 
                 # 2. create DESeqDataSet object
                 # exp design
-                robjects.r(f"""dds <- DESeqDataSetFromMatrix(countData = r_experiment_organism_count_df, 
-                                                            colData = r_experiment_condition_df, 
-                                                            design = ~ {experiment})""")
+                robjects.r(f"""dds <- DESeqDataSetFromMatrix(countData = r_comparison_organism_count_df, 
+                                                            colData = r_comparison_condition_df, 
+                                                            design = ~ {comparison})""")
                 
                 # 3. run DEseq command
                 dds_processed = robjects.r("DESeq(dds)")
@@ -370,8 +377,8 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
                 r_normalized_counts_df = robjects.r("counts(dds_processed, normalized=TRUE)")
                 
                 if return_results_df:
-                    # 4a. set up experiment controls and treatments
-                    contrast_string_list = robjects.StrVector([experiment, 'control', 'treatment'])
+                    # 4a. set up comparison controls and treatments
+                    contrast_string_list = robjects.StrVector([comparison, 'control', 'treatment'])
 
                     # 4b. get results df
                     r_results = deseq2.results(dds_processed, contrast = contrast_string_list)
@@ -402,34 +409,34 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
                         results_table = robjects.conversion.rpy2py(r_results_df)
                         
                     results_table = results_table.rename({'seq_id':'long_ID'})
-                    results_table['long_ID'] = experiment_organism_count_df.index.values
+                    results_table['long_ID'] = comparison_organism_count_df.index.values
                     results_table = results_table.set_index('long_ID')
 
-                    results_table_path = experiment_deseq2out_dir / '{}_{}_results.tsv'.format(experiment, organism)
+                    results_table_path = comparison_deseq2out_dir / '{}_{}_results.tsv'.format(comparison, organism)
                     results_table.to_csv(results_table_path, sep='\t')
 
-                normalized_counts_df = pd.DataFrame(normalized_counts_array, index=experiment_organism_count_df.index, columns=included_samples_series.index.values)
-                rlog_df = pd.DataFrame(rlog_array, index=experiment_organism_count_df.index, columns=included_samples_series.index.values)
-                vst_df = pd.DataFrame(vst_array, index=experiment_organism_count_df.index, columns=included_samples_series.index.values)
+                normalized_counts_df = pd.DataFrame(normalized_counts_array, index=comparison_organism_count_df.index, columns=included_samples_series.index.values)
+                rlog_df = pd.DataFrame(rlog_array, index=comparison_organism_count_df.index, columns=included_samples_series.index.values)
+                vst_df = pd.DataFrame(vst_array, index=comparison_organism_count_df.index, columns=included_samples_series.index.values)
                 
                 # saving out dataframes:
-                rlog_count_data_path = experiment_deseq2out_dir / '{}_{}_rlog.tsv'.format(experiment, organism)
-                vst_data_path = experiment_deseq2out_dir / '{}_{}_vst.tsv'.format(experiment, organism)
-                normalized_counts_data_path = experiment_deseq2out_dir / '{}_{}_normalized_counts.tsv'.format(experiment, organism)
+                rlog_count_data_path = comparison_deseq2out_dir / '{}_{}_rlog.tsv'.format(comparison, organism)
+                vst_data_path = comparison_deseq2out_dir / '{}_{}_vst.tsv'.format(comparison, organism)
+                normalized_counts_data_path = comparison_deseq2out_dir / '{}_{}_normalized_counts.tsv'.format(comparison, organism)
                 
                 normalized_counts_df.to_csv(normalized_counts_data_path, sep='\t')
                 rlog_df.to_csv(rlog_count_data_path, sep='\t')
                 vst_df.to_csv(vst_data_path, sep='\t')
 
                 # post-DEseq2 analysis
-                zero_dge_out_path = dge_out_dir / '{}_{}_DGE_all.tsv'.format(experiment, organism)
-                dge_out_path = dge_out_dir / '{}_{}_DGE_fdr10pct.tsv'.format(experiment, organism)
-                high_dge_out_path = dge_out_dir / '{}_{}_DGE_fdr01pct.tsv'.format(experiment, organism)
-                pca_out_path = figure_out_dir / '{}_{}_PCA.png'.format(experiment, organism)
-                clustermap_log_out_path = figure_out_dir / '{}_{}_clustermap_rlog.png'.format(experiment, organism)
-                lfc_mean_normalized_counts_path = figure_out_dir / '{}_{}_lfc_v_mean_normalized_counts.png'.format(experiment, organism)
+                zero_dge_out_path = dge_out_dir / '{}_{}_DGE_all.tsv'.format(comparison, organism)
+                dge_out_path = dge_out_dir / '{}_{}_DGE_fdr10pct.tsv'.format(comparison, organism)
+                high_dge_out_path = dge_out_dir / '{}_{}_DGE_fdr01pct.tsv'.format(comparison, organism)
+                pca_out_path = figure_out_dir / '{}_{}_PCA.png'.format(comparison, organism)
+                clustermap_log_out_path = figure_out_dir / '{}_{}_clustermap_rlog.png'.format(comparison, organism)
+                lfc_mean_normalized_counts_path = figure_out_dir / '{}_{}_lfc_v_mean_normalized_counts.png'.format(comparison, organism)
 
-                plot_PCA(rlog_df, experiment_condition_df, pca_out_path)
+                plot_PCA(rlog_df, comparison_condition_df, pca_out_path)
 
                 if return_results_df:
 
@@ -448,4 +455,21 @@ def main(results_dir, htseq2dir, gff_dir, condition_table_path, raw_reads_dir, f
                     except:
                         log.error(f"rlog min: (something went wrong)\n{rlog_df.min()}")
                         raise
+                    
+                    #results df
+                    index = pd.MultiIndex.from_product([[organism], results_table.index])
+                    columns = pd.MultiIndex.from_product([[organism], [comparison], results_table.columns])
+                    multiindex_results_df = results_df
+                    multiindex_results_df.columns = columns
+                    multiindex_results_df.index = index
+                    results_dfs.append(multiindex_results_df)
+
+                    #rlog df
+                    index = pd.MultiIndex.from_product([[organism], rlog_df.index])
+                    columns = pd.MultiIndex.from_product([[organism], [comparison], rlog_df.columns])
+                    multiindex_rlog_df = rlog_df
+                    multiindex_rlog_df.columns = columns
+                    multiindex_rlog_df.index = index
+                    rlog_dfs.append(multiindex_rlog_df)
+
 
