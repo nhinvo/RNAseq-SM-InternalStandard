@@ -16,11 +16,28 @@ SAMPLES = glob_wildcards(
 ).sample
 
 
+path_dict = {
+    'done_files' : Path(config["scratch_dir"]) / 'done_files',
+    'trimmed_reads': Path(config["scratch_dir"]) / 'trimmed_reads',
+    'concat_gff':
+        {'concat_gff_file': Path(config["scratch_dir"]) / 'concat_gff' / 'concat_gff.gff',
+        'concat_gff_mod_file': Path(config["scratch_dir"]) / 'concat_gff' / 'concat_gff_mod.gff'},
+    'concat_genome': 
+        {'concat_genome_file': Path(config["scratch_dir"]) / 'concat_genome' / 'concat_genome.fna',
+        'concat_genome_done': Path(config["scratch_dir"]) / 'concat_genome' / 'indexed.done'},
+    'mapped_reads': Path(config["scratch_dir"]) / 'mapped_reads',
+    'feature_count': Path(config["scratch_dir"]) / 'HTseq',
+    'genome_index_parent': Path(config["scratch_dir"]) / 'genome_index',
+    'library_count': Path(config["scratch_dir"]) / 'raw_library_counts' / 'library_len.tsv'
+    'coverage_positions': Path(config["scratch_dir"]) / 'coverage_positions',
+    'fastqc': Path(config["scratch_dir"]) / 'fastqc'
+}
+
 rule all:
     input:
-        Path(config["output"]["done_files"]) / "post_htseq2_parsing.done",
+        path_dict["done_files"] / "post_htseq2_parsing.done",
         expand(
-            Path(config["output"]["fastqc"]) / "{sample}_{read}_trimmed_fastqc.html",
+            path_dict["fastqc"] / "{sample}_{read}_trimmed_fastqc.html",
             sample=SAMPLES,
             read=[1, 2],
         ),
@@ -35,14 +52,13 @@ include: "rules/genome_concat.smk"
 include: "rules/gff_tools.smk"
 
 
-assert not (config["use_bwa"] and config["use_hisat2"])
 
-if config["use_hisat2"]:
+if config['aligner'] == 'hisat2':
 
     include: "rules/map_reads_hisat2.smk"
 
 
-if config["use_bwa"]:
+if config['aligner'] == 'bwa':
 
     include: "rules/map_reads_bwa.smk"
 
