@@ -4,7 +4,7 @@ rule map_reads_PE:
         r1 = path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq",
         r2 = path_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq",
         ref = path_dict["concat_genome"]["concat_genome_file"],
-        indexing = path_dict"concat_genome"]["concat_genome_done"]
+        indexing = path_dict["concat_genome"]["concat_genome_done"]
     output:
         sam_out = temp(path_dict["mapped_reads"] / "{sample}_mapped.sam"),
         sai1 = temp(path_dict["mapped_reads"] / "{sample}_1_bwa.sai"),
