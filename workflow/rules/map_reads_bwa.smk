@@ -1,14 +1,14 @@
 # map sample reads to concatenated genome
 rule map_reads_PE:
     input:
-        r1 = path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq",
-        r2 = path_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq",
-        ref = path_dict["concat_genome"]["concat_genome_file"],
-        indexing = path_dict["concat_genome"]["concat_genome_done"]
+        r1 = output_path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq",
+        r2 = output_path_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq",
+        ref = output_path_dict["concat_genome"]["concat_genome_file"],
+        indexing = output_path_dict["concat_genome"]["concat_genome_done"]
     output:
-        sam_out = temp(path_dict["mapped_reads"] / "{sample}_mapped.sam"),
-        sai1 = temp(path_dict["mapped_reads"] / "{sample}_1_bwa.sai"),
-        sai2 = temp(path_dict["mapped_reads"] / "{sample}_2_bwa.sai"),
+        sam_out = temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),
+        sai1 = temp(output_path_dict["mapped_reads"] / "{sample}_1_bwa.sai"),
+        sai2 = temp(output_path_dict["mapped_reads"] / "{sample}_2_bwa.sai"),
     resources: 
         mem_mb=100000,
     conda:
@@ -41,9 +41,9 @@ rule map_reads_PE:
 
 rule index_genome:
     input:
-        ref = path_dict["concat_genome"]["concat_genome_file"]
+        ref = output_path_dict["concat_genome"]["concat_genome_file"]
     output:
-        touch(path_dict["concat_genome"]["concat_genome_done"]),
+        touch(output_path_dict["concat_genome"]["concat_genome_done"]),
     resources:
         mem_mb=10000,
     conda:

@@ -2,20 +2,12 @@ from pathlib import Path
 import pandas as pd
 import logging as log
 import urllib.error
-import yaml
 
 import Bio.KEGG.REST as kegg_rest
 
 log.basicConfig(format='%(levelname)s:%(message)s', level=log.DEBUG)
 
-
-with open('../../config/config.yaml', 'r') as file:
-    config = yaml.safe_load(file)
-results_dir = Path(config["results"])
-
-# results_dir = Path(snakemake.config["results"])
-
-counts_df = pd.read_csv(results_dir / "counts.tsv", sep='\t', index_col=[0,1,2], header=[0,1])
+counts_df = pd.read_csv(Path(snakemake.input['counts']), sep='\t', index_col=[0,1,2], header=[0,1])
 
 log.debug(f"counts_df:\n{counts_df}\n\n")
 
@@ -67,4 +59,4 @@ for col in ref_table.ref_col.unique():
 
     counts_df.loc[:,('annotation_data',f"{col}_terms")] = col_terms
 
-counts_df.to_csv(results_dir / "counts.tsv", sep='\t')
+counts_df.to_csv(Path(snakemake.input['counts']), sep='\t')

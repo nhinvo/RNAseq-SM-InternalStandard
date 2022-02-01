@@ -1,38 +1,20 @@
 from pathlib import Path
 import shutil
-from matplotlib.colors import same_color
 import pandas as pd
 import numpy as np
 import gffpandas.gffpandas as gffpd
-import yaml
 
 import logging as log
 
 # Snakemake
+htseq2dir = Path(snakemake.input['htseq2_dir'])
+raw_gff_dir = Path(snakemake.input['raw_gff_dir'])
 feature_types_to_keep = snakemake.config["feature_types_to_keep"]
-results_dir = Path(snakemake.config["results"])
-htseq2dir = Path(snakemake.config["scratch_dir"]) / 'HTseq'
-raw_gff_dir = Path(snakemake.config["input"]["gff_refs"])
-condition_table_path = Path(snakemake.config["samples"])
-config_yaml_path = Path(snakemake.config["config"])
-
-# # Non-Snakemake
-# with open('../../config/config.yaml', 'r') as file:
-#     config = yaml.safe_load(file)
-
-# feature_types_to_keep = config["feature_types_to_keep"]
-# results_dir = Path(config["results"])
-# htseq2dir = Path(config["scratch_dir"]) / 'HTseq'
-# raw_gff_dir = Path(config["input"]["gff_refs"])
-# condition_table_path = Path('../../config/samples.tsv')
-# config_yaml_path = Path('../../config/config.yaml')
 
 log.basicConfig(format='%(levelname)s:%(message)s', level=log.INFO)
 
-results_dir.mkdir(parents=True, exist_ok=True)
-
-shutil.copy(condition_table_path, results_dir / condition_table_path.name)
-shutil.copy(config_yaml_path, results_dir / config_yaml_path.name)
+shutil.copy(snakemake.input['condition_table_path'], snakemake.output['samples'])
+shutil.copy(snakemake.input["config_yaml_path"], snakemake.output["config"])
 
 # attributes and annotations
 
@@ -110,5 +92,7 @@ counts_df = counts_df.join(attributes_df)
 log.info(f"counts_df:\n{counts_df}\n\n")
 log.info(f"metadata_df:\n{metadata_df}\n\n")
 
-counts_df.to_csv(results_dir / "counts.tsv", sep="\t")
-metadata_df.to_csv(results_dir / 'metadata.tsv', sep='\t')
+counts_df = counts_df.loc[~counts_df.index.duplicated(keep='first')]
+
+counts_df.to_csv(Path(snakemake.output["counts"]), sep="\t")
+metadata_df.to_csv(Path(snakemake.output["metadata"]), sep='\t')

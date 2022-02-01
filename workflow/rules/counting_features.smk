@@ -1,11 +1,11 @@
 # count features
 rule counting_features:
     input:
-        map_file = path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
-        map_index = path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam.bai",
-        gff = path_dict["concat_gff"]["concat_gff_mod_file"],
+        map_file = output_path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
+        map_index = output_path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam.bai",
+        gff = output_path_dict["concat_gff"]["concat_gff_mod_file"],
     output:
-        path_dict["feature_count"] / "{sample}.tsv",
+        output_path_dict["feature_count"] / "{sample}.tsv",
     resources:
         mem_mb=10000,
     conda:
@@ -20,7 +20,7 @@ rule counting_reads:
     input:
         config["input"]["raw_reads"]
     output:
-        path_dict["library_count"]
+        output_path_dict["library_count"]
     resources:
         mem_mb=100000,
     shell:

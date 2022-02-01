@@ -1,8 +1,8 @@
 rule unzip_gz:
     input:
-        path_dict["trimmed_reads"] / "{anything}.fastq.gz",
+        output_path_dict["trimmed_reads"] / "{anything}.fastq.gz",
     output:
-        path_dict["trimmed_reads"] / "{anything}.fastq",
+        output_path_dict["trimmed_reads"] / "{anything}.fastq",
     resources:
         mem_mb=100000,
     conda:
@@ -12,9 +12,9 @@ rule unzip_gz:
 
 # rule unzip_bz2:
 #     input:
-#         path_dict["trimmed_reads"]) / "{anything}.fastq.bz2",
+#         output_path_dict["trimmed_reads"]) / "{anything}.fastq.bz2",
 #     output:
-#         path_dict["trimmed_reads"]) / "{anything}.fastq",
+#         output_path_dict["trimmed_reads"]) / "{anything}.fastq",
 #     resources:
 #         mem_mb=100000,
 #     conda:

@@ -16,7 +16,7 @@ SAMPLES = glob_wildcards(
 ).sample
 
 
-path_dict = {
+output_path_dict = {
     "done_files": Path(config["scratch_dir"]) / "done_files",
     "trimmed_reads": Path(config["scratch_dir"]) / "trimmed_reads",
     "concat_gff": {
@@ -45,12 +45,21 @@ path_dict = {
     "fastqc": Path(config["scratch_dir"]) / "fastqc",
 }
 
+results_path_dict = {
+    "counts": Path(config["results"]) / "counts.tsv",
+    "metadata": Path(config["results"]) / "metadata.tsv",
+    "config": Path(config["results"]) / "config.yaml",
+    "samples": Path(config["results"]) / "samples.tsv",
+    "results": Path(config["results"]) / "results.tsv",
+    "rlog": Path(config["results"]) / "rlog.tsv",
+}
+
 
 rule all:
     input:
-        path_dict["done_files"] / "post_htseq2_parsing.done",
+        list(results_path_dict.values()),
         expand(
-            path_dict["fastqc"] / "{sample}_{read}_trimmed_fastqc.html",
+            output_path_dict["fastqc"] / "{sample}_{read}_trimmed_fastqc.html",
             sample=SAMPLES,
             read=[1, 2],
         ),

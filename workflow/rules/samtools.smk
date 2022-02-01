@@ -1,9 +1,9 @@
 
 rule convert_sam2bam:
     input:
-        path_dict["mapped_reads"] / "{sample}_mapped.sam",
+        output_path_dict["mapped_reads"] / "{sample}_mapped.sam",
     output:
-        temp(path_dict["mapped_reads"] / "{sample}_mapped.bam"),
+        temp(output_path_dict["mapped_reads"] / "{sample}_mapped.bam"),
     resources:
         mem_mb=100000,
     conda:
@@ -13,9 +13,9 @@ rule convert_sam2bam:
 
 rule sort_bam:
     input:
-        path_dict["mapped_reads"] / "{sample}_mapped.bam",
+        output_path_dict["mapped_reads"] / "{sample}_mapped.bam",
     output:
-        path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
+        output_path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
     resources:
         mem_mb=100000,
     conda:
@@ -25,9 +25,9 @@ rule sort_bam:
 
 rule index_bam:
     input:
-        path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
+        output_path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
     output:
-        temp(path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam.bai"),
+        temp(output_path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam.bai"),
     resources:
         mem_mb=100000,
     conda:
@@ -38,9 +38,9 @@ rule index_bam:
 
 rule bam_coverage:
     input:
-        path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
+        output_path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
     output:
-        path_dict["coverage_positions"] / "{sample}_coverage_depth.tsv",
+        output_path_dict["coverage_positions"] / "{sample}_coverage_depth.tsv",
     resources:
         mem_mb=100000,
     conda:

@@ -5,8 +5,8 @@ rule run_trim_PE:
         r2 = Path(config["input"]["raw_reads"]) / "2021_Sar11Pro_RNAseq_Project_{sample}_2_sequence.fastq.gz",
         ref = Path(config["input"]["adapter_file"]),
     output:
-        o1 = path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq.gz",
-        o2 = path_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq.gz",
+        o1 = output_path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq.gz",
+        o2 = output_path_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq.gz",
     resources:
         mem_mb=100000,
     conda:
@@ -25,7 +25,7 @@ rule run_trim_PE:
 #         r = Path(config["input"]["raw_reads"]) / "2019_dark_adapted_transcriptome_sequencing_{sample}.fastq.bz2",
 #         ref = Path(config["input"]["adapter_file"]),
 #     output:
-#         o = path_dict["trimmed_reads"] / "{sample}_trimmed.fastq.gz",
+#         o = output_path_dict["trimmed_reads"] / "{sample}_trimmed.fastq.gz",
 #     resources:
 #         mem_mb=100000,
 #     conda:
