@@ -1,12 +1,12 @@
 # map sample reads to concatenated genome
 rule map_reads_PE:
     input:
-        r1 = Path(config["output"]["trimmed_reads"]) / "{sample}_1_trimmed.fastq",
-        r2 = Path(config["output"]["trimmed_reads"]) / "{sample}_2_trimmed.fastq",
-        index_dir = Path(config["output"]["genome_index_parent"]) / "{sample}" / "concat_genome", 
-        index = Path(config["output"]["done_files"]) / "build_hisat2_index.{sample}.done"
+        r1 = output_path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq",
+        r2 = output_path_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq",
+        index_dir = output_path_dict["genome_index_parent"] / "{sample}" / "concat_genome", 
+        index = output_path_dict["done_files"] / "build_hisat2_index.{sample}.done"
     output:
-        temp(Path(config["output"]["mapped_reads"]) / "{sample}_mapped.sam"),  # temp() temporarily keeps SAMs until converted
+        temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),  # temp() temporarily keeps SAMs until converted
     resources:
         mem_mb=100000,
     conda:
@@ -19,11 +19,11 @@ rule map_reads_PE:
 
 rule map_reads_SE:
     input:
-        se_reads = Path(config["output"]["trimmed_reads"]) / "{sample}_trimmed.fastq",
-        index_dir = Path(config["output"]["genome_index_parent"]) / "{sample}" / "concat_genome", 
-        index = Path(config["output"]["done_files"]) / "build_hisat2_index.{sample}.done"
+        se_reads = output_path_dict["trimmed_reads"] / "{sample}_trimmed.fastq",
+        index_dir = output_path_dict["genome_index_parent"] / "{sample}" / "concat_genome", 
+        index = output_path_dict["done_files"] / "build_hisat2_index.{sample}.done"
     output:
-        temp(Path(config["output"]["mapped_reads"]) / "{sample}_mapped.sam"),  # temp() temporarily keeps SAMs until converted
+        temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),  # temp() temporarily keeps SAMs until converted
     resources:
         mem_mb=100000,
     conda:
@@ -36,16 +36,16 @@ rule map_reads_SE:
 
 rule make_sample_index_dir:
     output:
-        directory(Path(config["output"]["genome_index_parent"]) / "{sample}" / "concat_genome")
+        directory(output_path_dict["genome_index_parent"] / "{sample}" / "concat_genome")
     shell:
         "mkdir -p {output}; sleep 1"
 
 rule build_hisat2_index:
     input:
-        out_dir = Path(config["output"]["genome_index_parent"]) / "{sample}" / "concat_genome",
-        ref = Path(config["output"]["concat_genome"]["concat_genome_file"]),
+        out_dir = output_path_dict["genome_index_parent"] / "{sample}" / "concat_genome",
+        ref = output_path_dict["concat_genome"]["concat_genome_file"],
     output:
-        touch(Path(config["output"]["done_files"]) / "build_hisat2_index.{sample}.done")
+        touch(output_path_dict["done_files"] / "build_hisat2_index.{sample}.done")
     resources:
         mem_mb=100000,
     conda:

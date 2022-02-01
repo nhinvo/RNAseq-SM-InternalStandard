@@ -1,30 +1,31 @@
 
 samples: "config/samples.tsv"
+config: "config/config.yaml"
 
-use_bwa: true
-use_hisat2: false
+# options are 'bwa' 'hisat2' and 'bowtie2'
+aligner: 'bwa'
+
+experiment_name: '2021_Sar11Pro_RNAseq_Project'
 
 htseq:
   mapping_qual_threshold: 10 # default is 10
+
+feature_types_to_keep: [
+'CDS',
+'rRNA',
+'tRNA',
+'sRNA'
+# 'RNase_P_RNA',
+# 'pseudogene',
+# 'region',
+# 'riboswitch',
+# 'tmRNA',
+]
 
 input: 
   raw_reads: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/raw_reads
   genome_refs: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/culture_genome_refs
   gff_refs: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/culture_genome_annotations
   adapter_file: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/adapters/all_illumina_adapters.fa
-output: 
-  done_files: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/done_files
-  trimmed_reads: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/trimmed_reads
-  concat_gff:
-    concat_gff_file: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/concat_gff/concat_gff.gff
-    concat_gff_mod_file: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/concat_gff/concat_gff_mod.gff
-  concat_genome: 
-    concat_genome_file: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/concat_genome/concat_genome.fna
-    concat_genome_done: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/concat_genome/indexed.done
-  mapped_reads: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/mapped_reads
-  feature_count: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/HTseq
-  genome_index_parent: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/genome_index
-  library_count: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/raw_library_counts/library_len.tsv
-  coverage_positions: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/coverage_positions
-  fastqc: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/fastqc
+scratch_dir: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/
 results: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/results

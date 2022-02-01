@@ -29,6 +29,7 @@ dependencies:
   - bioconductor-summarizedexperiment=1.22.0=r41hdfd78af_0
   - bioconductor-xvector=0.32.0=r41hd029910_0
   - bioconductor-zlibbioc=1.38.0=r41hd029910_0
+  - biopython=1.79=py39h3811e60_0
   - bwidget=1.9.14=ha770c72_1
   - bzip2=1.0.8=h7f98852_4
   - c-ares=1.18.1=h7f98852_0
