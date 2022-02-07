@@ -52,3 +52,4 @@ rule build_hisat2_index:
         "../envs/hisat2.yaml"
     shell:
         "hisat2-build {input.ref} {input.out_dir}"
+        

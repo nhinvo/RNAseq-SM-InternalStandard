@@ -38,6 +38,7 @@ for col, db in kegg_pathway_columns.items():
         dfs.append(pd.DataFrame(term_table, columns=['ref_col', 'kegg_df_ref', 'kegg_id', 'kegg_term']))
 
 ref_table = pd.concat(dfs, axis=0)
+ref_table.to_csv(snakemake.output['kegg_refs'], sep='\t', index=False)
 
 counts_df_kegg_cols = ref_table.ref_col.unique()
 

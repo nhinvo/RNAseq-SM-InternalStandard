@@ -8,7 +8,6 @@
 rule generate_counts_metadata_dfs:
     input:
         sample_counts=expand(output_path_dict["feature_count"] / "{sample}.tsv", sample=SAMPLES),
-        htseq2_dir = output_path_dict["feature_count"],
         raw_gff_dir=Path(config["input"]["gff_refs"]),
         condition_table_path=Path(config["samples"]),
         config_yaml_path=Path(config["config"]),
@@ -31,7 +30,8 @@ rule add_kegg_ids_to_count_df:
     input:
         counts = results_path_dict['counts']
     output:
-        touch(output_path_dict["done_files"] / "added_kegg_tags.done")
+        kegg_refs = results_path_dict['kegg_refs'],
+        count_df_updated = touch(output_path_dict['done_files'] / 'kegg_additions.done')
     conda:
         "../envs/post_htseq2_parsing.yaml"
     script:
@@ -40,9 +40,10 @@ rule add_kegg_ids_to_count_df:
 # run post-HTseq script
 rule generate_results_rlog_dfs:
     input:
-        add_kegg_ids = output_path_dict["done_files"] / "added_kegg_tags.done",
         counts = results_path_dict['counts'],
+        kegg_refs = results_path_dict['kegg_refs'],
         samples = results_path_dict['samples'],
+        count_df_updated = output_path_dict['done_files'] / 'kegg_additions.done'
     output:
         results = results_path_dict['results'],
         rlog = results_path_dict['rlog'],

@@ -52,6 +52,7 @@ results_path_dict = {
     "samples": Path(config["results"]) / "samples.tsv",
     "results": Path(config["results"]) / "results.tsv",
     "rlog": Path(config["results"]) / "rlog.tsv",
+    "kegg_refs": Path(config["results"]) / "kegg_refs.tsv",
 }
 
 
@@ -84,6 +85,11 @@ if config["aligner"] == "bwa":
     include: "rules/map_reads_bwa.smk"
 
 
+if config["aligner"] == "bowtie2":
+
+    include: "rules/map_reads_bowtie2.smk"
+
+
 include: "rules/post_htseq2_parsing.smk"
 
 
@@ -97,7 +103,3 @@ include: "rules/unzip.smk"
 
 
 include: "rules/fastqc.smk"
-
-
-onsuccess:
-    shutil.rmtree(".snakemake")

@@ -7,7 +7,8 @@ import gffpandas.gffpandas as gffpd
 import logging as log
 
 # Snakemake
-htseq2dir = Path(snakemake.input['htseq2_dir'])
+
+htseq2dir = Path(snakemake.input['sample_counts'][0]).parent
 raw_gff_dir = Path(snakemake.input['raw_gff_dir'])
 feature_types_to_keep = snakemake.config["feature_types_to_keep"]
 

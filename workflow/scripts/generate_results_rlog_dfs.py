@@ -57,6 +57,7 @@ def main():
     counts_df = pd.read_csv(Path(snakemake.input['counts']), sep='\t', index_col=[0,1,2], header=[0,1])
     conditions_df =  pd.read_csv(Path(snakemake.input['samples']), sep='\t', index_col='sample_name')
 
+    log.debug(f"counts_df:\n{counts_df}")
 
     # extracts columns that include the word "comparison"
     comparisons_include_df = conditions_df[conditions_df.columns[np.array(conditions_df.columns.str.contains('comparison'))]]
@@ -68,10 +69,14 @@ def main():
 
     log.debug(f"counts_df after reindexing:\n{counts_df}\n\n")
 
-    results_dfs = [counts_df[['annotation_data']]]
-    rlog_dfs = []
+    annotation_data = counts_df[['annotation_data']]
+
+    log.debug(f"annotation_data:\n{annotation_data}")
 
     counts_df = counts_df['sample_data']
+
+    rlog_dfs = []
+    results_dfs = [annotation_data]
 
     for comparison in comparisons_include_df.columns:
         
@@ -92,6 +97,7 @@ def main():
 
         comparison_counts_df = counts_df[[f"sample_{s:02d}" for s in comparison_samples]]
 
+        organisms_result_dfs = []
         for organism in comparison_counts_df.index.unique(0):
             log.info(f'{organism}\n')
 
@@ -177,11 +183,11 @@ def main():
                     multiindex_results_df = results_table
                     multiindex_results_df.columns = pd.MultiIndex.from_product([[comparison], results_table.columns])
                     multiindex_results_df.index = pd.MultiIndex.from_product([[organism], results_table.index])
-                    log.debug(f"multiindex_results_df:\n{multiindex_results_df}")
                     # log.debug(f"multiindex_results_df.shape before filter:\n{multiindex_results_df.shape}")
                     # multiindex_results_df = multiindex_results_df.loc[~multiindex_results_df.index.duplicated(keep='first')]
                     # log.debug(f"multiindex_results_df.shape after filter:\n{multiindex_results_df.shape}")
-                    results_dfs.append(multiindex_results_df)
+                    log.debug(f"multiindex_results_df:\n{multiindex_results_df}")
+                    organisms_result_dfs.append(multiindex_results_df)
 
                     #rlog df
                     multiindex_rlog_df = rlog_df
@@ -189,9 +195,19 @@ def main():
                     multiindex_rlog_df.index = pd.MultiIndex.from_product([[organism], rlog_df.index])
                     log.debug(f"multiindex_rlog_df:\n{multiindex_rlog_df}")
                     rlog_dfs.append(multiindex_rlog_df)
+        
+        if len(organisms_result_dfs) == 1:
+            results_dfs.append(organisms_result_dfs[0])
+        if len(organisms_result_dfs) > 1:
+            results_df = pd.concat(organisms_result_dfs, axis=0)
+            results_dfs.append(results_df)
+        
 
     app_results_df = pd.concat(results_dfs, axis=1)
     app_rlog_df = pd.concat(rlog_dfs, axis=1)
+
+    log.debug(f"app_results_df:\n{app_results_df}")
+    log.debug(f"app_rlog_df:\n{app_rlog_df}")
 
     app_results_df.to_csv(Path(snakemake.output['results']), sep='\t')
     app_rlog_df.to_csv(Path(snakemake.output['rlog']), sep='\t')

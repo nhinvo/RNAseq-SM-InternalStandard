@@ -38,9 +38,7 @@ snakemake --snakefile $SNAKEFILE --lint --unlock
 snakefmt $SNAKEFILE
 
 # examine full workflow using:
-snakemake --forceall -n --snakefile $SNAKEFILE --dag | dot -T pdf > all_rules_dag.pdf
-# examine workflow steps to run using:
-snakemake -n --snakefile $SNAKEFILE --dag | dot -T pdf > current_rules_dag.pdf
+snakemake --forceall -n --snakefile $SNAKEFILE --dag > all_rules_dag.dot
 
 # run job:
 snakemake --cores all --resources mem_mb=250000 --snakefile $SNAKEFILE --use-conda --conda-frontend conda
