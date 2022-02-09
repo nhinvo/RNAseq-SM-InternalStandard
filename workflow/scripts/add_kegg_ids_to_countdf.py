@@ -11,7 +11,7 @@ counts_df = pd.read_csv(Path(snakemake.input['counts']), sep='\t', index_col=[0,
 
 log.debug(f"counts_df:\n{counts_df}\n\n")
 
-kegg_pathway_columns = {'BRITE':'brite', 'KEGG_Module':'module', 'KEGG_Pathway':'pathway', 'KEGG_Reaction':'reaction', 'KEGG_rclass':'rclass'}
+kegg_pathway_columns = {'em_BRITE':'brite', 'em_KEGG_Module':'module', 'em_KEGG_Pathway':'pathway', 'em_KEGG_Reaction':'reaction', 'em_KEGG_rclass':'rclass'}
 
 def ident_kegg_term(db, id):
     try: 

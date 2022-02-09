@@ -1,8 +1,8 @@
 
 rule run_trim_PE:
     input:
-        r1 = Path(config["input"]["raw_reads"]) / "2021_Sar11Pro_RNAseq_Project_{sample}_1_sequence.fastq.gz",
-        r2 = Path(config["input"]["raw_reads"]) / "2021_Sar11Pro_RNAseq_Project_{sample}_2_sequence.fastq.gz",
+        r1 = Path(config["input"]["raw_reads"]) / "S{sample}_R1.fastq.gz",
+        r2 = Path(config["input"]["raw_reads"]) / "S{sample}_R2.fastq.gz",
         ref = Path(config["input"]["adapter_file"]),
     output:
         o1 = output_path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq.gz",

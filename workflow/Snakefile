@@ -12,7 +12,8 @@ configfile: "config/config.yaml"
 SAMPLES = glob_wildcards(
     Path(config["input"]["raw_reads"])
     # / "2019_dark_adapted_transcriptome_sequencing_{sample}.fastq.bz2"
-    / "2021_Sar11Pro_RNAseq_Project_{sample}_1_sequence.fastq.gz"
+    # / "2021_Sar11Pro_RNAseq_Project_{sample}_1_sequence.fastq.gz"
+    / "S{sample}_R1.fastq.gz"
 ).sample
 
 
