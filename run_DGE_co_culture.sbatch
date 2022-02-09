@@ -26,6 +26,8 @@
 # Processors per task:
 #SBATCH --cpus-per-task=1
 #
+#SBATCH --mem=250G
+#
 #SBATCH -o logs/%j_slurm_output.txt
 #SBATCH -e logs/%j_slurm_error.txt
 
@@ -34,7 +36,8 @@ source activate DGE_smk_minimal
 SNAKEFILE=workflow/Snakefile
 
 # lints and formats snakefile
-snakemake --snakefile $SNAKEFILE --lint --unlock
+snakemake --snakefile $SNAKEFILE --lint 
+snakemake --snakefile $SNAKEFILE --unlock
 snakefmt $SNAKEFILE
 
 # examine full workflow using:

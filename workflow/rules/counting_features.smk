@@ -22,7 +22,7 @@ rule counting_reads:
     output:
         output_path_dict["library_count"]
     resources:
-        mem_mb=100000,
+        mem_mb=10000,
     shell:
         """
         echo -e "read_file\tnum_reads" > {output}
