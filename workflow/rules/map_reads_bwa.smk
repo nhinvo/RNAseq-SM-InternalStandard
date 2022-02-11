@@ -1,3 +1,27 @@
+# # map sample reads to concatenated genome
+# rule map_reads_PE:
+#     input:
+#         r1 = output_path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq",
+#         r2 = output_path_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq",
+#         ref = output_path_dict["concat_genome"]["concat_genome_file"],
+#         indexing = output_path_dict["concat_genome"]["concat_genome_done"]
+#     output:
+#         sam_out = temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),
+#         sai1 = temp(output_path_dict["mapped_reads"] / "{sample}_1_bwa.sai"),
+#         sai2 = temp(output_path_dict["mapped_reads"] / "{sample}_2_bwa.sai"),
+#     resources: 
+#         mem_mb=100000,
+#     conda:
+#         "../envs/bwa.yaml"
+#     shell:
+#         # BWA Mapping:
+#         """
+#         bwa aln {input.ref} {input.r1} > {output.sai1}
+#         bwa aln {input.ref} {input.r2} > {output.sai2}
+
+#         bwa sampe {input.ref} {output.sai1} {output.sai2} {input.r1} {input.r2} > {output.sam_out}
+#         """
+
 # map sample reads to concatenated genome
 rule map_reads_PE:
     input:
@@ -7,8 +31,6 @@ rule map_reads_PE:
         indexing = output_path_dict["concat_genome"]["concat_genome_done"]
     output:
         sam_out = temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),
-        sai1 = temp(output_path_dict["mapped_reads"] / "{sample}_1_bwa.sai"),
-        sai2 = temp(output_path_dict["mapped_reads"] / "{sample}_2_bwa.sai"),
     resources: 
         mem_mb=100000,
     conda:
@@ -16,10 +38,7 @@ rule map_reads_PE:
     shell:
         # BWA Mapping:
         """
-        bwa aln {input.ref} {input.r1} > {output.sai1}
-        bwa aln {input.ref} {input.r2} > {output.sai2}
-
-        bwa sampe {input.ref} {output.sai1} {output.sai2} {input.r1} {input.r2} > {output.sam_out}
+        bwa mem {input.ref} {input.r1} {input.r2} > {output.sam_out}
         """
 
 # rule map_reads_SE_greater_70bp:
