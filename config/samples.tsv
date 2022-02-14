@@ -1,49 +1,33 @@
-sample_name	CUGC_ID	Condition	Rep	time_point	Ribozero or polyA	Ribozero box	Status	treatment	comparison_0_LGV	comparison_0_HV	comparison_0_LG	comparison_12_LGV	comparison_12_HV	comparison_24_LGV	comparison_24_HV	comparison_24_LG	comparison_36_LGV	comparison_36_HV	comparison_36_LG
-1	SS0278	Control	A	0	Ribozero	SS0278	Sequenced	Control 0	control	control	control								
-2	SS0279	Control	B	0	Ribozero	SS0279	Sequenced	Control 0	control	control	control								
-3	SS0280	Control	C	0	Ribozero	SS0280	Sequenced	Control 0	control	control	control								
-48	SS0356	Control	E1	0	Ribozero	SS0356	Sequenced	Control 0	control	control	control								
-7	SS0287	HV	A	0	Ribozero	SS0287	Sequenced	HV 0		treatment									
-8	SS0288	HV	B	0	Ribozero	SS0288	Sequenced	HV 0		treatment									
-9	SS0289	HV	C	0	Ribozero	SS0289	Sequenced	HV 0		treatment									
-12	SS0294	LG	E2	0	Ribozero	SS0294	Sequenced	LG 0			treatment								
-11	SS0292	LG	E3	0	Ribozero	SS0292	Sequenced	LG 0			treatment								
-10	SS0290	LG	E4	0	Ribozero	SS0290	Sequenced	LG 0			treatment								
-4	SS0281	LGV	A	0	Ribozero	SS0281	Sequenced	LGV 0	treatment										
-5	SS0283	LGV	B	0	Ribozero	SS0283	Sequenced	LGV 0	treatment										
-6	SS0285	LGV	C	0	Ribozero	SS0285	Sequenced	LGV 0	treatment										
-13	SS0296	Control	A	12	Ribozero	SS0296	Sequenced	Control 12				control	control						
-14	SS0297	Control	B	12	Ribozero	SS0297	Sequenced	Control 12				control	control						
-15	SS0298	Control	C	12	Ribozero	SS0298	Sequenced	Control 12				control	control						
-19	SS0305	HV	A	12	Ribozero	SS0305	Sequenced	HV 12					treatment						
-20	SS0306	HV	B	12	Ribozero	SS0306	Sequenced	HV 12					treatment						
-21	SS0307	HV	C	12	Ribozero	SS0307	Sequenced	HV 12					treatment						
-16	SS0299	LGV	A	12	Ribozero	SS0299	Sequenced	LGV 12				treatment							
-18	SS0303	LGV	B	12	Ribozero	SS0303	Sequenced	LGV 12				treatment							
-17	SS0301	LGV	C	12	Ribozero	SS0301	Sequenced	LGV 12				treatment							
-28	SS0317	Control	A	24	Ribozero	SS0317	Sequenced	Control 24						control	control	control			
-29	SS0318	Control	B	24	Ribozero	SS0318	Sequenced	Control 24						control	control	control			
-30	SS0319	Control	C	24	Ribozero	SS0319	Sequenced	Control 24						control	control	control			
-46	SS0354	Control	E1	24	Ribozero	SS0354	Sequenced	Control 24						control	control	control			
-25	SS0314	HV	A	24	Ribozero	SS0314	Sequenced	HV 24							treatment				
-26	SS0315	HV	B	24	Ribozero	SS0315	Sequenced	HV 24							treatment				
-27	SS0316	HV	C	24	Ribozero	SS0316	Sequenced	HV 24							treatment				
-40	SS0332	LG	E2	24	Ribozero	SS0332	Sequenced	LG 24								treatment			
-41	SS0334	LG	E3	24	Ribozero	SS0334	Sequenced	LG 24								treatment			
-42	SS0336	LG	E4	24	Ribozero	SS0336	Sequenced	LG 24								treatment			
-22	SS0308	LGV	A	24	Ribozero	SS0308	Sequenced	LGV 24						treatment					
-23	SS0310	LGV	B	24	Ribozero	SS0310	Sequenced	LGV 24						treatment					
-24	SS0312	LGV	C	24	Ribozero	SS0312	Sequenced	LGV 24						treatment					
-31	SS0320	Control	A	36	Ribozero	SS0320	Sequenced	Control 36									control	control	control
-32	SS0321	Control	B	36	Ribozero	SS0321	Sequenced	Control 36									control	control	control
-33	SS0322	Control	C	36	Ribozero	SS0322	Sequenced	Control 36									control	control	control
-47	SS0355	Control	E1	36	Ribozero	SS0355	Sequenced	Control 36									control	control	control
-37	SS0329	HV	A	36	Ribozero	SS0329	Sequenced	HV 36										treatment	
-38	SS0330	HV	B	36	Ribozero	SS0330	Sequenced	HV 36										treatment	
-39	SS0331	HV	C	36	Ribozero	SS0331	Sequenced	HV 36										treatment	
-43	SS0348	LG	E2	36	Ribozero	SS0348	Sequenced	LG 36											treatment
-44	SS0350	LG	E3	36	Ribozero	SS0350	Sequenced	LG 36											treatment
-45	SS0352	LG	E4	36	Ribozero	SS0352	Sequenced	LG 36											treatment
-34	SS0323	LGV	A	36	Ribozero	SS0323	Sequenced	LGV 36									treatment		
-35	SS0325	LGV	B	36	Ribozero	SS0325	Sequenced	LGV 36									treatment		
-36	SS0327	LGV	C	36	Ribozero	SS0327	Sequenced	LGV 36									treatment		
+exp_name	sample_number	sample_name	adapter_reference	adapter_string	culture	time_point	media	centrifuge_type	treatment	comparison_1	comparison_2	comparison_3	comparison_4	comparison_5	comparison_7	comparison_8	comparison_9	comparison_10	comparison_11
+D21	143001	01	25	(GTCAGTCA+TAATGCCG)	9301 ax 	T1	ProMS	normal	9301 ax  T1 ProMS	control		control	control						treatment
+D21	143002	02	26	(CCTTCCAT+ATTGCGTG)	9301 ax 	T1	ProMS	normal	9301 ax  T1 ProMS	control		control	control						treatment
+D21	143003	03	27	(AGGAACAC+GACATTCC)	9301 ax 	T1	ProMS	normal	9301 ax  T1 ProMS	control		control	control						treatment
+D21	143004	04	49	(CTTACAGC+CTTCACCA)	9301 ax 	T1	ProMS	normal	9301 ax  T1 ProMS	control		control	control						treatment
+D21	143005	05	34	(TACCTGCA+TGATGTCC)	9301 ax 	T2	ProMS	normal	9301 ax  T2 ProMS	control		treatment		control					
+D21	143006	06	35	(AGACGCTA+TGTACACC)	9301 ax 	T2	ProMS	normal	9301 ax  T2 ProMS	control		treatment		control					
+D21	143007	07	36	(CAACACAG+TGGCTATC)	9301 ax 	T2	ProMS	normal	9301 ax  T2 ProMS	control		treatment		control					
+D21	143008	08	50	(GTACCACA+TGTTGTGG)	9301 ax 	T2	ProMS	normal	9301 ax  T2 ProMS	control		treatment		control					
+D21	143009	09	19	(CGAATACG+GTCGGTAA)	9301 - SAR11 co-culture	T1	ProMS	normal	9301 - SAR11 co-culture T1 ProMS	treatment	treatment		treatment		control	treatment			
+D21	143010	10	20	(GTCCTTGA+TCAGACGA)	9301 - SAR11 co-culture	T1	ProMS	normal	9301 - SAR11 co-culture T1 ProMS	treatment	treatment		treatment		control	treatment			
+D21	143011	11	21	(CAGTGCTT+ACCTGGAA)	9301 - SAR11 co-culture	T1	ProMS	normal	9301 - SAR11 co-culture T1 ProMS	treatment	treatment		treatment		control	treatment			
+D21	143012	12	37	(TCCATTGC+AGACCGTA)	9301 - SAR11 co-culture	T1	ProMS	ultracentrifuged	9301 - SAR11 co-culture T1 ProMS	treatment	treatment		treatment		control	treatment			
+D21	143013	13	38	(GTCGATTG+ACGGTCTT)	9301 - SAR11 co-culture	T1	ProMS	ultracentrifuged	9301 - SAR11 co-culture T1 ProMS	treatment	treatment		treatment		control	treatment			
+D21	143014	14	39	(ATAACGCC+TGAACCTG)	9301 - SAR11 co-culture	T1	ProMS	ultracentrifuged	9301 - SAR11 co-culture T1 ProMS	treatment	treatment		treatment		control	treatment			
+D21	143015	15	28	(GCCTTAAC+AGCTCCTA)	9301 - SAR11 co-culture	T2	ProMS	normal	9301 - SAR11 co-culture T2 ProMS	treatment	treatment			treatment	treatment		treatment		
+D21	143016	16	29	(GGTATAGG+CTGGAGTA)	9301 - SAR11 co-culture	T2	ProMS	normal	9301 - SAR11 co-culture T2 ProMS	treatment	treatment			treatment	treatment		treatment		
+D21	143017	17	30	(TCTAGGAG+AGGTCACT)	9301 - SAR11 co-culture	T2	ProMS	normal	9301 - SAR11 co-culture T2 ProMS	treatment	treatment			treatment	treatment		treatment		
+D21	143018	18	40	(TGCGTAAC+GATAGGCT)	9301 - SAR11 co-culture	T2	ProMS	ultracentrifuged	9301 - SAR11 co-culture T2 ProMS	treatment	treatment			treatment	treatment		treatment		
+D21	143019	19	41	(CTTGCTAG+GGAGATGA)	9301 - SAR11 co-culture	T2	ProMS	ultracentrifuged	9301 - SAR11 co-culture T2 ProMS	treatment	treatment			treatment	treatment		treatment		
+D21	143020	20	42	(AGCGAGAT+GATACTGG)	9301 - SAR11 co-culture	T2	ProMS	ultracentrifuged	9301 - SAR11 co-culture T2 ProMS	treatment	treatment			treatment	treatment		treatment		
+D21	143021	21	53	(TATGGCAC+TCTCGCAA)	9301 ax 	T1	Pro99	normal	9301 ax  T1 Pro99										control
+D21	143022	22	54	(GAATCACC+CTTCGTTC)	9301 ax 	T1	Pro99	normal	9301 ax  T1 Pro99										control
+D21	143023	23	55	(GTAAGGTG+GCAATTCG)	9301 ax 	T1	Pro99	normal	9301 ax  T1 Pro99										control
+D21	143024	24	56	(CGAGAGAA+TCTCTTCC)	9301 ax 	T1	Pro99	normal	9301 ax  T1 Pro99										control
+D21	143025	25	22	(CGCAACTA+GAATCCGA)	SAR11 ax	T1	ProMS	ultracentrifuged	SAR11 ax T1 ProMS		control					control		control	
+D21	143026	26	23	(CACAGACT+TGGTACAG)	SAR11 ax	T1	ProMS	ultracentrifuged	SAR11 ax T1 ProMS		control					control		control	
+D21	143027	27	24	(TGGAAGCA+GTACTCTC)	SAR11 ax	T1	ProMS	ultracentrifuged	SAR11 ax T1 ProMS		control					control		control	
+D21	143028	28	57	(CAATAGCC+TGCGTAGA)	SAR11 ax	T1	ProMS	ultracentrifuged	SAR11 ax T1 ProMS		control					control		control	
+D21	143029	29	31	(CTCGAACA+GGAATTGC)	SAR11 ax	T2	ProMS	ultracentrifuged	SAR11 ax T2 ProMS		control						control	treatment	
+D21	143030	30	32	(GGCAAGTT+CTTCTGAG)	SAR11 ax	T2	ProMS	ultracentrifuged	SAR11 ax T2 ProMS		control						control	treatment	
+D21	143031	31	33	(AGCTACCA+CTTAGGAC)	SAR11 ax	T2	ProMS	ultracentrifuged	SAR11 ax T2 ProMS		control						control	treatment	
+D21	143032	32	58	(CAGCATAC+TCTAACGC)	SAR11 ax	T2	ProMS	ultracentrifuged	SAR11 ax T2 ProMS										
