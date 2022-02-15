@@ -13,24 +13,6 @@ rule counting_features:
     params:
         mapping_quality_thresh = config["htseq"]["mapping_qual_threshold"]
     shell:
-        "htseq-count --idattr=ID -a {params.mapping_quality_thresh} -s reverse --nonunique all "
+        "htseq-count --idattr=ID -a 10 -s reverse -t exon -r pos --nonunique all "
         "{input.map_file} {input.gff} > {output}"
-
-rule counting_reads:
-    input:
-        config["input"]["raw_reads"]
-    output:
-        output_path_dict["library_count"]
-    resources:
-        mem_mb=10000,
-    shell:
-        """
-        echo -e "read_file\tnum_reads" > {output}
-        for READ in {input}/*
-        do
-            FILE_BASENAME=$(basename $READ)
-            FILE_COUNT=$(zcat $READ | echo $((`wc -l`/4)))
-            echo -e "$FILE_BASENAME\t$FILE_COUNT"  >> {output}
-            echo $FILE_BASENAME
-        done
-        """
+        
