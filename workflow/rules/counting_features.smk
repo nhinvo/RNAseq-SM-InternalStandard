@@ -13,6 +13,6 @@ rule counting_features:
     params:
         mapping_quality_thresh = config["htseq"]["mapping_qual_threshold"]
     shell:
-        "htseq-count --idattr=ID -a 10 -s reverse -t exon -r pos --nonunique all "
+        "htseq-count --idattr=ID -a {params.mapping_quality_thresh} -s reverse -t exon -r pos --nonunique all "
         "{input.map_file} {input.gff} > {output}"
         
