@@ -21,7 +21,7 @@ rule sort_bam:
     conda:
         "../envs/samtools.yaml"
     shell:
-        "samtools sort -n {input} -o {output}"
+        "samtools sort {input} -o {output}"
 
 rule index_bam:
     input:

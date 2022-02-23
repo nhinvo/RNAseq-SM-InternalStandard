@@ -6,13 +6,14 @@ import gffpandas.gffpandas as gffpd
 
 import logging as log
 
-# Snakemake
+log.basicConfig(format='%(levelname)s:%(message)s', level=log.INFO)
 
+# Snakemake
 htseq2dir = Path(snakemake.input['sample_counts'][0]).parent
 raw_gff_dir = Path(snakemake.input['raw_gff_dir'])
 feature_types_to_keep = snakemake.config["feature_types_to_keep"]
 
-log.basicConfig(format='%(levelname)s:%(message)s', level=log.INFO)
+log.info(f"snakemake.input['sample_counts']:\ntype:{type(snakemake.input['sample_counts'])}\ndata:{snakemake.input['sample_counts']}\n\n")
 
 shutil.copy(snakemake.input['condition_table_path'], snakemake.output['samples'])
 shutil.copy(snakemake.input["config_yaml_path"], snakemake.output["config"])

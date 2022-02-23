@@ -14,12 +14,7 @@ feature_types_to_keep: [
 'CDS',
 'rRNA',
 'tRNA',
-'sRNA'
-# 'RNase_P_RNA',
-# 'pseudogene',
-# 'region',
-# 'riboswitch',
-# 'tmRNA',
+'internal_ref'
 ]
 
 input: 
