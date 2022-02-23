@@ -18,9 +18,9 @@ feature_types_to_keep: [
 ]
 
 input: 
-  raw_reads: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/input_data/samples
-  genome_refs: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/input_data/genomes
-  gff_refs: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/input_data/annotations
+  raw_reads: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/input_data_ribozero/samples
+  genome_refs: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/input_data_ribozero/genomes
+  gff_refs: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/input_data_ribozero/annotations
   adapter_file: /nfs/chisholmlab001/kve/genomic_resources/adapters/illumina/all_illumina_adapters.fa
 scratch_dir: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/output_data/
 results: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/results_hisat2

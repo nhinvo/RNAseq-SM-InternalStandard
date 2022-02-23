@@ -9,7 +9,7 @@
 #SBATCH -C centos7
 #
 # wall clock limit:
-#SBATCH --time 48:00:00
+#SBATCH --time 72:00:00
 #
 # Partition to use:
 #SBATCH --partition sched_mit_chisholm
@@ -44,6 +44,6 @@ snakefmt $SNAKEFILE
 snakemake --forceall -n --snakefile $SNAKEFILE --dag > all_rules_dag.dot
 
 # run job:
-snakemake --cores all --resources mem_mb=250000 --snakefile $SNAKEFILE --use-conda --conda-frontend conda
+snakemake --cores all --resources mem_mb=250000 --snakefile $SNAKEFILE --use-conda --conda-frontend conda --rerun-incomplete
 # get report once job is finished
 snakemake --snakefile $SNAKEFILE --report report.html
