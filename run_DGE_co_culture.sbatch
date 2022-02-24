@@ -31,7 +31,7 @@
 #SBATCH -o logs/%j_slurm_output.txt
 #SBATCH -e logs/%j_slurm_error.txt
 
-source activate DGE_smk_minimal
+source activate snakemake
 
 SNAKEFILE=workflow/Snakefile
 

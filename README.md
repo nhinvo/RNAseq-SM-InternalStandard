@@ -23,6 +23,16 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 
 Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `samples.tsv` to specify your sample setup.
 
+#### Sample table specification
+Required Columns:
+- "treatment" –– specifies the treatment of the sample. This is the same within biological replicates. 
+- "sample_name" –– specifies a sample identifier. This must be unique for each sample. 
+For Paired End Reads:
+- "fwd_read" –– specifies the path of the forward read.
+- "rev_read" –– specifies the path of the reverse read.
+For Single End Reads:
+- "read_path" –– specifies the path of the single read.
+
 ### Step 3: Install Snakemake
 
 Install Snakemake using [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html):

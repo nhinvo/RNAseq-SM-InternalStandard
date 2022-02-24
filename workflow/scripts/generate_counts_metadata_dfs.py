@@ -1,7 +1,6 @@
 from pathlib import Path
 import shutil
 import pandas as pd
-import numpy as np
 import gffpandas.gffpandas as gffpd
 
 import logging as log
@@ -9,7 +8,6 @@ import logging as log
 log.basicConfig(format='%(levelname)s:%(message)s', level=log.INFO)
 
 # Snakemake
-htseq2dir = Path(snakemake.input['sample_counts'][0]).parent
 raw_gff_dir = Path(snakemake.input['raw_gff_dir'])
 feature_types_to_keep = snakemake.config["feature_types_to_keep"]
 
@@ -45,7 +43,8 @@ raw_counts_df_list = []
 raw_metadata_df_list = []
 first_unique_ids = []
 
-for i, path in enumerate(sorted(list(htseq2dir.iterdir()))):
+for i, path in enumerate(sorted(snakemake.input['sample_counts'])):
+    path = Path(path)
     if path.suffix == '.tsv':
         # get sample ID from path
         sample_name = path.stem

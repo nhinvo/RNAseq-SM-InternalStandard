@@ -2,20 +2,15 @@
 # After configuring, running snakemake -n in a clone of this repository should successfully execute a dry-run of the workflow.
 from pathlib import Path
 import shutil
-
-# report: "report/workflow.rst"
+import pandas as pd
 
 
 configfile: "config/config.yaml"
 
 
-SAMPLES = glob_wildcards(
-    Path(config["input"]["raw_reads"])
-    # / "2019_dark_adapted_transcriptome_sequencing_{sample}.fastq.bz2"
-    # / "2021_Sar11Pro_RNAseq_Project_{sample}_1_sequence.fastq.gz"
-    / "S{sample}_R1.fastq.gz"
-).sample
-
+SAMPLE_TABLE = pd.read_csv(config["samples"], index_col="sample_name", sep="\t")
+SAMPLE_TABLE.index = SAMPLE_TABLE.index.map(str)
+SAMPLES = SAMPLE_TABLE.index.values
 
 output_path_dict = {
     "done_files": Path(config["scratch_dir"]) / "done_files",
@@ -51,28 +46,18 @@ results_path_dict = {
     "metadata": Path(config["results"]) / "metadata.tsv",
     "config": Path(config["results"]) / "config.yaml",
     "samples": Path(config["results"]) / "samples.tsv",
-    "results": Path(config["results"]) / "results.tsv",
-    "rlog": Path(config["results"]) / "rlog.tsv",
-    "kegg_refs": Path(config["results"]) / "kegg_refs.tsv",
+    "ref_table": Path(config["results"]) / "bio_db_ref_table.tsv",
+    "json": Path(config["results"]) / "data.json",
 }
 
 
 rule all:
     input:
         list(results_path_dict.values()),
-        expand(
-            output_path_dict["fastqc"] / "{sample}_{read}_trimmed_fastqc.html",
-            sample=SAMPLES,
-            read=[1, 2],
-        ),
 
 
 include: "rules/counting_features.smk"
-
-
 include: "rules/genome_concat.smk"
-
-
 include: "rules/gff_tools.smk"
 
 
