@@ -6,7 +6,7 @@ import Bio.KEGG.REST as kegg_rest
 
 log.basicConfig(format='%(levelname)s:%(message)s', level=log.DEBUG)
 
-raw_gff_dir = Path("/nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/culture_genome_annotations") #snakemake.input['raw_gff_dir'])
+raw_gff_dir = Path(snakemake.input['raw_gff_dir'])
 
 # attributes and annotations
 
@@ -86,4 +86,4 @@ for col, db in kegg_pathway_columns.items():
         dfs.append(pd.DataFrame(term_table, columns=['ref_col','id','term']))
 
 ref_table = pd.concat(dfs, axis=0)
-ref_table.to_csv(snakemake.output['kegg_refs'], sep='\t', index=False)
+ref_table.to_csv(snakemake.output['ref_table'], sep='\t', index=False)

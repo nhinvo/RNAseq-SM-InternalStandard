@@ -16,16 +16,16 @@ rule generate_counts_metadata_dfs:
     script:
         "../scripts/generate_counts_metadata_dfs.py"
 
-# # run post-HTseq script
-# rule generate_ref_table:
-#     input:
-#         raw_gff_dir = Path(config["input"]["gff_refs"]),
-#     output:
-#         ref_table = results_path_dict['ref_table']
-#     conda:
-#         "../envs/post_htseq2_parsing.yaml"
-#     script:
-#         "../scripts/generate_bio_db_ref_table.py"
+# run post-HTseq script
+rule generate_ref_table:
+    input:
+        raw_gff_dir = Path(config["input"]["gff_refs"]),
+    output:
+        ref_table = results_path_dict['ref_table']
+    conda:
+        "../envs/post_htseq2_parsing.yaml"
+    script:
+        "../scripts/generate_bio_db_ref_table.py"
 
 rule generate_data_json:
     input:
@@ -33,7 +33,7 @@ rule generate_data_json:
         metadata = results_path_dict['metadata'],
         config = results_path_dict['config'],
         samples = results_path_dict['samples'],
-        # ref_table = results_path_dict['ref_table']
+        ref_table = results_path_dict['ref_table']
     output:
         data_json = results_path_dict['json']
     conda:

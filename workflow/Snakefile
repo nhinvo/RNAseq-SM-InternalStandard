@@ -46,7 +46,7 @@ results_path_dict = {
     "metadata": Path(config["results"]) / "metadata.tsv",
     "config": Path(config["results"]) / "config.yaml",
     "samples": Path(config["results"]) / "samples.tsv",
-    # "ref_table": Path(config["results"]) / "bio_db_ref_table.tsv",
+    "ref_table": Path(config["results"]) / "bio_db_ref_table.tsv",
     "json": Path(config["results"]) / "data.json",
 }
 
