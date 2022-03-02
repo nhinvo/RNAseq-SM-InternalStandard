@@ -1,15 +1,12 @@
 from pathlib import Path
 import shutil
 import pandas as pd
-import numpy as np
-import gffpandas.gffpandas as gffpd
 
 import logging as log
 
 log.basicConfig(format='%(levelname)s:%(message)s', level=log.INFO)
 
 # Snakemake
-htseq2dir = Path(snakemake.input['sample_counts'][0]).parent
 raw_gff_dir = Path(snakemake.input['raw_gff_dir'])
 feature_types_to_keep = snakemake.config["feature_types_to_keep"]
 
@@ -20,11 +17,46 @@ shutil.copy(snakemake.input["config_yaml_path"], snakemake.output["config"])
 
 # attributes and annotations
 
+def generate_gff_df(gff_file):
+    ## This method is heavily influenced from GFFpandas
+    df = pd.read_csv(gff_file, sep="\t", comment="#",
+            names=[
+                "seq_id",
+                "source",
+                "type",
+                "start",
+                "end",
+                "score",
+                "strand",
+                "phase",
+                "attributes",
+            ],
+    )
+    attr_dict_series = df.attributes.apply(
+        lambda attributes: dict(
+            [
+                key_value_pair.split(sep="=", maxsplit=1)
+                for key_value_pair in attributes.split(";")
+            ]
+        )
+    )
+    key_set = set()
+    attr_dict_series.apply(
+        lambda at_dic: key_set.update(list(at_dic.keys()))
+    )
+
+    for attr in sorted(list(key_set)):
+        df[attr] = attr_dict_series.apply(
+            lambda attr_dict: attr_dict.get(attr)
+        )
+
+    return df
+    
+
 gffs = []
 for gff_path in raw_gff_dir.iterdir():
     organism_name = str(gff_path.stem)
-    annotation = gffpd.read_gff3(gff_path)
-    attributes_df = annotation.attributes_to_columns()
+    attributes_df = generate_gff_df(gff_path)
     attributes_df['organism'] = organism_name
     gffs.append(attributes_df)
 
@@ -45,7 +77,8 @@ raw_counts_df_list = []
 raw_metadata_df_list = []
 first_unique_ids = []
 
-for i, path in enumerate(sorted(list(htseq2dir.iterdir()))):
+for i, path in enumerate(sorted(snakemake.input['sample_counts'])):
+    path = Path(path)
     if path.suffix == '.tsv':
         # get sample ID from path
         sample_name = path.stem

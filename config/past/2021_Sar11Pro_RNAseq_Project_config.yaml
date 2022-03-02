@@ -3,7 +3,7 @@ samples: "config/samples.tsv"
 config: "config/config.yaml"
 
 # options are 'bwa' 'hisat2' and 'bowtie2'
-aligner: 'bwa'
+aligner: 'hisat2'
 
 experiment_name: '2021_Sar11Pro_RNAseq_Project'
 
@@ -15,11 +15,17 @@ feature_types_to_keep: [
 'rRNA',
 'tRNA',
 'sRNA'
+# 'RNase_P_RNA',
+# 'pseudogene',
+# 'region',
+# 'riboswitch',
+# 'tmRNA',
 ]
 
 input: 
+  raw_reads: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/raw_reads
   genome_refs: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/culture_genome_refs
   gff_refs: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/culture_genome_annotations
   adapter_file: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/adapters/all_illumina_adapters.fa
 scratch_dir: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/
-results: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/results_bwa
+results: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/results_hisat2

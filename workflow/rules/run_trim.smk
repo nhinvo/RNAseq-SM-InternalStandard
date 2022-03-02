@@ -1,8 +1,8 @@
 
 rule run_trim_PE:
     input:
-        r1 = Path(config["input"]["raw_reads"]) / "S{sample}_R1.fastq.gz",
-        r2 = Path(config["input"]["raw_reads"]) / "S{sample}_R2.fastq.gz",
+        r1 = lambda wildcards: SAMPLE_TABLE.loc[wildcards.sample, 'fwd_read'],
+        r2 = lambda wildcards: SAMPLE_TABLE.loc[wildcards.sample, 'rev_read'],
         ref = Path(config["input"]["adapter_file"]),
     output:
         o1 = output_path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq.gz",

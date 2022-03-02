@@ -1,8 +1,3 @@
-# rule make_results_dir:
-#     output:
-#         directory(config["results"])
-#     shell:
-#         "mkdir -p {output}; sleep 1"
 
 # run post-HTseq script
 rule generate_counts_metadata_dfs:
@@ -11,10 +6,6 @@ rule generate_counts_metadata_dfs:
         raw_gff_dir=Path(config["input"]["gff_refs"]),
         condition_table_path=Path(config["samples"]),
         config_yaml_path=Path(config["config"]),
-        # results_dir = Path(config["results"]),
-        # raw_reads=Path(config["input"]["raw_reads"]),
-        # raw_reads_counts=output_path_dict["library_count"],
-        # bam_coverages=expand(output_path_dict["coverage_positions"] / "{sample}_coverage_depth.tsv", sample=SAMPLES),
     output:
         counts = results_path_dict['counts'],
         metadata = results_path_dict['metadata'],
@@ -26,28 +17,26 @@ rule generate_counts_metadata_dfs:
         "../scripts/generate_counts_metadata_dfs.py"
 
 # run post-HTseq script
-rule add_kegg_ids_to_count_df:
+rule generate_ref_table:
     input:
-        counts = results_path_dict['counts']
+        raw_gff_dir = Path(config["input"]["gff_refs"]),
     output:
-        kegg_refs = results_path_dict['kegg_refs'],
-        count_df_updated = touch(output_path_dict['done_files'] / 'kegg_additions.done')
+        ref_table = results_path_dict['ref_table']
     conda:
         "../envs/post_htseq2_parsing.yaml"
     script:
-        "../scripts/add_kegg_ids_to_countdf.py"
+        "../scripts/generate_bio_db_ref_table.py"
 
-# run post-HTseq script
-rule generate_results_rlog_dfs:
+rule generate_data_json:
     input:
         counts = results_path_dict['counts'],
-        kegg_refs = results_path_dict['kegg_refs'],
+        metadata = results_path_dict['metadata'],
+        config = results_path_dict['config'],
         samples = results_path_dict['samples'],
-        count_df_updated = output_path_dict['done_files'] / 'kegg_additions.done'
+        ref_table = results_path_dict['ref_table']
     output:
-        results = results_path_dict['results'],
-        rlog = results_path_dict['rlog'],
+        data_json = results_path_dict['json']
     conda:
         "../envs/post_htseq2_parsing.yaml"
     script:
-        "../scripts/generate_results_rlog_dfs.py"
+        "../scripts/generate_data_json.py"

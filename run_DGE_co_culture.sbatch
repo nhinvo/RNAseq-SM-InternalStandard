@@ -31,7 +31,7 @@
 #SBATCH -o logs/%j_slurm_output.txt
 #SBATCH -e logs/%j_slurm_error.txt
 
-source activate DGE_smk_minimal
+source activate snakemake
 
 SNAKEFILE=workflow/Snakefile
 
@@ -41,7 +41,7 @@ snakemake --snakefile $SNAKEFILE --unlock
 snakefmt $SNAKEFILE
 
 # examine full workflow using:
-snakemake --forceall -n --snakefile $SNAKEFILE --dag > all_rules_dag.dot
+# snakemake --forceall -n --snakefile $SNAKEFILE --dag > all_rules_dag.dot
 
 # run job:
 snakemake --cores all --resources mem_mb=250000 --snakefile $SNAKEFILE --use-conda --conda-frontend conda --rerun-incomplete
