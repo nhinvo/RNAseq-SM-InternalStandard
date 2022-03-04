@@ -149,7 +149,7 @@ def main():
             rlog_df = pd.DataFrame(rlog_array, index=comp_count_df.index, columns=included_samples)
             vst_df = pd.DataFrame(vst_array, index=comp_count_df.index, columns=included_samples)
 
-            comparisons[comparison]['rlog'] = rlog_df.to_dict(orient='split')
+            comparisons[comparison]['rlog'] = rlog_df.to_dict(orient='tight')
             
             # post-DEseq2 analysis
             if return_results_df:
