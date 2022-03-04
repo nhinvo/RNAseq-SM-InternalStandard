@@ -21,6 +21,9 @@ all_data = {}
 with open(snakemake.input['config']) as file:
     all_data['config'] = yaml.load(file, Loader=yaml.FullLoader)
 
+with open(snakemake.input['comparison_data']) as file:
+    all_data['comparisons'] = json.load(file) 
+
 all_data['samples'] = samples_df.to_dict(orient='records')
 
 all_data['metadata'] = metadata_df.to_dict(orient='dict')
@@ -30,7 +33,6 @@ log.debug(f"ref_table.index.unique(level='ref_col'):\n{ref_table.index.unique(le
 all_data['db lookup'] = {}
 for ref_col in ref_table.index.unique(level='ref_col'):
     all_data['db lookup'][ref_col] = ref_table.loc[ref_col]['term'].to_dict()
-
 
 counts_df = counts_df.reset_index(level='type', col_level=1, col_fill='annotation_data')
 
@@ -42,3 +44,4 @@ for organism in counts_df.index.unique(level='organism'):
 
 with open(snakemake.output['data_json'], "w") as outfile:
     json.dump(all_data, outfile)
+

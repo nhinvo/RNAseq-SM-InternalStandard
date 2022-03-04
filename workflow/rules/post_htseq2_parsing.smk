@@ -27,13 +27,25 @@ rule generate_ref_table:
     script:
         "../scripts/generate_bio_db_ref_table.py"
 
+rule generate_comparison_results:
+    input: 
+        comparison_yaml = Path(config["comparisons"]),
+        counts = results_path_dict['counts'],
+    output:
+        comparison_data = results_path_dict['comparisons']
+    conda:
+        "../envs/DEseq2py.yaml"
+    script:
+        "../scripts/generate_comparison_results.py"
+
 rule generate_data_json:
     input:
         counts = results_path_dict['counts'],
         metadata = results_path_dict['metadata'],
         config = results_path_dict['config'],
         samples = results_path_dict['samples'],
-        ref_table = results_path_dict['ref_table']
+        ref_table = results_path_dict['ref_table'],
+        comparison_data = results_path_dict['comparisons']
     output:
         data_json = results_path_dict['json']
     conda:

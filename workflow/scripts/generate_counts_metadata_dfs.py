@@ -104,10 +104,8 @@ for i, path in enumerate(sorted(snakemake.input['sample_counts'])):
         raw_metadata_df_list.append(temp_metadata_df)
 
 counts_df = pd.concat(raw_counts_df_list, axis=1)
-counts_df = counts_df.add_prefix('sample_')
 
 metadata_df = pd.concat(raw_metadata_df_list, axis=1)
-metadata_df = metadata_df.add_prefix('sample_')
 metadata_df.index = metadata_df.index.str.replace('__', '')
 
 counts_df = counts_df.join(organism_type_ID_df)
