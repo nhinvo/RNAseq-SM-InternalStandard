@@ -84,6 +84,8 @@ for col, db in kegg_pathway_columns.items():
             log.info(f"{col}\t{i}\t{term}")
             term_table.append([col, i, term])
         dfs.append(pd.DataFrame(term_table, columns=['ref_col','id','term']))
-
-ref_table = pd.concat(dfs, axis=0)
-ref_table.to_csv(snakemake.output['ref_table'], sep='\t', index=False)
+try: 
+    ref_table = pd.concat(dfs, axis=0)
+    ref_table.to_csv(snakemake.output['ref_table'], sep='\t', index=False)
+except ValueError:
+    open(snakemake.output['ref_table'], 'a').close()
