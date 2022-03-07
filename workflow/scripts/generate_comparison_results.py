@@ -55,112 +55,111 @@ def main():
 
     counts_df = counts_df['sample_data']
 
-    for comparison in comparisons.keys():
+    for organism in comparisons.keys():
+        for comparison in comparisons[organism].keys():
 
-        log.info(comparison)
+            log.info(f"organism: {organism}\t comparison: {comparison}")
 
-        sample_use = pd.Series(comparisons[comparison]['sample_use'], name='sample_use')
-        sample_use = sample_use[sample_use != 'none']
+            sample_use = pd.Series(comparisons[organism][comparison]['sample_use'], name='sample_use')
+            sample_use = sample_use[sample_use != 'none']
 
-        conditions = list(sample_use.unique())
+            conditions = list(sample_use.unique())
 
-        return_results_df = len(conditions) == 2 and 'control' in conditions and 'treatment' in conditions
+            return_results_df = len(conditions) == 2 and 'control' in conditions and 'treatment' in conditions
 
-        organism = comparisons[comparison]['scaffold']
+            log.info(f'{organism}\n')
 
-        log.info(f'{organism}\n')
+            included_samples = list(sample_use.index.values)
 
-        included_samples = list(sample_use.index.values)
+            comp_count_df = counts_df.loc[organism][included_samples]
 
-        comp_count_df = counts_df.loc[organism][included_samples]
+            sample_use_df = pd.DataFrame(sample_use)
 
-        sample_use_df = pd.DataFrame(sample_use)
+            log.debug(f"comp_count_df:\n{comp_count_df}")
+            log.debug(f"sample_use_df:\n{sample_use_df}")
 
-        log.debug(f"comp_count_df:\n{comp_count_df}")
-        log.debug(f"sample_use_df:\n{sample_use_df}")
+            # organism must be present in all samples. Good test to tell if it is from experience...
+            if min(comp_count_df.mean()) > 1:
 
-        # organism must be present in all samples. Good test to tell if it is from experience...
-        if min(comp_count_df.mean()) > 1:
+                comparisons[organism][comparison]['status'] = 'running'
 
-            comparisons[comparison]['status'] = 'running'
-
-            # DEseq process
-            # 1a. transfer count df into r df
-            with localconverter(robjects.default_converter + pandas2ri.converter):
-                r_comp_count_df = robjects.conversion.py2rpy(comp_count_df)
-
-            robjects.globalenv['r_comp_count_df'] = r_comp_count_df
-            
-            # 1b. transfer condition df into r df
-            with localconverter(robjects.default_converter + pandas2ri.converter):
-                r_comparison_condition_df = robjects.conversion.py2rpy(sample_use_df)
-            robjects.globalenv['r_comparison_condition_df'] = r_comparison_condition_df
-            
-            # 2. create DESeqDataSet object
-            # exp design
-            robjects.r(f"""dds <- DESeqDataSetFromMatrix(countData = r_comp_count_df, 
-                                                        colData = r_comparison_condition_df, 
-                                                        design = ~ sample_use)""")
-            
-            # 3. run DEseq command
-            dds_processed = robjects.r("DESeq(dds)")
-            robjects.globalenv['dds_processed'] = dds_processed
-
-            # get normalized counts df
-            r_normalized_counts_df = robjects.r("counts(dds_processed, normalized=TRUE)")
-            
-            if return_results_df:
-                # 4a. set up comparison controls and treatments
-                contrast_string_list = robjects.StrVector(['sample_use', 'control', 'treatment'])
-
-                # 4b. get results df
-                r_results = deseq2.results(dds_processed, contrast = contrast_string_list)
-                robjects.globalenv['r_results'] = r_results
-                r_results_df = robjects.r("as.data.frame(r_results)")
-
-            # 5. get rlog and vsd dfs
-            rlog_output = deseq2.rlog(dds_processed, blind=False)
-            robjects.globalenv['rlog_output'] = rlog_output
-            r_rlog_df = robjects.r("assay(rlog_output)")
-
-            robjects.r("vst_output <- varianceStabilizingTransformation(dds, blind=FALSE)")
-            r_vst_df = robjects.r("assay(vst_output)")
-            
-            # 6. transfer normalized counts, rlog, and vst df to pandas
-            with localconverter(robjects.default_converter + pandas2ri.converter):
-                rlog_array = robjects.conversion.rpy2py(r_rlog_df)
-            
-            with localconverter(robjects.default_converter + pandas2ri.converter):
-                vst_array = robjects.conversion.rpy2py(r_vst_df)
-            
-            with localconverter(robjects.default_converter + pandas2ri.converter):
-                normalized_counts_array = robjects.conversion.rpy2py(r_normalized_counts_df)
-
-            if return_results_df:
-                # 7. transfer results df to pandas
+                # DEseq process
+                # 1a. transfer count df into r df
                 with localconverter(robjects.default_converter + pandas2ri.converter):
-                    results_table = robjects.conversion.rpy2py(r_results_df)
-                    
-                results_table = results_table.rename({'seq_id':'long_ID'})
-                results_table['long_ID'] = comp_count_df.index.values
-                results_table = results_table.set_index('long_ID')
+                    r_comp_count_df = robjects.conversion.py2rpy(comp_count_df)
 
-            normalized_counts_df = pd.DataFrame(normalized_counts_array, index=comp_count_df.index, columns=included_samples)
-            rlog_df = pd.DataFrame(rlog_array, index=comp_count_df.index, columns=included_samples)
-            vst_df = pd.DataFrame(vst_array, index=comp_count_df.index, columns=included_samples)
+                robjects.globalenv['r_comp_count_df'] = r_comp_count_df
+                
+                # 1b. transfer condition df into r df
+                with localconverter(robjects.default_converter + pandas2ri.converter):
+                    r_comparison_condition_df = robjects.conversion.py2rpy(sample_use_df)
+                robjects.globalenv['r_comparison_condition_df'] = r_comparison_condition_df
+                
+                # 2. create DESeqDataSet object
+                # exp design
+                robjects.r(f"""dds <- DESeqDataSetFromMatrix(countData = r_comp_count_df, 
+                                                            colData = r_comparison_condition_df, 
+                                                            design = ~ sample_use)""")
+                
+                # 3. run DEseq command
+                dds_processed = robjects.r("DESeq(dds)")
+                robjects.globalenv['dds_processed'] = dds_processed
 
-            comparisons[comparison]['rlog'] = rlog_df.to_dict(orient='tight')
-            
-            # post-DEseq2 analysis
-            if return_results_df:
-                all_dge_table = get_dge_table(results_table)
-                log.debug(f'{all_dge_table}\n')
-                comparisons[comparison]['results'] = all_dge_table.to_dict()
-            
-            comparisons[comparison]['status'] = 'finished'
+                # get normalized counts df
+                r_normalized_counts_df = robjects.r("counts(dds_processed, normalized=TRUE)")
+                
+                if return_results_df:
+                    # 4a. set up comparison controls and treatments
+                    contrast_string_list = robjects.StrVector(['sample_use', 'control', 'treatment'])
 
-        else:
-            comparisons[comparison]['status'] = 'failed QC'
+                    # 4b. get results df
+                    r_results = deseq2.results(dds_processed, contrast = contrast_string_list)
+                    robjects.globalenv['r_results'] = r_results
+                    r_results_df = robjects.r("as.data.frame(r_results)")
+
+                # 5. get rlog and vsd dfs
+                rlog_output = deseq2.rlog(dds_processed, blind=False)
+                robjects.globalenv['rlog_output'] = rlog_output
+                r_rlog_df = robjects.r("assay(rlog_output)")
+
+                robjects.r("vst_output <- varianceStabilizingTransformation(dds, blind=FALSE)")
+                r_vst_df = robjects.r("assay(vst_output)")
+                
+                # 6. transfer normalized counts, rlog, and vst df to pandas
+                with localconverter(robjects.default_converter + pandas2ri.converter):
+                    rlog_array = robjects.conversion.rpy2py(r_rlog_df)
+                
+                with localconverter(robjects.default_converter + pandas2ri.converter):
+                    vst_array = robjects.conversion.rpy2py(r_vst_df)
+                
+                with localconverter(robjects.default_converter + pandas2ri.converter):
+                    normalized_counts_array = robjects.conversion.rpy2py(r_normalized_counts_df)
+
+                if return_results_df:
+                    # 7. transfer results df to pandas
+                    with localconverter(robjects.default_converter + pandas2ri.converter):
+                        results_table = robjects.conversion.rpy2py(r_results_df)
+                        
+                    results_table = results_table.rename({'seq_id':'long_ID'})
+                    results_table['long_ID'] = comp_count_df.index.values
+                    results_table = results_table.set_index('long_ID')
+
+                normalized_counts_df = pd.DataFrame(normalized_counts_array, index=comp_count_df.index, columns=included_samples)
+                rlog_df = pd.DataFrame(rlog_array, index=comp_count_df.index, columns=included_samples)
+                vst_df = pd.DataFrame(vst_array, index=comp_count_df.index, columns=included_samples)
+
+                comparisons[organism][comparison]['rlog'] = rlog_df.to_dict(orient='tight')
+                
+                # post-DEseq2 analysis
+                if return_results_df:
+                    all_dge_table = get_dge_table(results_table)
+                    log.debug(f'{all_dge_table}\n')
+                    comparisons[organism][comparison]['results'] = all_dge_table.to_dict()
+                
+                comparisons[organism][comparison]['status'] = 'finished'
+
+            else:
+                comparisons[organism][comparison]['status'] = 'failed QC'
 
     with open(Path(snakemake.output['comparison_data']), 'w') as outfile:
         json.dump(comparisons, outfile)
