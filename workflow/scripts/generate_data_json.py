@@ -30,18 +30,6 @@ all_data['samples'] = samples_df.to_dict(orient='records')
 
 all_data['metadata'] = metadata_df.to_dict(orient='dict')
 
-log.debug(f"ref_table.index.unique(level='ref_col'):\n{ref_table.index.unique(level='ref_col')}\n\n")
-
-# all_data['db lookup'] = {}
-# for ref_col in ref_table.index.unique(level='ref_col'):
-#     all_data['db lookup'][ref_col] = ref_table.loc[ref_col]['term'].to_dict()
-
-# all_data['annotation_data'] = {}
-# all_data['count_data'] = {}
-# for organism in counts_df.index.unique(level='organism'):
-#     all_data['count_data'][organism] = counts_df.loc[organism]['sample_data'].to_dict(orient='dict')
-#     all_data['annotation_data'][organism] = counts_df.loc[organism]['annotation_data'].to_dict(orient='dict')
-
 with open(snakemake.output['data_json'], "w") as outfile:
     json.dump(all_data, outfile)
 

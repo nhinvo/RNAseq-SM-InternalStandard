@@ -7,7 +7,7 @@ import json
 
 log.basicConfig(format='%(levelname)s:%(message)s', level=log.DEBUG)
 
-raw_gff_dir = Path(snakemake.input['raw_gff_dir'])
+raw_gff_dir = Path(snakemake.input['raw_gff_dir']) # Path('/nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/culture_genome_annotations')
 
 # attributes and annotations
 
@@ -64,7 +64,8 @@ kegg_pathway_columns = {'em_BRITE':'brite', 'em_KEGG_Module':'module', 'em_KEGG_
 
 def ident_kegg_term(db, id):
     try: 
-        return kegg_rest.kegg_find(db, id).readline().split('\n')[0].split('\t')[1]
+        line = kegg_rest.kegg_find(db, id).readline()
+        return line.split('\n')[0].split('\t')[1]
     except IndexError as e:
         log.error(f'problematic term:\n{kegg_rest.kegg_find(db, id).readline()}')
         return ""
@@ -77,16 +78,15 @@ for col, db in kegg_pathway_columns.items():
     unique_terms = set()
     ref_dict[col] = {}
     if col in attributes_df.columns:
-
         for row in attributes_df[col].to_list():
             unique_terms |= set(str(row).split(","))
-
         unique_terms -= {'-', 'nan'}
         term_table = []
-
         for i in unique_terms:
             term = ident_kegg_term(db, i)
+            log.info(f"{i}\t{term}")
             ref_dict[col][i] = term
 
 with open(snakemake.output['ref_json'], "w") as outfile:
+# with open('/nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/results_bwa/ref.json', "w") as outfile:
     json.dump(ref_dict, outfile)

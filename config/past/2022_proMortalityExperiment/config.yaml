@@ -1,7 +1,7 @@
 
 samples: "config/samples.tsv"
 config: "config/config.yaml"
-comparisons:
+comparisons: "config/comparisons.yaml"
 
 # options are 'bwa' 'hisat2' and 'bowtie2'
 aligner: 'bwa'
@@ -21,6 +21,6 @@ feature_types_to_keep: [
 input: 
   genome_refs: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/input_data_ribozero/genomes
   gff_refs: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/input_data_ribozero/annotations
-  adapter_file: /nfs/chisholmlab001/kve/genomic_resources/adapters/illumina/all_illumina_adapters.fa
+  adapter_file: /nfs/chisholmlab001/kve/genomic_resources/references/illumina/all_illumina_adapters.fa
 scratch_dir: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/output_data/
 results: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/results_hisat2

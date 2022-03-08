@@ -42,7 +42,7 @@ def get_dge_table(results_table):
 
 def main():
 
-    counts_df = pd.read_csv(Path(snakemake.input['counts']), sep='\t', index_col=[0,1,2], header=[0,1])
+    counts_df = pd.read_csv(Path(snakemake.input['counts']), sep='\t', index_col=[0,1], header=[0,1])
 
     with open(Path(snakemake.input['comparison_yaml'])) as infile:
         comparisons = yaml.load(infile, Loader=yaml.FullLoader)
@@ -140,9 +140,9 @@ def main():
                     with localconverter(robjects.default_converter + pandas2ri.converter):
                         results_table = robjects.conversion.rpy2py(r_results_df)
                         
-                    results_table = results_table.rename({'seq_id':'long_ID'})
-                    results_table['long_ID'] = comp_count_df.index.values
-                    results_table = results_table.set_index('long_ID')
+                    results_table = results_table.rename({'seq_id':'ID'})
+                    results_table['ID'] = comp_count_df.index.values
+                    results_table = results_table.set_index('ID')
 
                 normalized_counts_df = pd.DataFrame(normalized_counts_array, index=comp_count_df.index, columns=included_samples)
                 rlog_df = pd.DataFrame(rlog_array, index=comp_count_df.index, columns=included_samples)

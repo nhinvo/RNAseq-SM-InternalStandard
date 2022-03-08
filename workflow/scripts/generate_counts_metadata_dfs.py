@@ -137,15 +137,16 @@ metadata_df.to_csv(Path(snakemake.output["metadata"]), sep='\t')
 annotation_data = counts_df['annotation_data']
 
 annotation_dict = {}
-for col in annotation_data.columns if col not in ref_dict.keys():
-    print(col)
-    unique_values = annotation_data[col].unique()
-    annotation_dict[str(col)] = {}
-    for val in unique_values:
-        mi = annotation_data[annotation_data[col]==val].index
-        annotation_dict[str(col)][str(val)] = {org : [] for org in mi.get_level_values('organism').unique()}
-        for org, gene in mi.to_list():
-            annotation_dict[str(col)][str(val)][str(org)].append(gene)
+for col in annotation_data.columns:
+    if col not in ref_dict.keys():
+        log.info(col)
+        unique_values = annotation_data[col].unique()
+        annotation_dict[str(col)] = {}
+        for val in unique_values:
+            mi = annotation_data[annotation_data[col]==val].index
+            annotation_dict[str(col)][str(val)] = {org : [] for org in mi.get_level_values('organism').unique()}
+            for org, gene in mi.to_list():
+                annotation_dict[str(col)][str(val)][str(org)].append(gene)
 
 # for col_id, (i, term) in ref_dict.items()
 
@@ -153,10 +154,11 @@ with open(snakemake.output['annotation_json'], 'w') as outfile:
     json.dump(annotation_dict, outfile)
 
 counts_data = counts_df['sample_data']
+counts_dict = {}
 for col in counts_data.columns:
-    counts_data[col] = {}
-    for org in counts_data[col].get_level_values('organism').unique():
-        counts_data[col][org] = counts_data.loc[org][col].to_dict()
+    counts_dict[col] = {}
+    for org in counts_data[col].index.get_level_values('organism').unique():
+        counts_dict[col][org] = counts_data.loc[org][col].to_dict()
 
 with open(snakemake.output['counts_json'], 'w') as outfile:
-    json.dump(counts_data, outfile)
+    json.dump(counts_dict, outfile)
