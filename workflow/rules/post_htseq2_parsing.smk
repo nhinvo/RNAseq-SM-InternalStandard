@@ -6,11 +6,14 @@ rule generate_counts_metadata_dfs:
         raw_gff_dir=Path(config["input"]["gff_refs"]),
         condition_table_path=Path(config["samples"]),
         config_yaml_path=Path(config["config"]),
+        ref_json = results_path_dict['ref_json']
     output:
         counts = results_path_dict['counts'],
         metadata = results_path_dict['metadata'],
         config = results_path_dict['config'],
         samples = results_path_dict['samples'],
+        counts_json = results_path_dict['counts_json'],
+        annotation_json = results_path_dict['annotation_json'],
     conda:
         "../envs/post_htseq2_parsing.yaml"
     script:
@@ -21,7 +24,7 @@ rule generate_ref_table:
     input:
         raw_gff_dir = Path(config["input"]["gff_refs"]),
     output:
-        ref_table = results_path_dict['ref_table']
+        ref_json = results_path_dict['ref_json']
     conda:
         "../envs/post_htseq2_parsing.yaml"
     script:
@@ -40,11 +43,11 @@ rule generate_comparison_results:
 
 rule generate_data_json:
     input:
-        counts = results_path_dict['counts'],
+        counts_json = results_path_dict['counts_json'],
+        annotation_json = results_path_dict['annotation_json'],
         metadata = results_path_dict['metadata'],
         config = results_path_dict['config'],
         samples = results_path_dict['samples'],
-        ref_table = results_path_dict['ref_table'],
         comparison_data = results_path_dict['comparisons']
     output:
         data_json = results_path_dict['json']

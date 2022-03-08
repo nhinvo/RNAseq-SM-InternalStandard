@@ -1,7 +1,7 @@
 from pathlib import Path
 import shutil
 import pandas as pd
-
+import json
 import logging as log
 
 log.basicConfig(format='%(levelname)s:%(message)s', level=log.INFO)
@@ -14,6 +14,9 @@ log.info(f"snakemake.input['sample_counts']:\ntype:{type(snakemake.input['sample
 
 shutil.copy(snakemake.input['condition_table_path'], snakemake.output['samples'])
 shutil.copy(snakemake.input["config_yaml_path"], snakemake.output["config"])
+
+with open(snakemake.input['ref_json']) as file:
+    ref_dict = json.load(file) 
 
 # attributes and annotations
 
@@ -62,16 +65,14 @@ for gff_path in raw_gff_dir.iterdir():
 
 attributes_df = pd.concat(gffs)
 
-attributes_df = attributes_df.rename(columns={'ID':'long_ID'})
-
 log.info(f"attributes_df.columns:\n{attributes_df.columns}\n\n")
 
-attributes_df = attributes_df.set_index('long_ID')
+attributes_df = attributes_df.set_index('ID')
 
 organism_type_ID_df = attributes_df[['organism', 'type']].copy()
 
 attributes_df = attributes_df.set_index(['organism', 'type'], append=True)
-attributes_df = attributes_df.reorder_levels(['organism', 'type', 'long_ID'])
+attributes_df = attributes_df.reorder_levels(['organism', 'type', 'ID'])
 
 raw_counts_df_list = []
 raw_metadata_df_list = []
@@ -84,16 +85,16 @@ for i, path in enumerate(sorted(snakemake.input['sample_counts'])):
         sample_name = path.stem
 
         # read in HTseq TSV
-        temp_df = pd.read_csv(path, sep='\t', names=['long_ID', sample_name])
+        temp_df = pd.read_csv(path, sep='\t', names=['ID', sample_name])
 
-        # check that long_IDs match
+        # check that IDs match
         if len(first_unique_ids) == 0:
-            first_unique_ids = temp_df['long_ID'].unique()
+            first_unique_ids = temp_df['ID'].unique()
         else:
-            temp_unique_ids = temp_df['long_ID'].unique()
+            temp_unique_ids = temp_df['ID'].unique()
             assert first_unique_ids.all() == temp_unique_ids.all()
 
-        temp_df = temp_df.set_index('long_ID')
+        temp_df = temp_df.set_index('ID')
 
         temp_metadata_df = temp_df[temp_df.index.str.contains('__')]
 
@@ -104,13 +105,13 @@ for i, path in enumerate(sorted(snakemake.input['sample_counts'])):
         raw_metadata_df_list.append(temp_metadata_df)
 
 counts_df = pd.concat(raw_counts_df_list, axis=1)
-
 metadata_df = pd.concat(raw_metadata_df_list, axis=1)
+
 metadata_df.index = metadata_df.index.str.replace('__', '')
 
 counts_df = counts_df.join(organism_type_ID_df)
 counts_df = counts_df.set_index(['organism', 'type'], append=True)
-counts_df = counts_df.reorder_levels(['organism', 'type', 'long_ID'])
+counts_df = counts_df.reorder_levels(['organism', 'type', 'ID'])
 
 if feature_types_to_keep:
     counts_df = counts_df[counts_df.index.get_level_values('type').isin(feature_types_to_keep)]
@@ -127,5 +128,35 @@ log.info(f"metadata_df:\n{metadata_df}\n\n")
 
 counts_df = counts_df.loc[~counts_df.index.duplicated(keep='first')]
 
+counts_df['annotation_data', 'type'] = counts_df.index.get_level_values('type')
+counts_df = counts_df.reset_index(level='type', drop=True)
+
 counts_df.to_csv(Path(snakemake.output["counts"]), sep="\t")
 metadata_df.to_csv(Path(snakemake.output["metadata"]), sep='\t')
+
+annotation_data = counts_df['annotation_data']
+
+annotation_dict = {}
+for col in annotation_data.columns if col not in ref_dict.keys():
+    print(col)
+    unique_values = annotation_data[col].unique()
+    annotation_dict[str(col)] = {}
+    for val in unique_values:
+        mi = annotation_data[annotation_data[col]==val].index
+        annotation_dict[str(col)][str(val)] = {org : [] for org in mi.get_level_values('organism').unique()}
+        for org, gene in mi.to_list():
+            annotation_dict[str(col)][str(val)][str(org)].append(gene)
+
+# for col_id, (i, term) in ref_dict.items()
+
+with open(snakemake.output['annotation_json'], 'w') as outfile:
+    json.dump(annotation_dict, outfile)
+
+counts_data = counts_df['sample_data']
+for col in counts_data.columns:
+    counts_data[col] = {}
+    for org in counts_data[col].get_level_values('organism').unique():
+        counts_data[col][org] = counts_data.loc[org][col].to_dict()
+
+with open(snakemake.output['counts_json'], 'w') as outfile:
+    json.dump(counts_data, outfile)

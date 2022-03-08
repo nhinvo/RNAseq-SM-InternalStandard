@@ -43,10 +43,12 @@ output_path_dict = {
 
 results_path_dict = {
     "counts": Path(config["results"]) / "counts.tsv",
+    "counts_json": Path(config["results"]) / "counts.json",
+    "annotation_json": Path(config["results"]) / "annotations.json",
     "metadata": Path(config["results"]) / "metadata.tsv",
     "config": Path(config["results"]) / "config.yaml",
     "samples": Path(config["results"]) / "samples.tsv",
-    "ref_table": Path(config["results"]) / "bio_db_ref_table.tsv",
+    "ref_json": Path(config["results"]) / "bio_db_ref_dict.json",
     "json": Path(config["results"]) / f"{config['experiment_name']}.json",
     "comparisons": Path(config["results"]) / "comparisons.json",
 }

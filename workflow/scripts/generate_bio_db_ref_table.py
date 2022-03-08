@@ -3,6 +3,7 @@ import pandas as pd
 import logging as log
 import urllib.error
 import Bio.KEGG.REST as kegg_rest
+import json
 
 log.basicConfig(format='%(levelname)s:%(message)s', level=log.DEBUG)
 
@@ -70,22 +71,22 @@ def ident_kegg_term(db, id):
     except urllib.error.URLError as e:
         return e.read().decode("utf8", 'ignore')
 
-dfs = []
+ref_dict = {}
 for col, db in kegg_pathway_columns.items():
     log.info(f"{col}\t{db}")
     unique_terms = set()
+    ref_dict[col] = {}
     if col in attributes_df.columns:
+
         for row in attributes_df[col].to_list():
             unique_terms |= set(str(row).split(","))
+
         unique_terms -= {'-', 'nan'}
         term_table = []
+
         for i in unique_terms:
             term = ident_kegg_term(db, i)
-            log.info(f"{col}\t{i}\t{term}")
-            term_table.append([col, i, term])
-        dfs.append(pd.DataFrame(term_table, columns=['ref_col','id','term']))
-try: 
-    ref_table = pd.concat(dfs, axis=0)
-    ref_table.to_csv(snakemake.output['ref_table'], sep='\t', index=False)
-except ValueError:
-    open(snakemake.output['ref_table'], 'a').close()
+            ref_dict[col][i] = term
+
+with open(snakemake.output['ref_json'], "w") as outfile:
+    json.dump(ref_dict, outfile)
