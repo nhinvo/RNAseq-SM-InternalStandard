@@ -4,7 +4,7 @@ import pandas as pd
 import json
 import logging as log
 
-log.basicConfig(format='%(levelname)s:%(message)s', level=log.INFO)
+log.basicConfig(format='%(levelname)s:%(message)s', level=log.DEBUG)
 
 # Snakemake
 raw_gff_dir = Path(snakemake.input['raw_gff_dir'])
@@ -148,7 +148,24 @@ for col in annotation_data.columns:
             for org, gene in mi.to_list():
                 annotation_dict[str(col)][str(val)][str(org)].append(gene)
 
-# for col_id, (i, term) in ref_dict.items()
+
+for col, col_dict in ref_dict.items():
+    annotation_dict[str(col)] = {}
+    for i, term in col_dict.items():
+        try:
+            if i not in ['nan', "", 'None']:
+                mi = annotation_data[annotation_data[col].str.contains(i, na=False)].index
+                if term in ["",'None','nan']:
+                    annotation_dict[str(col)][str(i)] = {org : [] for org in mi.get_level_values('organism').unique()}
+                    for org, gene in mi.to_list():
+                        annotation_dict[str(col)][str(i)][str(org)].append(gene)
+                else:
+                    annotation_dict[str(col)][str(term)] = {org : [] for org in mi.get_level_values('organism').unique()}
+                    for org, gene in mi.to_list():
+                        annotation_dict[str(col)][str(term)][str(org)].append(gene)
+        except ValueError:
+            log.debug(f"{col}\t{i}\t{term}")
+            raise
 
 with open(snakemake.output['annotation_json'], 'w') as outfile:
     json.dump(annotation_dict, outfile)
