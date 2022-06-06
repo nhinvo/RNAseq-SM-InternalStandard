@@ -23,4 +23,4 @@ input:
   gff_refs: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/input_data_ribozero/annotations
   adapter_file: /nfs/chisholmlab001/kve/genomic_resources/references/illumina/all_illumina_adapters.fa
 scratch_dir: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/output_data/
-results: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/results_hisat2
+results: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/results_bwa

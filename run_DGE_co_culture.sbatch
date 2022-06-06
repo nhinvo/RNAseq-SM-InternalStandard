@@ -3,16 +3,16 @@
 #SBATCH --job-name=DGE-co-cul
 #
 # Number of tasks/cores for job
-#SBATCH -n 10
+#SBATCH -n 1
 #
 # Specifies using a centos7 node
 #SBATCH -C centos7
 #
 # wall clock limit:
-#SBATCH --time 72:00:00
+#SBATCH --time 1:00:00
 #
 # Partition to use:
-#SBATCH --partition sched_mit_chisholm
+#SBATCH --partition sched_mit_hill
 #
 #SBATCH --comment="Diff expression analysis of co-culture"
 #
@@ -20,13 +20,7 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=kve@mit.edu
 #
-# Request one node:
-#SBATCH --nodes=1
-#
-# Processors per task:
-#SBATCH --cpus-per-task=1
-#
-#SBATCH --mem=250G
+#SBATCH --mem=10G
 #
 #SBATCH -o logs/%j_slurm_output.txt
 #SBATCH -e logs/%j_slurm_error.txt

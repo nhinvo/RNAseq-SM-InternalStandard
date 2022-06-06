@@ -6,7 +6,7 @@ comparisons: "config/comparisons.yaml"
 # options are 'bwa' 'hisat2' and 'bowtie2'
 aligner: 'bwa'
 
-experiment_name: '2021_Sar11Pro_RNAseq_Project'
+experiment_name: '2022_proMortalityExperiment'
 
 htseq:
   mapping_qual_threshold: 10 # default is 10
@@ -15,12 +15,12 @@ feature_types_to_keep: [
 'CDS',
 'rRNA',
 'tRNA',
-'sRNA'
+'internal_ref'
 ]
 
 input: 
-  genome_refs: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/culture_genome_refs
-  gff_refs: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/culture_genome_annotations
-  adapter_file: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/input_data/adapters/all_illumina_adapters.fa
-scratch_dir: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/output_data/
-results: /nfs/chisholmlab001/kve/2021_Sar11Pro_RNAseq_Project/data/results_bwa
+  genome_refs: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/input_data_ribozero/genomes
+  gff_refs: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/input_data_ribozero/annotations
+  adapter_file: /nfs/chisholmlab001/kve/genomic_resources/references/illumina/all_illumina_adapters.fa
+scratch_dir: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/output_data/
+results: /nfs/chisholmlab001/kve/2022_proMortalityExperiment/results_bwa
