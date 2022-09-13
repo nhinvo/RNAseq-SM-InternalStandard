@@ -51,6 +51,9 @@ results_path_dict = {
     "ref_json": Path(config["results"]) / "bio_db_ref_dict.json",
     "json": Path(config["results"]) / f"{config['experiment_name']}.json",
     "comparisons": Path(config["results"]) / "comparisons.json",
+    "samples_json": Path(config["results"]) / "samples.json",
+    "metadata_json": Path(config["results"]) / "metadata.json",
+    "config_json": Path(config["results"]) / "config.json",
 }
 
 

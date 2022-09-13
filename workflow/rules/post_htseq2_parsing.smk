@@ -48,9 +48,12 @@ rule generate_data_json:
         metadata = results_path_dict['metadata'],
         config = results_path_dict['config'],
         samples = results_path_dict['samples'],
-        comparison_data = results_path_dict['comparisons']
+        comparison_data = results_path_dict['comparisons'],
     output:
-        data_json = results_path_dict['json']
+        data_json = results_path_dict['json'],
+        samples = results_path_dict['samples_json'],
+        metadata = results_path_dict['metadata_json'],
+        config = results_path_dict['config_json'],
     conda:
         "../envs/post_htseq2_parsing.yaml"
     script:

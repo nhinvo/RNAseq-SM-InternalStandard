@@ -30,6 +30,15 @@ all_data['samples'] = samples_df.to_dict(orient='records')
 
 all_data['metadata'] = metadata_df.to_dict(orient='dict')
 
+with open(snakemake.output['samples'], "w") as outfile:
+    json.dump(all_data['samples'], outfile)
+
+with open(snakemake.output['metadata'], "w") as outfile:
+    json.dump(all_data['metadata'], outfile)
+
+with open(snakemake.output['config'], "w") as outfile:
+    json.dump(all_data['config'], outfile)
+
 with open(snakemake.output['data_json'], "w") as outfile:
     json.dump(all_data, outfile)
 

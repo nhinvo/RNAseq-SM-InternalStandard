@@ -1,0 +1,16 @@
+MED4:  
+  blank:
+    sample_use:
+      SS0284: none
+      SS0291: none
+      SS0302: none
+      SS0309: none
+      SS0311: none
+      SS0313: none
+      SS0324: none
+      SS0326: none
+      SS0328: none
+      SS0333: none
+      SS0349: none
+      SS0351: none
+    status: 'ready'

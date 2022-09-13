@@ -9,6 +9,8 @@ rule run_fastqc:
         mem_mb=10000,
     conda:
         "../envs/fastqc.yaml"
+    log:
+        "logs/fastqc/run_fastqc/{anything}.log"
     shell:
         "fastqc {input}"
 

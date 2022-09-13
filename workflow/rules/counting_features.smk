@@ -12,7 +12,9 @@ rule counting_features:
         "../envs/htseq-count.yaml"
     params:
         mapping_quality_thresh = config["htseq"]["mapping_qual_threshold"]
+    log:
+        "logs/counting_features/{sample}.log"
     shell:
         "htseq-count --idattr=ID -a {params.mapping_quality_thresh} -s reverse -t exon -r pos --nonunique all "
-        "{input.map_file} {input.gff} > {output}"
+        "{input.map_file} {input.gff} > {output} 2> {log}"
         
