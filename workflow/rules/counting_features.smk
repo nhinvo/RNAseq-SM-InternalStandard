@@ -6,15 +6,20 @@ rule counting_features:
         gff = output_path_dict["concat_gff"]["concat_gff_mod_file"],
     output:
         output_path_dict["feature_count"] / "{sample}.tsv",
+    benchmark:
+        benchmark_dir / 'counting_features' / 'counting_features' / '{sample}.benchmark'
     resources:
-        mem_mb=10000,
+        partition = 'sched_mit_chisholm',
+        mem = '12G',
+        ntasks = 1,
+        time = '0-12', 
+        output = str(log_dir / 'counting_features' / 'counting_features' / '{sample}.out'),
+        error = str(log_dir / 'counting_features' / 'counting_features' / '{sample}.err'),
     conda:
         "../envs/htseq-count.yaml"
     params:
         mapping_quality_thresh = config["htseq"]["mapping_qual_threshold"]
-    log:
-        "logs/counting_features/{sample}.log"
     shell:
         "htseq-count --idattr=ID -a {params.mapping_quality_thresh} -s reverse -t exon -r pos --nonunique all "
-        "{input.map_file} {input.gff} > {output} 2> {log}"
+        "{input.map_file} {input.gff} > {output}"
         

@@ -44,8 +44,7 @@ def main():
 
     counts_df = pd.read_csv(Path(snakemake.input['counts']), sep='\t', index_col=[0,1], header=[0,1])
 
-    with open(Path(snakemake.input['comparison_yaml'])) as infile:
-        comparisons = yaml.load(infile, Loader=yaml.FullLoader)
+    comparisons = snakemake.config['comparisons']
 
     if comparisons is None:
         with open(Path(snakemake.output['comparison_data']), 'w') as outfile:
@@ -59,28 +58,25 @@ def main():
 
                 log.info(f"organism: {organism}\t comparison: {comparison}")
 
-                sample_use = pd.Series(comparisons[organism][comparison]['sample_use'], name='sample_use')
-                sample_use = sample_use[sample_use != 'none']
-
-                conditions = list(sample_use.unique())
+                conditions = list(comparisons[organism][comparison].keys())
 
                 return_results_df = len(conditions) == 2 and 'control' in conditions and 'treatment' in conditions
 
                 log.info(f'{organism}\n')
 
-                included_samples = list(sample_use.index.values)
+                included_samples = [i for l in comparisons[organism][comparison].values() for i in l]
 
                 comp_count_df = counts_df.loc[organism][included_samples]
 
-                sample_use_df = pd.DataFrame(sample_use)
+                sample_use = pd.Series({s:t for t,l in comparisons[organism][comparison].items() for s in l})
+                sample_use.name = 'sample_use'
+                sample_use_df = sample_use.to_frame()
 
                 log.debug(f"comp_count_df:\n{comp_count_df}")
                 log.debug(f"sample_use_df:\n{sample_use_df}")
 
                 # organism must be present in all samples. Good test to tell if it is from experience...
                 if min(comp_count_df.mean()) > 1:
-
-                    comparisons[organism][comparison]['status'] = 'running'
 
                     # DEseq process
                     # 1a. transfer count df into r df
@@ -158,11 +154,9 @@ def main():
                         all_dge_table = get_dge_table(results_table)
                         log.debug(f'{all_dge_table}\n')
                         comparisons[organism][comparison]['results'] = all_dge_table.to_dict()
-                    
-                    comparisons[organism][comparison]['status'] = 'finished'
 
                 else:
-                    comparisons[organism][comparison]['status'] = 'failed QC'
+                    raise ValueError('failed QC')
 
         with open(Path(snakemake.output['comparison_data']), 'w') as outfile:
             json.dump(comparisons, outfile)

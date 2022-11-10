@@ -6,27 +6,37 @@ rule map_reads_PE:
         ref = output_path_dict["concat_genome"]["concat_genome_file"],
         indexing = output_path_dict["concat_genome"]["concat_genome_done"]
     output:
-        sam_out = temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),
-    resources: 
-        mem_mb=100000,
+        temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),
+    benchmark:
+        benchmark_dir / 'map_reads_bowtie2' / 'map_reads_PE' / '{sample}.benchmark'
+    resources:
+        partition = 'sched_mit_chisholm',
+        mem = '250G',
+        ntasks = 20,
+        time = '0-12', 
+        output = str(log_dir / 'map_reads_bowtie2' / 'map_reads_PE' / '{sample}.out'),
+        error = str(log_dir / 'map_reads_bowtie2' / 'map_reads_PE' / '{sample}.err'),
     conda:
         "../envs/bowtie2.yaml"
-    log: 
-        "logs/bowtie2/map_reads_PE/{sample}.log"
     shell:
-        "bowtie2 -x {input.ref} -1 {input.r1} -2 {input.r2} -S {output.sam_out} &> {log}"
+        "bowtie2 -x {input.ref} -1 {input.r1} -2 {input.r2} -S {output} -p {resources.ntasks}"
 
 rule index_genome:
     input:
         ref = output_path_dict["concat_genome"]["concat_genome_file"]
     output:
         touch(output_path_dict["concat_genome"]["concat_genome_done"]),
+    benchmark:
+        benchmark_dir / 'map_reads_bowtie2' / 'index_genome.benchmark'
     resources:
-        mem_mb=10000,
+        partition = 'sched_mit_chisholm',
+        mem = '250G',
+        ntasks = 20,
+        time = '0-12', 
+        output = str(log_dir / 'map_reads_bowtie2' / 'index_genome.out'),
+        error = str(log_dir / 'map_reads_bowtie2' / 'index_genome.err'),
     conda:
         "../envs/bowtie2.yaml"
-    log: 
-        "logs/bowtie2/index_genome.log"
     shell:
-        "bowtie2-build {input.ref} {input.ref} &> {log}"
+        "bowtie2-build --threads {resources.ntasks} {input.ref} {input.ref}"
 

@@ -1,28 +1,3 @@
-# # map sample reads to concatenated genome
-# rule map_reads_PE:
-#     input:
-#         r1 = output_path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq",
-#         r2 = output_path_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq",
-#         ref = output_path_dict["concat_genome"]["concat_genome_file"],
-#         indexing = output_path_dict["concat_genome"]["concat_genome_done"]
-#     output:
-#         sam_out = temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),
-#         sai1 = temp(output_path_dict["mapped_reads"] / "{sample}_1_bwa.sai"),
-#         sai2 = temp(output_path_dict["mapped_reads"] / "{sample}_2_bwa.sai"),
-#     resources: 
-#         mem_mb=100000,
-#     conda:
-#         "../envs/bwa.yaml"
-#     shell:
-#         # BWA Mapping:
-#         """
-#         bwa aln {input.ref} {input.r1} > {output.sai1}
-#         bwa aln {input.ref} {input.r2} > {output.sai2}
-
-#         bwa sampe {input.ref} {output.sai1} {output.sai2} {input.r1} {input.r2} > {output.sam_out}
-#         """
-
-# map sample reads to concatenated genome
 rule map_reads_PE:
     input:
         r1 = output_path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq",
@@ -30,64 +5,37 @@ rule map_reads_PE:
         ref = output_path_dict["concat_genome"]["concat_genome_file"],
         indexing = output_path_dict["concat_genome"]["concat_genome_done"]
     output:
-        sam_out = temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),
-    resources: 
-        mem_mb=100000,
+        temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),
+    benchmark:
+        benchmark_dir / 'map_reads_bwa' / 'map_reads_PE' / '{sample}.benchmark'
+    resources:
+        partition = 'sched_mit_chisholm',
+        mem = '250G',
+        ntasks = 20,
+        time = '0-12', 
+        output = str(log_dir / 'map_reads_bwa' / 'map_reads_PE' / '{sample}.out'),
+        error = str(log_dir / 'map_reads_bwa' / 'map_reads_PE' / '{sample}.err'),
     conda:
         "../envs/bwa.yaml"
-    log: 
-        "logs/bwa/map_reads_PE/{sample}.log"
     shell:
-        # BWA Mapping:
-        "bwa mem {input.ref} {input.r1} {input.r2} > {output.sam_out} 2> {log}"
+        "bwa mem {input.ref} {input.r1} {input.r2} > {output}"
 
-# rule map_reads_SE_greater_70bp:
-#     input:
-#         se_reads = Path(config["output"]["trimmed_reads"]) / "{sample}_trimmed.fastq",
-#         ref = Path(config["output"]["concat_genome"]["concat_genome_file"]),
-#     output:
-#         temp(Path(config["output"]["mapped_reads"]) / "{sample}_mapped.sam"),  # temp() temporarily keeps SAMs until converted
-#     resources:
-#         mem_mb=100000,
-#     conda:
-#         "../envs/bwa.yaml"
-#     shell:
-#         # BWA Mapping:
-#         """
-#         bwa index {input.ref}
-#         bwa mem {input.ref} {input.se_reads} > {output}
-#         """
 
 rule index_genome:
     input:
         ref = output_path_dict["concat_genome"]["concat_genome_file"]
     output:
         touch(output_path_dict["concat_genome"]["concat_genome_done"]),
+    benchmark:
+        benchmark_dir / 'map_reads_bwa' / 'index_genome.benchmark'
     resources:
-        mem_mb=10000,
+        partition = 'sched_mit_chisholm',
+        mem = '250G',
+        ntasks = 20,
+        time = '0-12', 
+        output = str(log_dir / 'map_reads_bwa' / 'index_genome.out'),
+        error = str(log_dir / 'map_reads_bwa' / 'index_genome.err'),
     conda:
         "../envs/bwa.yaml"
-    log: 
-        "logs/bwa/index_genome.log"
     shell:
-        "bwa index {input.ref} &> {log}"
-
-
-# rule map_reads_SE_less_70bp:
-#     input:
-#         se_reads = Path(config["output"]["trimmed_reads"]) / "{sample}_trimmed.fastq",
-#         ref = Path(config["output"]["concat_genome"]["concat_genome_file"]),
-#         indexing = Path(config["output"]["concat_genome"]["concat_genome_done"])
-#     output:
-#         sam = temp(Path(config["output"]["mapped_reads"]) / "{sample}_mapped.sam"),  # temp() temporarily keeps SAMs until converted
-#         index = temp(Path(config["output"]["trimmed_reads"]) / "{sample}_trimmed.sai"),
-#     resources:
-#         mem_mb=100000,
-#     conda:
-#         "../envs/bwa.yaml"
-#     shell:
-#         # BWA Mapping:
-#         """
-#         bwa aln {input.ref} {input.se_reads} > {output.index}
-#         bwa samse {input.ref} {output.index} {input.se_reads} > {output.sam}
-#         """
+        "bwa index {input.ref}"
