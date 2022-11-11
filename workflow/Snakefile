@@ -59,15 +59,21 @@ results_path_dict = {
 def mk_out(d, f=None):
     if f:
         d.mkdir(parents=True, exist_ok=True)
-        return str(d / f"{f}.out")
+        p = d / f"{f}.out"
+        p.unlink(missing_ok=True)
+        return str(p)
     else:
+        d.unlink(missing_ok=True)
         return str(d)
 
 def mk_err(d, f=None):
     if f:
         d.mkdir(parents=True, exist_ok=True)
-        return str(d / f"{f}.err")
+        p = d / f"{f}.err"
+        p.unlink(missing_ok=True)
+        return str(p)
     else:
+        d.unlink(missing_ok=True)
         return str(d)
 
 rule all:

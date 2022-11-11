@@ -8,7 +8,7 @@
 
 source activate snakemake
 
-snakemake -s workflow/Snakefile --unlock
+snakemake -s workflow/Snakefile --unlock --configfile "/nfs/chisholmlab001/kve/2022_chitin_bead_colonization_rnaseq/inputs/config.yaml"
 
 # run job:
 snakemake \
