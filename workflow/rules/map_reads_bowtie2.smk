@@ -7,15 +7,13 @@ rule map_reads_PE:
         indexing = output_path_dict["concat_genome"]["concat_genome_done"]
     output:
         temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),
-    benchmark:
-        benchmark_dir / 'map_reads_bowtie2' / 'map_reads_PE' / '{sample}.benchmark'
     resources:
         partition = 'sched_mit_chisholm',
         mem = '250G',
         ntasks = 20,
         time = '0-12', 
-        output = str(log_dir / 'map_reads_bowtie2' / 'map_reads_PE' / '{sample}.out'),
-        error = str(log_dir / 'map_reads_bowtie2' / 'map_reads_PE' / '{sample}.err'),
+        output = lambda wildcards: mk_out(log_dir / 'map_reads_bowtie2' / 'map_reads_PE', wildcards.sample),
+        error = lambda wildcards: mk_err(log_dir / 'map_reads_bowtie2' / 'map_reads_PE', wildcards.sample),
     conda:
         "../envs/bowtie2.yaml"
     shell:
@@ -26,15 +24,13 @@ rule index_genome:
         ref = output_path_dict["concat_genome"]["concat_genome_file"]
     output:
         touch(output_path_dict["concat_genome"]["concat_genome_done"]),
-    benchmark:
-        benchmark_dir / 'map_reads_bowtie2' / 'index_genome.benchmark'
     resources:
         partition = 'sched_mit_chisholm',
         mem = '250G',
         ntasks = 20,
         time = '0-12', 
-        output = str(log_dir / 'map_reads_bowtie2' / 'index_genome.out'),
-        error = str(log_dir / 'map_reads_bowtie2' / 'index_genome.err'),
+        output = mk_out(log_dir / 'map_reads_bowtie2' / 'index_genome.out'),
+        error = mk_err(log_dir / 'map_reads_bowtie2' / 'index_genome.err'),
     conda:
         "../envs/bowtie2.yaml"
     shell:

@@ -6,15 +6,13 @@ rule counting_features:
         gff = output_path_dict["concat_gff"]["concat_gff_mod_file"],
     output:
         output_path_dict["feature_count"] / "{sample}.tsv",
-    benchmark:
-        benchmark_dir / 'counting_features' / 'counting_features' / '{sample}.benchmark'
     resources:
         partition = 'sched_mit_chisholm',
         mem = '12G',
         ntasks = 1,
         time = '0-12', 
-        output = str(log_dir / 'counting_features' / 'counting_features' / '{sample}.out'),
-        error = str(log_dir / 'counting_features' / 'counting_features' / '{sample}.err'),
+        output = lambda wildcards: mk_out(log_dir / 'counting_features' / 'counting_features', wildcards.sample),
+        error = lambda wildcards: mk_err(log_dir / 'counting_features' / 'counting_features', wildcards.sample),
     conda:
         "../envs/htseq-count.yaml"
     params:

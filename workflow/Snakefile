@@ -56,17 +56,28 @@ results_path_dict = {
     "config_json": Path(config["results directory"]) / "config.json",
 }
 
+def mk_out(d, f=None):
+    if f:
+        d.mkdir(parents=True, exist_ok=True)
+        return str(d / f"{f}.out")
+    else:
+        return str(d)
+
+def mk_err(d, f=None):
+    if f:
+        d.mkdir(parents=True, exist_ok=True)
+        return str(d / f"{f}.err")
+    else:
+        return str(d)
 
 rule all:
     input:
-        # list(results_path_dict.values()),
         expand(output_path_dict["feature_count"] / "{sample}.tsv", sample=SAMPLES),
-
+        # list(results_path_dict.values()),
 
 include: "rules/counting_features.smk"
 include: "rules/genome_concat.smk"
 include: "rules/gff_tools.smk"
-
 
 if config["aligner"] == "bwa":
 

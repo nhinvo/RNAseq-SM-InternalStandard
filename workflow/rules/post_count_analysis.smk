@@ -17,14 +17,14 @@
 #     conda:
 #         "../envs/post_count_analysis.yaml"
 #     benchmark:
-#         benchmark_dir / 'gff_tools' / 'annotation_concat.benchmark'
+#         lambda wildcards: benchmark_dir / 'gff_tools' / 'annotation_concat.benchmark'
 #     resources:
 #         partition = 'sched_mit_chisholm',
 #         mem = '250G',
 #         ntasks = 20,
 #         time = '0-12', 
-#         output = str(log_dir / 'gff_tools' / 'annotation_concat.out'),
-#         error = str(log_dir / 'gff_tools' / 'annotation_concat.err'),
+#         output = lambda wildcards: mk_out(log_dir / 'gff_tools' / 'annotation_concat.out'),
+#         error = lambda wildcards: mk_err(log_dir / 'gff_tools' / 'annotation_concat.err'),
 #     script:
 #         "../scripts/generate_counts_metadata_dfs.py"
 
@@ -37,14 +37,14 @@
 #     conda:
 #         "../envs/post_count_analysis.yaml"
 #     benchmark:
-#         benchmark_dir / 'gff_tools' / 'annotation_concat.benchmark'
+#         lambda wildcards: benchmark_dir / 'gff_tools' / 'annotation_concat.benchmark'
 #     resources:
 #         partition = 'sched_mit_chisholm',
 #         mem = '250G',
 #         ntasks = 20,
 #         time = '0-12', 
-#         output = str(log_dir / 'gff_tools' / 'annotation_concat.out'),
-#         error = str(log_dir / 'gff_tools' / 'annotation_concat.err'),
+#         output = lambda wildcards: mk_out(log_dir / 'gff_tools' / 'annotation_concat.out'),
+#         error = lambda wildcards: mk_err(log_dir / 'gff_tools' / 'annotation_concat.err'),
 #     script:
 #         "../scripts/generate_bio_db_ref_table.py"
 
@@ -57,14 +57,14 @@
 #     conda:
 #         "../envs/DEseq2py.yaml"
 #     benchmark:
-#         benchmark_dir / 'gff_tools' / 'annotation_concat.benchmark'
+#         lambda wildcards: benchmark_dir / 'gff_tools' / 'annotation_concat.benchmark'
 #     resources:
 #         partition = 'sched_mit_chisholm',
 #         mem = '250G',
 #         ntasks = 20,
 #         time = '0-12', 
-#         output = str(log_dir / 'gff_tools' / 'annotation_concat.out'),
-#         error = str(log_dir / 'gff_tools' / 'annotation_concat.err'),
+#         output = lambda wildcards: mk_out(log_dir / 'gff_tools' / 'annotation_concat.out'),
+#         error = lambda wildcards: mk_err(log_dir / 'gff_tools' / 'annotation_concat.err'),
 #     script:
 #         "../scripts/generate_comparison_results.py"
 
@@ -84,13 +84,13 @@
 #     conda:
 #         "../envs/post_count_analysis.yaml"
 #     benchmark:
-#         benchmark_dir / 'gff_tools' / 'annotation_concat.benchmark'
+#         lambda wildcards: benchmark_dir / 'gff_tools' / 'annotation_concat.benchmark'
 #     resources:
 #         partition = 'sched_mit_chisholm',
 #         mem = '250G',
 #         ntasks = 20,
 #         time = '0-12', 
-#         output = str(log_dir / 'gff_tools' / 'annotation_concat.out'),
-#         error = str(log_dir / 'gff_tools' / 'annotation_concat.err'),
+#         output = lambda wildcards: mk_out(log_dir / 'gff_tools' / 'annotation_concat.out'),
+#         error = lambda wildcards: mk_err(log_dir / 'gff_tools' / 'annotation_concat.err'),
 #     script:
 #         "../scripts/generate_data_json.py"

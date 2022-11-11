@@ -18,5 +18,5 @@ snakemake \
     --conda-frontend conda \
     --rerun-incomplete \
     --cluster "sbatch -p {resources.partition} -t {resources.time} -n {resources.ntasks} --mem={resources.mem} -o {resources.output} -e {resources.error}" \
-    --jobs 3
+    --jobs 10
     # --keep-going
