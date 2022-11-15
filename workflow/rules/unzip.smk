@@ -1,8 +1,8 @@
 rule unzip_gz:
     input:
-        output_path_dict["trimmed_reads"] / "{anything}.fastq.gz",
+        scratch_dict["trimmed_reads"] / "{anything}.fastq.gz",
     output:
-        output_path_dict["trimmed_reads"] / "{anything}.fastq",
+        scratch_dict["trimmed_reads"] / "{anything}.fastq",
     resources:
         partition = 'sched_mit_chisholm',
         mem = '10G',

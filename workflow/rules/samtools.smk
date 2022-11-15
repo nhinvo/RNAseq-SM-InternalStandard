@@ -1,9 +1,9 @@
 
 rule convert_sam2bam:
     input:
-        output_path_dict["mapped_reads"] / "{sample}_mapped.sam",
+        scratch_dict["mapped_reads"] / "{sample}_mapped.sam",
     output:
-        temp(output_path_dict["mapped_reads"] / "{sample}_mapped.bam"),
+        temp(scratch_dict["mapped_reads"] / "{sample}_mapped.bam"),
     resources:
         partition = 'sched_mit_chisholm',
         mem = '250G',
@@ -18,9 +18,9 @@ rule convert_sam2bam:
 
 rule sort_bam:
     input:
-        output_path_dict["mapped_reads"] / "{sample}_mapped.bam",
+        scratch_dict["mapped_reads"] / "{sample}_mapped.bam",
     output:
-        output_path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
+        scratch_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
     resources:
         partition = 'sched_mit_chisholm',
         mem = '250G',
@@ -35,9 +35,9 @@ rule sort_bam:
 
 rule index_bam:
     input:
-        output_path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
+        scratch_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
     output:
-        temp(output_path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam.bai"),
+        temp(scratch_dict["mapped_reads"] / "{sample}_mapped_sorted.bam.bai"),
     resources:
         partition = 'sched_mit_chisholm',
         mem = '250G',

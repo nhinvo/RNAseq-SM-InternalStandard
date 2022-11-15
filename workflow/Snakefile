@@ -6,80 +6,80 @@ SAMPLE_TABLE = pd.read_csv(config["input"]["sample table"], index_col="sample", 
 SAMPLE_TABLE.index = SAMPLE_TABLE.index.map(str)
 SAMPLES = SAMPLE_TABLE.index.values
 
+ORGANISMS = [org for org, comps in config['comparisons'].items() for comp in comps]
+COMPARISONS = [comp for org, comps in config['comparisons'].items() for comp in comps]
+
 benchmark_dir = Path('benchmark')
 benchmark_dir.mkdir(exist_ok=True)
 
 log_dir = Path(config["logging directory"])
 log_dir.mkdir(exist_ok=True)
 
-output_path_dict = {
-    "done_files": Path(config["scratch directory"]) / "done_files",
-    "trimmed_reads": Path(config["scratch directory"]) / "trimmed_reads",
+scratch_dir = Path(config["scratch directory"])
+results_dir = Path(config["results directory"])
+
+scratch_dict = {
+    "done_files": scratch_dir / "done_files",
+    "trimmed_reads": scratch_dir / "trimmed_reads",
     "concat_gff": {
-        "concat_gff_file": Path(config["scratch directory"])
+        "concat_gff_file": scratch_dir
         / "concat_gff"
         / "concat_gff.gff",
-        "concat_gff_mod_file": Path(config["scratch directory"])
+        "concat_gff_mod_file": scratch_dir
         / "concat_gff"
         / "concat_gff_mod.gff",
     },
     "concat_genome": {
-        "concat_genome_file": Path(config["scratch directory"])
+        "concat_genome_file": scratch_dir
         / "concat_genome"
         / "concat_genome.fna",
-        "concat_genome_done": Path(config["scratch directory"])
+        "concat_genome_done": scratch_dir
         / "concat_genome"
         / "indexed.done",
     },
-    "mapped_reads": Path(config["scratch directory"]) / "mapped_reads",
-    "feature_count": Path(config["scratch directory"]) / "HTseq",
-    "genome_index_parent": Path(config["scratch directory"]) / "genome_index",
-    "library_count": Path(config["scratch directory"])
+    "mapped_reads": scratch_dir / "mapped_reads",
+    "feature_count": scratch_dir / "HTseq",
+    "genome_index_parent": scratch_dir / "genome_index",
+    "library_count": scratch_dir
     / "raw_library_counts"
     / "library_len.tsv",
-    "coverage_positions": Path(config["scratch directory"]) / "coverage_positions",
-    "fastqc": Path(config["scratch directory"]) / "fastqc",
+    "coverage_positions": scratch_dir / "coverage_positions",
+    "fastqc": scratch_dir / "fastqc",
 }
 
-results_path_dict = {
-    "counts": Path(config["results directory"]) / "counts.tsv",
-    "counts_json": Path(config["results directory"]) / "counts.json",
-    "annotation_json": Path(config["results directory"]) / "annotations.json",
-    "metadata": Path(config["results directory"]) / "metadata.tsv",
-    "config": Path(config["results directory"]) / "config.yaml",
-    "samples": Path(config["results directory"]) / "samples.tsv",
-    "ref_json": Path(config["results directory"]) / "bio_db_ref_dict.json",
-    "json": Path(config["results directory"]) / f"{config['experiment_name']}.json",
-    "comparisons": Path(config["results directory"]) / "comparisons.json",
-    "samples_json": Path(config["results directory"]) / "samples.json",
-    "metadata_json": Path(config["results directory"]) / "metadata.json",
-    "config_json": Path(config["results directory"]) / "config.json",
+results_dict = {
+    "bio_db_ref": results_dir / "tables" / "bio_db_ref.tsv",
+    "raw_counts": results_dir / "tables" / "raw_counts.tsv",
+    "counts_w_annotations": results_dir / "tables" / "raw_counts_w_annotations.tsv",
+    "annotations": results_dir / "tables" / "annotations.tsv",
+    "mapping_metadata": results_dir / "metadata" / "mapping_metadata.tsv",
+    "organism_occurance": results_dir / "metadata" / "organism_occurance.tsv",
+    "gene_sparsity": results_dir / "metadata" / "gene_sparsity.tsv",
+    "DEseq2": results_dir / "DEseq2",
+    "data_json": results_dir / f"{config['experiment_name']}.json.gz",
 }
 
 def mk_out(d, f=None):
     if f:
         d.mkdir(parents=True, exist_ok=True)
-        p = d / f"{f}.out"
-        p.unlink(missing_ok=True)
+        p = d / f"{f.replace(' ','_')}.out"
         return str(p)
     else:
-        d.unlink(missing_ok=True)
+        d.parent.mkdir(parents=True, exist_ok=True)
         return str(d)
 
 def mk_err(d, f=None):
     if f:
         d.mkdir(parents=True, exist_ok=True)
-        p = d / f"{f}.err"
-        p.unlink(missing_ok=True)
+        p = d / f"{f.replace(' ','_')}.err"
         return str(p)
     else:
-        d.unlink(missing_ok=True)
+        d.parent.mkdir(parents=True, exist_ok=True)
         return str(d)
 
 rule all:
     input:
-        expand(output_path_dict["feature_count"] / "{sample}.tsv", sample=SAMPLES),
-        # list(results_path_dict.values()),
+        results_dict['data_json']
 
 include: "rules/counting_features.smk"
 include: "rules/genome_concat.smk"

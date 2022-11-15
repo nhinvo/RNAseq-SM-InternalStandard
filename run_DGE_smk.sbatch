@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=dge-smk
-#SBATCH --time 10-0                         # wall clock limit
+#SBATCH --time 5-0                         # wall clock limit
 #SBATCH -p sched_mit_chisholm               # partition selection
 #SBATCH -n 1                                # tasks (essentially threads)
 #SBATCH -o logs/%j.out

@@ -1,11 +1,11 @@
 # count features
 rule counting_features:
     input:
-        map_file = output_path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
-        map_index = output_path_dict["mapped_reads"] / "{sample}_mapped_sorted.bam.bai",
-        gff = output_path_dict["concat_gff"]["concat_gff_mod_file"],
+        map_file = scratch_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
+        map_index = scratch_dict["mapped_reads"] / "{sample}_mapped_sorted.bam.bai",
+        gff = scratch_dict["concat_gff"]["concat_gff_mod_file"],
     output:
-        output_path_dict["feature_count"] / "{sample}.tsv",
+        scratch_dict["feature_count"] / "{sample}.tsv",
     resources:
         partition = 'sched_mit_chisholm',
         mem = '12G',

@@ -1,12 +1,12 @@
 # map sample reads to concatenated genome
 rule map_reads_PE:
     input:
-        r1 = output_path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq",
-        r2 = output_path_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq",
-        ref = output_path_dict["concat_genome"]["concat_genome_file"],
-        indexing = output_path_dict["concat_genome"]["concat_genome_done"]
+        r1 = scratch_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq",
+        r2 = scratch_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq",
+        ref = scratch_dict["concat_genome"]["concat_genome_file"],
+        indexing = scratch_dict["concat_genome"]["concat_genome_done"]
     output:
-        temp(output_path_dict["mapped_reads"] / "{sample}_mapped.sam"),
+        temp(scratch_dict["mapped_reads"] / "{sample}_mapped.sam"),
     resources:
         partition = 'sched_mit_chisholm',
         mem = '250G',
@@ -21,9 +21,9 @@ rule map_reads_PE:
 
 rule index_genome:
     input:
-        ref = output_path_dict["concat_genome"]["concat_genome_file"]
+        ref = scratch_dict["concat_genome"]["concat_genome_file"]
     output:
-        touch(output_path_dict["concat_genome"]["concat_genome_done"]),
+        touch(scratch_dict["concat_genome"]["concat_genome_done"]),
     resources:
         partition = 'sched_mit_chisholm',
         mem = '250G',

@@ -2,7 +2,7 @@ rule annotation_concat:
     input:
         [d['annotation'] for d in config["input"]["reference genomes"].values()]
     output:
-        output_path_dict["concat_gff"]["concat_gff_file"],
+        scratch_dict["concat_gff"]["concat_gff_file"],
     resources:
         partition = 'sched_mit_chisholm',
         mem = '10G',
@@ -15,9 +15,9 @@ rule annotation_concat:
 
 rule add_exon_column_to_gff:
     input:
-        output_path_dict["concat_gff"]["concat_gff_file"]
+        scratch_dict["concat_gff"]["concat_gff_file"]
     output:
-        output_path_dict["concat_gff"]["concat_gff_mod_file"]
+        scratch_dict["concat_gff"]["concat_gff_mod_file"]
     conda:
         "../envs/post_count_analysis.yaml"
     resources:

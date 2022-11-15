@@ -5,8 +5,8 @@ rule run_trim_PE:
         r2 = lambda wildcards: SAMPLE_TABLE.loc[wildcards.sample, 'reverse read'],
         ref = Path(config["input"]["adapter_file"]),
     output:
-        o1 = output_path_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq.gz",
-        o2 = output_path_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq.gz",
+        o1 = scratch_dict["trimmed_reads"] / "{sample}_1_trimmed.fastq.gz",
+        o2 = scratch_dict["trimmed_reads"] / "{sample}_2_trimmed.fastq.gz",
     resources:
         partition = 'sched_mit_chisholm',
         mem = '250G',

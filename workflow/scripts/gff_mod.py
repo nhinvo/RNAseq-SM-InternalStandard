@@ -1,17 +1,11 @@
+import pandas as pd
 
-import gffpandas.gffpandas as gffpd
+feature_types_to_keep = snakemake.config["feature_types_to_count"]
 
-print(snakemake.input)
-print(snakemake.output)
+annotation = pd.read_table(snakemake.input[0], header=None, comment='#')
 
-feature_types_to_keep = snakemake.config["feature_types_to_keep"]
+annotation = annotation[annotation[2].isin(feature_types_to_keep)]
 
-annotation = gffpd.read_gff3(str(snakemake.input))
+annotation[2] = 'exon'
 
-#remove non-desired feature types
-annotation.df = annotation.df[annotation.df.type.isin(feature_types_to_keep)]
-
-#create just one gff with feature replaced as exon purely for htseq counting. Then use the unmodifed gff in the post-htseq-parsing.py
-annotation.df.iloc[:,2] = 'exon'
-
-annotation.to_gff3(str(snakemake.output))
+annotation.to_csv(snakemake.output[0], sep='\t', index=False, header=False)

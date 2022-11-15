@@ -1,10 +1,10 @@
 
 rule run_fastqc:
     input:
-        output_path_dict["trimmed_reads"] / "{anything}_trimmed.fastq"
+        scratch_dict["trimmed_reads"] / "{anything}_trimmed.fastq"
     output:
-        html = output_path_dict["trimmed_reads"] / "{anything}_trimmed_fastqc.html",
-        zipp = output_path_dict["trimmed_reads"] / "{anything}_trimmed_fastqc.zip",
+        html = scratch_dict["trimmed_reads"] / "{anything}_trimmed_fastqc.html",
+        zipp = scratch_dict["trimmed_reads"] / "{anything}_trimmed_fastqc.zip",
     resources:
         partition = 'sched_mit_chisholm',
         mem = '10G',
@@ -19,11 +19,11 @@ rule run_fastqc:
 
 rule move_fastqc_data:
     input:
-        html = output_path_dict["trimmed_reads"] / "{anything}_trimmed_fastqc.html",
-        zipp = output_path_dict["trimmed_reads"] / "{anything}_trimmed_fastqc.zip",
+        html = scratch_dict["trimmed_reads"] / "{anything}_trimmed_fastqc.html",
+        zipp = scratch_dict["trimmed_reads"] / "{anything}_trimmed_fastqc.zip",
     output:
-        html = output_path_dict["fastqc"] / "{anything}_trimmed_fastqc.html",
-        zipp = output_path_dict["fastqc"] / "{anything}_trimmed_fastqc.zip",
+        html = scratch_dict["fastqc"] / "{anything}_trimmed_fastqc.html",
+        zipp = scratch_dict["fastqc"] / "{anything}_trimmed_fastqc.zip",
     resources:
         partition = 'sched_mit_chisholm',
         mem = '10G',
