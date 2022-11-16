@@ -14,9 +14,10 @@ for genome, info in snakemake.config['input']['reference genomes'].items():
     attributes = pd.read_table(info['annotation'], header=None, comment="#")[8].to_list()
     for gene in attributes:
         for annot in gene.split(";"):
-            k, v = annot.split("=", maxsplit=1)
-            if k in kegg_pathway_columns.keys():
-                kegg_ids[kegg_pathway_columns[k]].update(v.split(","))
+            if "=" in annot:
+                k, v = annot.split("=", maxsplit=1)
+                if k in kegg_pathway_columns.keys():
+                    kegg_ids[kegg_pathway_columns[k]].update(v.split(","))
 
 def ident_kegg_term(db, id):
     try: 
