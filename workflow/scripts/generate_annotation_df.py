@@ -46,6 +46,10 @@ for genome, info in snakemake.config['input']['reference genomes'].items():
     attributes_df['organism'] = genome
     gffs.append(attributes_df)
 attributes_df = pd.concat(gffs)
-attributes_df = attributes_df.set_index(['organism','ID'])
 
+# filtering by 'type' column 
+feature_types_to_keep = snakemake.config["feature_types_to_count"]
+attributes_df = attributes_df[attributes_df['type'].isin(feature_types_to_keep)]
+
+attributes_df = attributes_df.set_index(['organism','ID'])
 attributes_df.to_csv(snakemake.output[0], sep='\t')
