@@ -62,7 +62,7 @@ rule generate_comparison_results:
         results = results_dict['DEseq2'] / "{organism}" / "{comparison}" / "results.tsv",
         results_w_annot = results_dict['DEseq2'] / "{organism}" / "{comparison}" / "results_w_annotation.tsv",
     conda:
-        "../envs/DEseq2py.yaml"
+        "../envs/DEseq2.yaml"
     resources:
         partition = 'sched_mit_chisholm',
         mem = '1G',
@@ -71,7 +71,7 @@ rule generate_comparison_results:
         output = lambda wildcards: mk_out(log_dir / 'post_count_analysis', f'{wildcards.organism} {wildcards.comparison}'),
         error = lambda wildcards: mk_err(log_dir / 'post_count_analysis', f'{wildcards.organism} {wildcards.comparison}'),
     script:
-        "../scripts/generate_comparison_results.py"
+        "../scripts/generate_comparison_results.R"
 
 rule generate_data_json:
     input:
