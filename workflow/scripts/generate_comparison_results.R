@@ -6,13 +6,17 @@ annots = read.csv(file=snakemake@input$annotations, sep='\t')
 organism = snakemake@wildcards$organism
 comparison = snakemake@wildcards$comparison
 
-conditions = names(snakemake@config$comparisons[[organism]][[comparison]])
-single_treatment = length(conditions) == 2 & 'control' %in% conditions & 'treatment' %in% conditions
+conditions = snakemake@config$comparisons[[organism]][[comparison]]
+single_treatment = length(names(conditions)) == 2 & 'control' %in% names(conditions) & 'treatment' %in% names(conditions)
+sample_use_list = list()
+for (name in names(conditions)){
+    for (sample in conditions[[name]]) {
+        sample_use_list[[sample]] = name
+    }
+}
 
-sample_use_df = stack(data.frame(snakemake@config$comparisons[[organism]][[comparison]]))
-
-rownames(sample_use_df) = sample_use_df$values
-sample_use_df = subset(sample_use_df, select=-c(values))
+sample_use_df = t(data.frame(sample_use_list))
+colnames(sample_use_df) = c("condition")
 
 counts_subset = subset(counts, organism==snakemake@wildcards$organism)
 rownames(counts_subset) = counts_subset$ID
@@ -26,10 +30,10 @@ if (min(colMeans(counts_subset[sapply(counts_subset, is.numeric)],na.rm=TRUE)) <
     stop('organism must be present in all samples')
 }
 
-dds = DESeqDataSetFromMatrix(countData = counts_subset, colData = sample_use_df, design = ~ ind)
+dds = DESeqDataSetFromMatrix(countData = counts_subset, colData = sample_use_df, design = ~ condition)
 dds_processed = DESeq(dds)
 
-vst_counts = assay(vst(dds_processed))
+vst_counts = assay(varianceStabilizingTransformation(dds_processed))
 vst_counts = cbind(ID=rownames(vst_counts), vst_counts)
 write.table(vst_counts, file=snakemake@output$vst, quote=FALSE, sep='\t', row.names=FALSE)
 
@@ -38,8 +42,7 @@ rlog_counts = cbind(ID=rownames(rlog_counts), rlog_counts)
 write.table(rlog_counts, file=snakemake@output$rlog, quote=FALSE, sep='\t', row.names=FALSE)
 
 if (single_treatment) {
-    dds$ind = relevel(dds$ind, ref = "control")
-    comparison_results = as.data.frame(results(dds_processed))
+    comparison_results = as.data.frame(results(dds_processed, contrast=c("condition","treatment","control")))
     comparison_results = cbind(ID=rownames(comparison_results), symlog10baseMean = with(comparison_results, log10(baseMean + 1)), comparison_results)
     write.table(comparison_results, file=snakemake@output$results, quote=FALSE, sep='\t', row.names=FALSE)
 

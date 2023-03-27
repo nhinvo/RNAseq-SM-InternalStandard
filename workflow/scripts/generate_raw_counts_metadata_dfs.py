@@ -46,5 +46,6 @@ organism_occurance = counts_df.groupby(level='organism').sum().div(counts_df.sum
 organism_occurance.to_csv(Path(snakemake.output["organism_occurance"]), sep='\t')
 
 sparsity_df = (counts_df >= 1).groupby(level='organism').sum().div(counts_df.index.get_level_values('organism').value_counts(), axis='index')
+sparsity_df.index.name = 'organism'
 sparsity_df.to_csv(Path(snakemake.output["gene_sparsity"]), sep="\t")
 
