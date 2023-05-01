@@ -8,11 +8,11 @@
 
 source activate snakemake
 
-snakemake -s workflow/Snakefile --unlock --configfile "/nfs/chisholmlab001/kve/2023_promo_rerun/inputs/config.yaml"
+snakemake -s workflow/Snakefile --unlock --configfile "/nfs/chisholmlab001/kve/2022_chitin_bead_colonization_rnaseq/inputs/config.yaml"
 
 # run job:
 snakemake \
-    --configfile "/nfs/chisholmlab001/kve/2023_promo_rerun/inputs/config.yaml" \
+    --configfile "/nfs/chisholmlab001/kve/2022_chitin_bead_colonization_rnaseq/inputs/config.yaml" \
     -s workflow/Snakefile \
     --use-conda \
     --rerun-incomplete \
