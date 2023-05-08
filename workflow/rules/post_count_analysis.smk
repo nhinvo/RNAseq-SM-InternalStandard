@@ -3,13 +3,6 @@ rule generate_ref_table:
         results_dict['bio_db_ref']
     conda:
         "../envs/post_count_analysis.yaml"
-    resources:
-        partition = 'sched_mit_chisholm',
-        mem = '1G',
-        ntasks = 1,
-        time = '0-12', 
-        output = lambda wildcards: mk_out(log_dir / 'post_count_analysis' / 'generate_ref_table.out'),
-        error = lambda wildcards: mk_err(log_dir / 'post_count_analysis' / 'generate_ref_table.err'),
     script:
         "../scripts/generate_bio_db_ref_table.py"
 
@@ -19,13 +12,6 @@ rule generate_annotation_df:
         results_dict['annotations']
     conda:
         "../envs/post_count_analysis.yaml"
-    resources:
-        partition = 'sched_mit_chisholm',
-        mem = '10G',
-        ntasks = 1,
-        time = '0-12', 
-        output = lambda wildcards: mk_out(log_dir / 'post_count_analysis' / 'generate_annotation_df.out'),
-        error = lambda wildcards: mk_err(log_dir / 'post_count_analysis' / 'generate_annotation_df.err'),
     script:
         "../scripts/generate_annotation_df.py"
 
@@ -42,13 +28,6 @@ rule generate_raw_counts_metadata_dfs:
         gene_sparsity = results_dict['gene_sparsity'],
     conda:
         "../envs/post_count_analysis.yaml"
-    resources:
-        partition = 'sched_mit_chisholm',
-        mem = '1G',
-        ntasks = 1,
-        time = '0-12', 
-        output = lambda wildcards: mk_out(log_dir / 'post_count_analysis' / 'generate_raw_counts_metadata_dfs.out'),
-        error = lambda wildcards: mk_err(log_dir / 'post_count_analysis' / 'generate_raw_counts_metadata_dfs.err'),
     script:
         "../scripts/generate_raw_counts_metadata_dfs.py"
 
@@ -57,27 +36,20 @@ rule generate_comparison_results:
         counts = results_dict['raw_counts'],
         annotations = results_dict['annotations'],
     output:
-        rlog = results_dict['DEseq2'] / "{organism}" / "{comparison}" / "rlog.tsv",
-        vst = results_dict['DEseq2'] / "{organism}" / "{comparison}" / "vst.tsv",
-        results = results_dict['DEseq2'] / "{organism}" / "{comparison}" / "results.tsv",
-        results_w_annot = results_dict['DEseq2'] / "{organism}" / "{comparison}" / "results_w_annotation.tsv",
+        rlog = results_dict['DEseq2'] / "{organism}" / "{experiment}" / "{comparison}" / "rlog.tsv",
+        vst = results_dict['DEseq2'] / "{organism}" / "{experiment}" / "{comparison}" / "vst.tsv",
+        results = results_dict['DEseq2'] / "{organism}" / "{experiment}" / "{comparison}" / "results.tsv",
+        results_w_annot = results_dict['DEseq2'] / "{organism}" / "{experiment}" / "{comparison}" / "results_w_annotation.tsv",
     conda:
         "../envs/DEseq2.yaml"
-    resources:
-        partition = 'sched_mit_chisholm',
-        mem = '1G',
-        ntasks = 1,
-        time = '0-12', 
-        output = lambda wildcards: mk_out(log_dir / 'post_count_analysis', f'{wildcards.organism} {wildcards.comparison}'),
-        error = lambda wildcards: mk_err(log_dir / 'post_count_analysis', f'{wildcards.organism} {wildcards.comparison}'),
     script:
         "../scripts/generate_comparison_results.R"
 
 rule generate_data_json:
     input:
-        rlogs = expand(results_dict['DEseq2'] / "{organism}" / "{comparison}" / "rlog.tsv", zip, organism=ORGANISMS, comparison=COMPARISONS),
-        vsts = expand(results_dict['DEseq2'] / "{organism}" / "{comparison}" / "vst.tsv", zip, organism=ORGANISMS, comparison=COMPARISONS),
-        deseq2_results = expand(results_dict['DEseq2'] / "{organism}" / "{comparison}" / "results.tsv", zip, organism=ORGANISMS, comparison=COMPARISONS),
+        rlogs = expand(results_dict['DEseq2'] / "{organism}" / "{experiment}" / "{comparison}" / "rlog.tsv", zip, organism=ORGANISMS, experiment=EXPERIMENTS, comparison=COMPARISONS),
+        vsts = expand(results_dict['DEseq2'] / "{organism}" / "{experiment}" / "{comparison}" / "vst.tsv", zip, organism=ORGANISMS, experiment=EXPERIMENTS, comparison=COMPARISONS),
+        deseq2_results = expand(results_dict['DEseq2'] / "{organism}" / "{experiment}" / "{comparison}" / "results.tsv", zip, organism=ORGANISMS, experiment=EXPERIMENTS, comparison=COMPARISONS),
         annotations = results_dict['annotations'],
         counts = results_dict['raw_counts'],
         mapping_metadata = results_dict['mapping_metadata'],
@@ -88,12 +60,5 @@ rule generate_data_json:
         results_dict['data_json']
     conda:
         "../envs/post_count_analysis.yaml"
-    resources:
-        partition = 'sched_mit_chisholm',
-        mem = '250G',
-        ntasks = 20,
-        time = '0-12', 
-        output = lambda wildcards: mk_out(log_dir / 'post_count_analysis' / 'generate_data_json.out'),
-        error = lambda wildcards: mk_err(log_dir / 'post_count_analysis' / 'generate_data_json.err'),
     script:
         "../scripts/generate_data_json.py"

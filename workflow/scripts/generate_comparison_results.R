@@ -4,19 +4,18 @@ counts = read.csv(file=snakemake@input$counts, sep='\t')
 annots = read.csv(file=snakemake@input$annotations, sep='\t')
 
 organism = snakemake@wildcards$organism
+experiment = snakemake@wildcards$experiment
 comparison = snakemake@wildcards$comparison
 
-conditions = snakemake@config$comparisons[[organism]][[comparison]]
-single_treatment = length(names(conditions)) == 2 & 'control' %in% names(conditions) & 'treatment' %in% names(conditions)
-sample_use_list = list()
-for (name in names(conditions)){
-    for (sample in conditions[[name]]) {
-        sample_use_list[[sample]] = name
-    }
-}
+saveRDS(snakemake, file = glue("{organism}.{experiment}.{comparison}.rds"))
 
-sample_use_df = t(data.frame(sample_use_list))
-colnames(sample_use_df) = c("condition")
+design_string = snakemake@config$comparisons[[organism]][[experiment]]$Design
+
+
+sample_use_df = read.csv(file=snakemake@config$input['sample table'], sep='\t')
+
+
+# TODO: Filter for only included/excluded samples
 
 counts_subset = subset(counts, organism==snakemake@wildcards$organism)
 rownames(counts_subset) = counts_subset$ID

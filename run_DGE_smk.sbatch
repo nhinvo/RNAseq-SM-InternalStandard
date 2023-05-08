@@ -8,14 +8,5 @@
 
 source activate snakemake
 
-snakemake -s workflow/Snakefile --unlock --configfile "/nfs/chisholmlab001/kve/2022_chitin_bead_colonization_rnaseq/inputs/config.yaml"
-
 # run job:
-snakemake \
-    --configfile "/nfs/chisholmlab001/kve/2022_chitin_bead_colonization_rnaseq/inputs/config.yaml" \
-    -s workflow/Snakefile \
-    --use-conda \
-    --rerun-incomplete \
-    --cluster "sbatch -p {resources.partition} -t {resources.time} -n {resources.ntasks} --mem={resources.mem} -o {resources.output} -e {resources.error}" \
-    --jobs 10 \
-    --latency-wait 30
+snakemake --profile profile
