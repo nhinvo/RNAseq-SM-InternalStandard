@@ -19,4 +19,5 @@ analysis/*
 !shell_scripts
 !shell_scripts/*
 !*.sbatch
+!profile/config.yaml
 shell_scripts/.*
