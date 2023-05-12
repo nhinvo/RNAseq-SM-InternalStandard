@@ -39,16 +39,18 @@ data = {
 
 for rlog, vst, result in zip(snakemake.input['rlogs'], snakemake.input['vsts'], snakemake.input['deseq2_results']):
     assert Path(rlog).parent == Path(vst).parent == Path(result).parent
-    org = Path(rlog).parent.parent.name
+    org = Path(rlog).parent.parent.parent.name
+    exp = Path(rlog).parent.parent.name
     comp = Path(rlog).parent.name
     if org not in data['deseq2'].keys():
         data['deseq2'][org] = {}
-    data['deseq2'][org][comp] = {
+    if exp not in data['deseq2'][org].keys():
+        data['deseq2'][org][exp] = {}
+    data['deseq2'][org][exp][comp] = {
         'rlog' : pd.read_table(rlog, index_col='ID').to_dict(),
         'vst' : pd.read_table(vst, index_col='ID').to_dict(),
+        'results' : pd.read_table(result, index_col='ID').to_dict()
     }
-    if Path(result).stat().st_size != 0:
-        data['deseq2'][org][comp]['results'] = pd.read_table(result, index_col='ID').to_dict()
 
 with gzip.open(snakemake.output[0], 'w') as fout:
     fout.write(json.dumps(data).encode('utf-8'))  
