@@ -1,0 +1,71 @@
+# options are 'bwa' 'hisat2' and 'bowtie2'
+
+experiment_name: 2023_Sar11Pro_RNAseq_rerun
+
+aligner: bowtie2 # or bwa... maybe
+# add an ultrasensitive mode?
+
+htseq:
+  mapping_qual_threshold: 10 # default is 10
+  # add counting method
+
+input: 
+  sample table: /nfs/chisholmlab001/kve/2023_Sar11Pro_RNAseq_rerun/inputs/samples.tsv
+  reference genomes:
+    HTCC7211:
+      genome: /nfs/chisholmlab001/chisholmlab/genomic_resources/strains/het/HTCC7211/HTCC7211.fna
+      annotation: /nfs/chisholmlab001/chisholmlab/genomic_resources/strains/het/HTCC7211/HTCC7211.emapper.gff
+    MIT9301:
+      genome: /nfs/chisholmlab001/chisholmlab/genomic_resources/strains/pro_syn_img/MIT9301_IMG_2623620961/MIT9301_IMG_2623620961.fna
+      annotation: /nfs/chisholmlab001/chisholmlab/genomic_resources/strains/pro_syn_img/MIT9301_IMG_2623620961/MIT9301_IMG_2623620961.emapper.decorated.gff
+  adapter_file: /nfs/chisholmlab001/chisholmlab/genomic_resources/references/illumina/all_illumina_adapters.fa
+scratch directory: /nobackup1/chisholmlab/kve/2023_Sar11Pro_RNAseq_rerun/scratch
+results directory: /nfs/chisholmlab001/kve/2023_Sar11Pro_RNAseq_rerun/results
+
+feature_types_to_count: [
+  'CDS',
+  'rRNA',
+  'tRNA',
+]
+
+Comparisons:
+  MIT9301:
+    Experiment:
+      Excluded Samples: [
+        S12, S13, S14, S18, S19, S20, # unsure where these ultracentrifuged samples came from
+        S25, S26, S27, S28, S29, S30, S31, S32] # samples with just Sar11 and no pro
+      Design: "~ treatment" 
+      Comparisons:
+        Media Effect:
+          Factor: treatment # factor must be in experiment design
+          Control: MIT9301 T1 Pro99
+          Treatment: MIT9301 T1 ProMS
+        Co-culture Effect:
+          Factor: treatment
+          Control: MIT9301 T1 ProMS
+          Treatment: MIT9301 + Sar11 co-culture T1 ProMS
+    Other Experiment Name:
+      Included Samples: [S12, S13, S14, S18, S19, S20]
+      Design: "~ time_point + media + culture"
+      Comparisons:
+        Media Effect:
+          Factor: media
+          Control: Pro99
+          Treatment: ProMS
+        Co-culture Effect:
+          Factor: culture
+          Control: MIT9301
+          Treatment: MIT9301 + Sar11 co-culture
+  HTCC7211:
+    Experiment:
+      Included Samples: 
+        [S09, S10, S11, S12, S13, S14, 
+        S15, S16, S17, S18, S19, S20, 
+        S25, S26, S27, S28, S29, S30, 
+        S31, S32]
+      Design: "~ treatment"
+      Comparisons:
+        Co-culture Effect:
+          Factor: treatment
+          Control: Sar11 T1 ProMS
+          Treatment: MIT9301 + Sar11 co-culture T1 ProMS
