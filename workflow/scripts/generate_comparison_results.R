@@ -17,8 +17,6 @@ if ('Included Samples' %in% names(snakemake@config[["Comparisons"]][[organism]][
 } else if ('Excluded Samples' %in% names(snakemake@config[["Comparisons"]][[organism]][[experiment]])) {
     excluded_samples = snakemake@config[["Comparisons"]][[organism]][[experiment]][['Excluded Samples']]
     sample_use_df = subset(sample_use_df, !sample %in% excluded_samples)
-} else {
-    stop("error -- no included or excluded samples")
 }
 
 row.names(sample_use_df) <- sample_use_df$sample
