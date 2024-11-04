@@ -16,3 +16,13 @@ rule run_trim_PE:
         "minlen=25 qtrim=rl trimq=10 maq=20 "
         "ref={input.ref} ktrim=r k=23 mink=11 hdist=1"
 
+rule unzip_gz:
+    input:
+        scratch_dict["trimmed_reads"] / "{anything}.fastq.gz",
+    output:
+        scratch_dict["trimmed_reads"] / "{anything}.fastq",
+    conda:
+        "../envs/gzip.yaml"
+    shell:
+        "gzip -d {input}"
+

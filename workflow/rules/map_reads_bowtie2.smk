@@ -19,7 +19,7 @@ rule map_reads_PE:
     conda:
         "../envs/bowtie2.yaml"
     shell:
-        "bowtie2 -x {input.ref} -1 {input.r1} -2 {input.r2} -S {output} -p {resources.tasks}"
+        "bowtie2 -x {input.ref} -1 {input.r1} -2 {input.r2} -S {output} -p {resources.cpus_per_task}"
 
 rule index_genome:
     input:
@@ -29,5 +29,5 @@ rule index_genome:
     conda:
         "../envs/bowtie2.yaml"
     shell:
-        "bowtie2-build --threads {resources.tasks} {input.ref} {input.ref}"
+        "bowtie2-build --threads {resources.cpus_per_task} {input.ref} {input.ref}"
 

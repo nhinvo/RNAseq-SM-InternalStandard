@@ -6,7 +6,7 @@ rule convert_sam2bam:
     conda:
         "../envs/samtools.yaml"
     shell:
-        "samtools view -@ {resources.tasks} -S -b {input} > {output}"
+        "samtools view -@ {resources.cpus_per_task} -S -b {input} > {output}"
 
 rule sort_bam:
     input:
@@ -16,7 +16,7 @@ rule sort_bam:
     conda:
         "../envs/samtools.yaml"
     shell:
-        "samtools sort -@ {resources.tasks} {input} -o {output}"
+        "samtools sort -@ {resources.cpus_per_task} {input} -o {output}"
 
 rule index_bam:
     input:
@@ -26,7 +26,7 @@ rule index_bam:
     conda:
         "../envs/samtools.yaml"
     shell:
-        "samtools index -@ {resources.tasks} -b {input}"
+        "samtools index -@ {resources.cpus_per_task} -b {input}"
 
 rule mapping_coverage:
     input:
