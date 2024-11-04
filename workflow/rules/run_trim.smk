@@ -10,9 +10,9 @@ rule run_trim_PE:
     conda:
         "../envs/bbtools.yaml"
     shell:
-        "bbduk.sh threads={resources.tasks} "
+        "bbduk.sh threads={resources.cpus_per_task} "
         "in1={input.r1} in2={input.r2} "
         "out1={output.o1} out2={output.o2} "
-        "minlen=25 qtrim=rl trimq=10 "
+        "minlen=25 qtrim=rl trimq=10 maq=20 "
         "ref={input.ref} ktrim=r k=23 mink=11 hdist=1"
 

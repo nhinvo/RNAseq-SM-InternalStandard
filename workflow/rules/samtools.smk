@@ -1,4 +1,3 @@
-
 rule convert_sam2bam:
     input:
         scratch_dict["mapped_reads"] / "{sample}_mapped.sam",
@@ -23,9 +22,18 @@ rule index_bam:
     input:
         scratch_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
     output:
-        temp(scratch_dict["mapped_reads"] / "{sample}_mapped_sorted.bam.bai"),
+        scratch_dict["mapped_reads"] / "{sample}_mapped_sorted.bam.bai",
     conda:
         "../envs/samtools.yaml"
     shell:
         "samtools index -@ {resources.tasks} -b {input}"
 
+rule mapping_coverage:
+    input:
+        scratch_dict["mapped_reads"] / "{sample}_mapped_sorted.bam",
+    output:
+        scratch_dict["mapping_coverage"] / "{sample}.cov", 
+    conda:
+        "../envs/samtools.yaml"
+    shell:
+        "samtools depth {input} > {output}"

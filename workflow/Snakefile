@@ -3,32 +3,20 @@ import shutil
 import pandas as pd
 
 SAMPLE_TABLE = pd.read_csv(config["input"]["sample table"], index_col="sample", sep="\t")
-SAMPLE_TABLE.index = SAMPLE_TABLE.index.map(str)
-SAMPLES = SAMPLE_TABLE.index.values
-
-
-ORGANISMS = []
-EXPERIMENTS = []
-COMPARISONS = []
-for org, exp_dict in config['Comparisons'].items():
-    for exp, info in exp_dict.items():
-        if 'Design' in info.keys():
-            if 'Included Samples' in info.keys() or 'Excluded Samples' in info.keys():
-                for comp in info['Comparisons'].keys():
-                    ORGANISMS.append(org)
-                    EXPERIMENTS.append(exp)
-                    COMPARISONS.append(comp)
-            else:
-                raise ValueError(f"comparison for organism {org} and experiment {exp} does not include an included or excluded samples list (must update config file)")
-        else:
-            raise ValueError(f"comparison for organism {org} and experiment {exp} does not include design (must update config file)")
+SAMPLE_TABLE.index = SAMPLE_TABLE.index.map(str)  # convert index (samples) to string 
+SAMPLES = SAMPLE_TABLE.index.values  # list of samples
 
 scratch_dir = Path(config["scratch directory"])
 results_dir = Path(config["results directory"])
 
 scratch_dict = {
     "done_files": scratch_dir / "done_files",
+
+    # trimming
     "trimmed_reads": scratch_dir / "trimmed_reads",
+
+    # mapping 
+    "genome_index_parent": scratch_dir / "genome_index",
     "concat_gff": {
         "concat_gff_file": scratch_dir
         / "concat_gff"
@@ -46,55 +34,49 @@ scratch_dict = {
         / "indexed.done",
     },
     "mapped_reads": scratch_dir / "mapped_reads",
+    "mapping_coverage": scratch_dir / "mapping_coverage",
+
+    # HTseq - feature counting 
     "feature_count": scratch_dir / "HTseq",
-    "genome_index_parent": scratch_dir / "genome_index",
-    "library_count": scratch_dir
-    / "raw_library_counts"
-    / "library_len.tsv",
-    "coverage_positions": scratch_dir / "coverage_positions",
-    "fastqc": scratch_dir / "fastqc",
 }
 
 results_dict = {
     "bio_db_ref": results_dir / "tables" / "bio_db_ref.tsv",
-    "raw_counts": results_dir / "tables" / "raw_counts.tsv",
-    "counts_w_annotations": results_dir / "tables" / "raw_counts_w_annotations.tsv",
     "annotations": results_dir / "tables" / "annotations.tsv",
-    "mapping_metadata": results_dir / "metadata" / "mapping_metadata.tsv",
-    "organism_occurance": results_dir / "metadata" / "organism_occurance.tsv",
-    "gene_sparsity": results_dir / "metadata" / "gene_sparsity.tsv",
-    "DEseq2": results_dir / "DEseq2",
-    "data_json": results_dir / f"{config['experiment_name']}.json.gz",
+    "mapping_metadata": results_dir / "tables" / "mapping_metadata.tsv",
+
+    # Raw uncorrected mapping counts - before internal standard correction
+    "raw_counts": results_dir / "tables" / "raw_counts_uncorrected.tsv",
+    "raw_counts_w_annotations": results_dir / "tables" / "raw_counts_uncorrected_w_annotations.tsv",
+    "organism_occurance": results_dir / "tables" / "organism_occurance_uncorrected.tsv",
+    "gene_sparsity": results_dir / "tables" / "gene_sparsity_uncorrected.tsv",
+
+    # Internal Standard analysis results: 
+    "all_standard_metadata": results_dir / "internal_standard_analysis" / "tables" / "all_standard_metadata.tsv", 
+    "filtered_standard_metadata": results_dir / "internal_standard_analysis" / "tables" / "filtered_standard_metadata.tsv", 
+    "efficiency_slopes_intercepts": results_dir / "internal_standard_analysis" / "tables" / "efficiency_slopes_intercepts.tsv", 
+    "IS_analysis_plot_outdir": results_dir / "internal_standard_analysis" / "plots", 
+
+    # Absolute (corrected) count data (after internal standard count correction)
+    "absolute_gene_count_per_cell": results_dir / "absolute_read_count" / "gene_count_per_cell.tsv", 
+    "corrected_transcript_count": results_dir / "absolute_read_count" / "corrected_transcript_count.tsv", 
+    "summary_back_calculate_counts": results_dir / "absolute_read_count" / "summary_back_calculate_counts.tsv", 
 }
 
 rule all:
     input:
-        results_dict['data_json']
-
-include: "rules/counting_features.smk"
-include: "rules/genome_concat.smk"
-include: "rules/gff_tools.smk"
-
-if config["aligner"] == "bwa":
-
-    include: "rules/map_reads_bwa.smk"
-
-
-if config["aligner"] == "bowtie2":
-
-    include: "rules/map_reads_bowtie2.smk"
-
-
-include: "rules/post_count_analysis.smk"
-
+        results_dict['absolute_gene_count_per_cell'],
 
 include: "rules/run_trim.smk"
 
+include: "rules/map_reads_bowtie2.smk"
+
+include: "rules/gff_tools.smk"
+
+include: "rules/counting_features.smk"
+
+include: "rules/uncorrected_count_summary.smk"
 
 include: "rules/samtools.smk"
 
-
-include: "rules/unzip.smk"
-
-
-include: "rules/fastqc.smk"
+include: "rules/internal_standard_correction.smk"

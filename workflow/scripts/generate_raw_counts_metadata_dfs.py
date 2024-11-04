@@ -32,15 +32,17 @@ metadata_df = pd.concat(raw_metadata_df_list, axis=1)
 
 metadata_df.index = metadata_df.index.str.replace('__', '')
 
+print(counts_df)
+print(attributes_df)
 counts_df = counts_df.loc[attributes_df.index.get_level_values('ID')]
 counts_df.index = attributes_df.index
 
 feature_df = counts_df.join(attributes_df['type']).groupby(['type']).sum() 
 metadata_df = pd.concat([feature_df, metadata_df])
 
-counts_df.to_csv(Path(snakemake.output["counts"]), sep="\t")
+counts_df.to_csv(Path(snakemake.output["raw_counts"]), sep="\t")
 metadata_df.to_csv(Path(snakemake.output["mapping_metadata"]), sep='\t')
-counts_df.join(attributes_df).to_csv(Path(snakemake.output["counts_w_annotations"]), sep="\t")
+counts_df.join(attributes_df).to_csv(Path(snakemake.output["raw_counts_w_annotations"]), sep="\t")
 
 organism_occurance = counts_df.groupby(level='organism').sum().div(counts_df.sum())
 organism_occurance.to_csv(Path(snakemake.output["organism_occurance"]), sep='\t')

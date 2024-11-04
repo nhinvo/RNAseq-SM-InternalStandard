@@ -29,3 +29,4 @@ feature_types_to_count: [
 ]
 
 read length: 40  # length of sequenced read 
+minimum standard sample: 3  # min number of sample an internal standard needs to be in to keep 
