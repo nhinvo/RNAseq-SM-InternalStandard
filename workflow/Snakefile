@@ -46,7 +46,7 @@ results_dict = {
     "mapping_metadata": results_dir / "tables" / "mapping_metadata.tsv",
 
     # Raw uncorrected mapping counts - before internal standard correction
-    "raw_counts": results_dir / "tables" / "raw_counts_uncorrected.tsv",
+    "uncorrected_counts": results_dir / "tables" / "raw_counts_uncorrected.tsv",
     "raw_counts_w_annotations": results_dir / "tables" / "raw_counts_uncorrected_w_annotations.tsv",
     "organism_occurance": results_dir / "tables" / "organism_occurance_uncorrected.tsv",
     "gene_sparsity": results_dir / "tables" / "gene_sparsity_uncorrected.tsv",
