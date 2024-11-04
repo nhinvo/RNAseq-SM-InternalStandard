@@ -24,7 +24,7 @@ rule generate_raw_counts_metadata_dfs:
         annotations = results_dict['annotations'],
         counts = expand(scratch_dict["feature_count"] / "{sample}.tsv", sample=SAMPLES),
     output:
-        raw_counts = results_dict['raw_counts'],
+        raw_counts = results_dict['uncorrected_counts'],
         raw_counts_w_annotations = results_dict['raw_counts_w_annotations'],
         mapping_metadata = results_dict['mapping_metadata'],
         organism_occurance = results_dict['organism_occurance'],
