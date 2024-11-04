@@ -8,8 +8,8 @@ input:
 
   reference genomes:
     MIT9301:
-      genome: inputs/ref_genomes/MIT9301_IMG_2623620961.fna
-      annotation: inputs/ref_genomes/MIT9301_IMG_2623620961.emapper.decorated.gff
+      genome: inputs/ref_genomes/MIT9301/MIT9301_IMG_2623620961.fna
+      annotation: inputs/ref_genomes/MIT9301/MIT9301_IMG_2623620961.emapper.decorated.gff
 
     InternalStandard:
       genome: inputs/ref_genomes/internal_standard_seqs/internal_standard_sequences.txt
