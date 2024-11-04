@@ -12,6 +12,6 @@ rule add_exon_column_to_gff:
     output:
         scratch_dict["concat_gff"]["concat_gff_mod_file"]
     conda:
-        "../envs/post_count_analysis.yaml"
+        "../envs/uncorrected_count_summary.yaml"
     script:
         "../scripts/gff_mod.py"
