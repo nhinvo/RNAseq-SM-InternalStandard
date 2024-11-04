@@ -43,6 +43,6 @@ rule transcript_back_calculate:
         summary_back_calculate_counts = results_dict['summary_back_calculate_counts'],
         corrected_transcript_count = results_dict['corrected_transcript_count'], 
     conda:
-        "../envs/transcript_back_calculating.yaml"
+        "../envs/internal_standard_analysis.yaml"
     script:
         "../scripts/transcript_back_calculate.py"
