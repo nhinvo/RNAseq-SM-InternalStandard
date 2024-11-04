@@ -30,9 +30,18 @@ default-resources:
 
 # set-resources:
 set-resources:
-  # multi-threaded rules
+  # multi-threaded rules --> 10 CPUs/cores
   - run_trim_PE:cpus_per_task=10
-  - read_mapping:cpus_per_task=10
+  - map_reads_PE:cpus_per_task=10
+  - index_genome:cpus_per_task=10
+  - convert_sam2bam:cpus_per_task=10
+  - sort_bam:cpus_per_task=10
+  - index_bam:cpus_per_task=10
 
-  # memory intensive rules
-  - run_trim_PE:mem=100000  # 100G 
+  # memory intensive rules --> 100G in mem 
+  - run_trim_PE:mem=100000  
+  - map_reads_PE:mem=100000
+  - index_genome:mem=100000
+  - convert_sam2bam:mem=100000
+  - sort_bam:mem=100000
+  - index_bam:mem=100000
