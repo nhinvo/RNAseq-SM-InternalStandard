@@ -1,0 +1,31 @@
+experiment_name: my_exp_name
+
+htseq:
+  mapping_qual_threshold: 10 # default is 10
+
+input: 
+  sample table: inputs/samples.tsv
+
+  reference genomes:
+    MIT9301:
+      genome: inputs/ref_genomes/MIT9301_IMG_2623620961.fna
+      annotation: inputs/ref_genomes/MIT9301_IMG_2623620961.emapper.decorated.gff
+
+    InternalStandard:
+      genome: inputs/ref_genomes/internal_standard_seqs/internal_standard_sequences.txt
+      annotation: inputs/ref_genomes/internal_standard_seqs/internal_standard_sequences.gff
+  
+  adapter_file: inputs/all_illumina_adapters.fa
+  internal_standard_concentration: inputs/internal_standard_concentration.tsv
+  cell_count_data: inputs/cell_count.tsv
+  
+scratch directory: path/to/scratch
+results directory: results
+
+feature_types_to_count: [
+  'CDS',
+  'tRNA',
+  'rRNA', 
+]
+
+read length: 40  # length of sequenced read 

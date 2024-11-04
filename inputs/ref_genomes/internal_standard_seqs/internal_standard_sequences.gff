@@ -1,0 +1,12 @@
+## gff
+## manually created gff file. Sequences were obtained from Gifford 2016 paper 
+s1_arsB_v1_1068_frag	Gifford 2016	CDS	1	1068	.	+	0	ID=s1_arsB_v1_1068_frag; product=Internal Standard Sequence
+s4_mcrB_v1_1028_Frag	Gifford 2016	CDS	1	1028	.	+	0	ID=s4_mcrB_v1_1028_Frag; product=Internal Standard Sequence
+s5_hdrB_v1_979_Frag	Gifford 2016	CDS	1	979	.	+	0	ID=s5_hdrB_v1_979_Frag; product=Internal Standard Sequence
+s6_hyp1378_v1_964_Frag	Gifford 2016	CDS	1	964	.	+	0	ID=s6_hyp1378_v1_964_Frag; product=Internal Standard Sequence
+s7_hyp1273_v1_991_Frag	Gifford 2016	CDS	1	991	.	+	0	ID=s7_hyp1273_v1_991_Frag; product=Internal Standard Sequence
+s8_tri3_v1_1000_Frag	Gifford 2016	CDS	1	1000	.	+	0	ID=s8_tri3_v1_1000_Frag; product=Internal Standard Sequence
+s10_hyp1806_v1_969_Frag	Gifford 2016	CDS	1	969	.	+	0	ID=s10_hyp1806_v1_969_Frag; product=Internal Standard Sequence
+s11_tynA_v1_996_Frag	Gifford 2016	CDS	1	996	.	+	0	ID=s11_tynA_v1_996_Frag; product=Internal Standard Sequence
+s14_virB_v1_301_Frag	Gifford 2016	CDS	1	301	.	+	0	ID=s14_virB_v1_301_Frag; product=Internal Standard Sequence
+s15_alpha_v1_1504_Frag	Gifford 2016	CDS	1	1504	.	+	0	ID=s15_alpha_v1_1504_Frag; product=Internal Standard Sequence

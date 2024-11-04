@@ -5,25 +5,25 @@ rerun-incomplete: True
 jobs: 5
 latency-wait: 120
 keep-going: True
-configfile: /nfs/chisholmlab001/kve/2023_Sar11Pro_RNAseq_rerun/inputs/config.yaml
+configfile: inputs/config.yaml
 keep-incomplete: True
 # unlock: True
 
 cluster:
-  mkdir -p /nfs/chisholmlab001/kve/2023_Sar11Pro_RNAseq_rerun/logs/{rule} &&
+  mkdir -p logs/{rule} &&
   sbatch
     --partition={resources.partition}
     --ntasks={resources.tasks}
     --mem={resources.mem}
     --time={resources.time}
     --job-name={rule}-%j
-    --output="/nfs/chisholmlab001/kve/2023_Sar11Pro_RNAseq_rerun/logs/{rule}/{wildcards}.out"
-    --error="/nfs/chisholmlab001/kve/2023_Sar11Pro_RNAseq_rerun/logs/{rule}/{wildcards}.err"
-
-# set-resources:
+    --output="logs/{rule}/{wildcards}.out"
+    --error="logs/{rule}/{wildcards}.err"
 
 default-resources:
   - time="1-0"
   - partition="sched_mit_chisholm"
   - mem="250G"
   - tasks=20
+
+# set-resources:

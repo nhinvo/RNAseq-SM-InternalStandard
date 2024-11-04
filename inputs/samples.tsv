@@ -1,0 +1,4 @@
+sample	forward read	reverse read
+12A	/nfs/chisholmlab001/chisholmlab/experiment_repository/2023/230404Chi/D23-137001-6203L/230404Chi_D23-137001_1_sequence.fastq	/nfs/chisholmlab001/chisholmlab/experiment_repository/2023/230404Chi/D23-137001-6203L/230404Chi_D23-137001_2_sequence.fastq
+12B	/nfs/chisholmlab001/chisholmlab/experiment_repository/2023/230404Chi/D23-137002-6203L/230404Chi_D23-137002_1_sequence.fastq	/nfs/chisholmlab001/chisholmlab/experiment_repository/2023/230404Chi/D23-137002-6203L/230404Chi_D23-137002_2_sequence.fastq
+12C	/nfs/chisholmlab001/chisholmlab/experiment_repository/2023/230404Chi/D23-137003-6203L/230404Chi_D23-137003_1_sequence.fastq	/nfs/chisholmlab001/chisholmlab/experiment_repository/2023/230404Chi/D23-137003-6203L/230404Chi_D23-137003_2_sequence.fastq
