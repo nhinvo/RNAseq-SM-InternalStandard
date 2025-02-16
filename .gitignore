@@ -1,0 +1,6 @@
+logs/*
+!logs/.temp.txt
+
+results/*
+
+.snakemake

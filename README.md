@@ -1,4 +1,14 @@
 # RNAseq Pipeline with Internal Standard Correction 
+RNAseq Pipeline with Read Count Correction using spike-in Internal Standards. 
+
+## Example Output Figures:   
+Examples before and after Internal Standard Filtering:  
+<p align="center">
+  <img src="workflow/images/all_sample_plots_1.png" width="40%" />
+  <img src="workflow/images/all_sample_plots_2.png" width="40%" />
+</p>
+
+
 ## Installations
 
 ## Snakemake Setup 
