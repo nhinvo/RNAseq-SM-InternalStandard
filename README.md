@@ -102,4 +102,4 @@ File containing resource specification for main Snakemake run/command.
       - y = transcript sequenced
 4. Obtain number of transcript per cell by dividing by sample cell count 
 
-For more explanation, visit this [.PDF file](workflow/images/RNAseq - Internal Standard.pdf)
+For more explanation, visit this [.PDF file](workflow/images/RNAseq_Internal_Standard.pdf)
